@@ -11,16 +11,15 @@ namespace ASE_Project
     /// <summary>
     /// The Canvas class acts as a controller for drawing onto a Graphics context.
     /// </summary>
-    internal class Canvas
+    public class Canvas
     {
-        const int DefaultPosX = 0;
-        const int DefaultPosY = 0;
+        public static int DefaultPosX = 0;
+        public static int DefaultPosY = 0;
         const int DefaultPenWidth = 1;
 
         Graphics g;
         Pen pen = new Pen(Color.Black, DefaultPenWidth);
-        int posX = DefaultPosX;
-        int posY = DefaultPosY;
+        
 
         /// <summary>
         /// Constructor for Canvas. Sets default color and default pen.
@@ -31,9 +30,11 @@ namespace ASE_Project
         }
         public void DrawLine(int toX, int toY)
         {
+            int posX = DefaultPosX;
+            int posY = DefaultPosY;
             this.g.DrawLine(pen, posX, posY, toX, toY);
-            this.posX = toX;
-            this.posY = toY;
+            posX = toX;
+            posY = toY;
         }
     }
 }

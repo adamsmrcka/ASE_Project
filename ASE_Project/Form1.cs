@@ -16,7 +16,6 @@ namespace ASE_Project
         Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
         Canvas paintingCanvas;
 
-
         public Form1()
         {
             InitializeComponent();
@@ -28,7 +27,11 @@ namespace ASE_Project
             if (Command.Equals("line") == true)
             {
                 paintingCanvas.DrawLine(1000, 1000);
-                Console.WriteLine("Line");
+            }
+            if (Command.Equals("move to") == true)
+            {
+                Canvas.DefaultPosX = 100;
+                Canvas.DefaultPosY = 100;
             }
 
             commandLineBox.Text = "Done";
