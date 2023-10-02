@@ -88,9 +88,10 @@
             this.complexCommandLabel.AutoSize = true;
             this.complexCommandLabel.Location = new System.Drawing.Point(249, 29);
             this.complexCommandLabel.Name = "complexCommandLabel";
-            this.complexCommandLabel.Size = new System.Drawing.Size(190, 20);
+            this.complexCommandLabel.Size = new System.Drawing.Size(177, 20);
             this.complexCommandLabel.TabIndex = 5;
-            this.complexCommandLabel.Text = "Enter Complex Command";
+            this.complexCommandLabel.Text = "Enter Complex Program";
+            this.complexCommandLabel.Click += new System.EventHandler(this.complexCommandLabel_Click);
             // 
             // simpleCommandLabel
             // 

@@ -26,5 +26,10 @@ namespace ASE_Project
         {
 
         }
+
+        private void complexCommandLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
