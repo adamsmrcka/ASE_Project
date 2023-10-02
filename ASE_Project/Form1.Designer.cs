@@ -32,9 +32,9 @@
             this.syntaxButton = new System.Windows.Forms.Button();
             this.commandTextBox = new System.Windows.Forms.TextBox();
             this.commandLineBox = new System.Windows.Forms.TextBox();
-            this.drawPanel = new System.Windows.Forms.PictureBox();
             this.complexCommandLabel = new System.Windows.Forms.Label();
             this.simpleCommandLabel = new System.Windows.Forms.Label();
+            this.drawPanel = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,7 +46,7 @@
             this.runButton.TabIndex = 0;
             this.runButton.Text = "Run";
             this.runButton.UseVisualStyleBackColor = true;
-            this.runButton.Click += new System.EventHandler(this.button1_Click);
+            this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // syntaxButton
             // 
@@ -72,17 +72,6 @@
             this.commandLineBox.Size = new System.Drawing.Size(606, 26);
             this.commandLineBox.TabIndex = 3;
             // 
-            // drawPanel
-            // 
-            this.drawPanel.BackColor = System.Drawing.SystemColors.Window;
-            this.drawPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.drawPanel.Cursor = System.Windows.Forms.Cursors.No;
-            this.drawPanel.Location = new System.Drawing.Point(664, 29);
-            this.drawPanel.Name = "drawPanel";
-            this.drawPanel.Size = new System.Drawing.Size(875, 626);
-            this.drawPanel.TabIndex = 4;
-            this.drawPanel.TabStop = false;
-            // 
             // complexCommandLabel
             // 
             this.complexCommandLabel.AutoSize = true;
@@ -91,7 +80,6 @@
             this.complexCommandLabel.Size = new System.Drawing.Size(177, 20);
             this.complexCommandLabel.TabIndex = 5;
             this.complexCommandLabel.Text = "Enter Complex Program";
-            this.complexCommandLabel.Click += new System.EventHandler(this.complexCommandLabel_Click);
             // 
             // simpleCommandLabel
             // 
@@ -102,22 +90,32 @@
             this.simpleCommandLabel.TabIndex = 6;
             this.simpleCommandLabel.Text = "Enter Simple Command";
             // 
+            // drawPanel
+            // 
+            this.drawPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.drawPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.drawPanel.Location = new System.Drawing.Point(684, 20);
+            this.drawPanel.Name = "drawPanel";
+            this.drawPanel.Size = new System.Drawing.Size(850, 750);
+            this.drawPanel.TabIndex = 7;
+            this.drawPanel.TabStop = false;
+            this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(1568, 822);
+            this.Controls.Add(this.drawPanel);
             this.Controls.Add(this.simpleCommandLabel);
             this.Controls.Add(this.complexCommandLabel);
-            this.Controls.Add(this.drawPanel);
             this.Controls.Add(this.commandLineBox);
             this.Controls.Add(this.commandTextBox);
             this.Controls.Add(this.syntaxButton);
             this.Controls.Add(this.runButton);
             this.Name = "Form1";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -130,9 +128,9 @@
         private System.Windows.Forms.Button syntaxButton;
         private System.Windows.Forms.TextBox commandTextBox;
         private System.Windows.Forms.TextBox commandLineBox;
-        private System.Windows.Forms.PictureBox drawPanel;
         private System.Windows.Forms.Label complexCommandLabel;
         private System.Windows.Forms.Label simpleCommandLabel;
+        private System.Windows.Forms.PictureBox drawPanel;
     }
 }
 

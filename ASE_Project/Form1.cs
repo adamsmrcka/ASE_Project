@@ -1,35 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.IO;
 using System.Windows.Forms;
+using CommandLine;
 
 namespace ASE_Project
 {
     public partial class Form1 : Form
     {
+
+        const int CanvasBitmapWidth = 850;
+        const int CanvasBitmapHeight = 750;
+
+        Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
+        Canvas paintingCanvas;
+
+
         public Form1()
         {
             InitializeComponent();
+            paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap));
+        }
+        private void runButton_Click(object sender, EventArgs e)
+        {
+            String Command = commandLineBox.Text.Trim().ToLower();
+            if (Command.Equals("line") == true)
+            {
+                paintingCanvas.DrawLine(1000, 1000);
+                Console.WriteLine("Line");
+            }
+
+            commandLineBox.Text = "Done";
+            Refresh();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void drawPanel_Paint(object sender, PaintEventArgs e)
         {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void complexCommandLabel_Click(object sender, EventArgs e)
-        {
-
+            Graphics g = e.Graphics;
+            g.DrawImageUnscaled(canvasBitmap, 0, 0);
         }
     }
 }

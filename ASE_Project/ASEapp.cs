@@ -6,10 +6,10 @@ using System.Windows.Forms;
 
 namespace ASE_Project
 {
-    internal static class Program
+    internal static class ASEapp
     {
         /// <summary>
-        /// Hlavní vstupní bod aplikace.
+        /// The main entry point for the application.
         /// </summary>
         [STAThread]
         static void Main()
