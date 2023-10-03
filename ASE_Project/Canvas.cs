@@ -28,11 +28,13 @@ namespace ASE_Project
         {
             this.g = g;
         }
+        public Graphics GetGraphics() { return g; }
+
         public void DrawLine(int toX, int toY)
         {
             int posX = DefaultPosX;
             int posY = DefaultPosY;
-            this.g.DrawLine(pen, posX, posY, toX, toY);
+            g.DrawLine(pen, posX, posY, toX, toY);
             posX = toX;
             posY = toY;
         }

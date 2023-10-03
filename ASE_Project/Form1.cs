@@ -15,11 +15,15 @@ namespace ASE_Project
 
         Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
         Canvas paintingCanvas;
+        CommandFactory commandFactory;
+        Graphics g;
 
         public Form1()
         {
             InitializeComponent();
             paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap));
+            g = paintingCanvas.GetGraphics();
+            commandFactory = new CommandFactory();
         }
         private void runButton_Click(object sender, EventArgs e)
         {
@@ -28,17 +32,22 @@ namespace ASE_Project
             {
                 paintingCanvas.DrawLine(1000, 1000);
             }
-            if (Command.Equals("move to") == true)
+            else if (Command.Equals("move to") == true)
             {
                 Canvas.DefaultPosX = 100;
                 Canvas.DefaultPosY = 100;
             }
-
-            commandLineBox.Text = "Done";
+            else if (Command.Equals("circle") == true)
+            {
+                Shape s = (Shape)commandFactory.GetShape(Command);
+                s.Set(Color.Red, 50, 50, 100);
+                s.Draw(g);
+            }
+                commandLineBox.Text = "Done";
             Refresh();
         }
 
-        private void drawPanel_Paint(object sender, PaintEventArgs e)
+            private void drawPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.DrawImageUnscaled(canvasBitmap, 0, 0);
