@@ -13,13 +13,15 @@ namespace ASE_Project
     /// </summary>
     public class Canvas
     {
-        public static int DefaultPosX = 0;
-        public static int DefaultPosY = 0;
+        private static int DefaultPosX = 10;
+        private static int DefaultPosY = 10;
         const int DefaultPenWidth = 1;
 
         Graphics g;
         Pen pen = new Pen(Color.Black, DefaultPenWidth);
-        
+
+        public static int posX = DefaultPosX;
+        public static int posY = DefaultPosY;
 
         /// <summary>
         /// Constructor for Canvas. Sets default color and default pen.
@@ -32,11 +34,17 @@ namespace ASE_Project
 
         public void DrawLine(int toX, int toY)
         {
-            int posX = DefaultPosX;
-            int posY = DefaultPosY;
             g.DrawLine(pen, posX, posY, toX, toY);
-            posX = toX;
-            posY = toY;
+        }
+        public void RestoreCanvas()
+        {
+            posX = DefaultPosX;
+            posY = DefaultPosY;
+        }
+
+        public void ClearCanvas()
+        {
+            this.g.Clear(Color.White);
         }
     }
 }

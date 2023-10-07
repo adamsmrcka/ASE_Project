@@ -9,7 +9,6 @@ namespace ASE_Project
 {
     internal class Rectangle : Shape
     {
-        private System.Drawing.Point[] rectanglePoints;
         private int[] rectangleParameters;
         public Rectangle() { }
 

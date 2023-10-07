@@ -34,26 +34,34 @@ namespace ASE_Project
             }
             else if (Command.Equals("move to") == true)
             {
-                Canvas.DefaultPosX = 100;
-                Canvas.DefaultPosY = 100;
+                Canvas.posX = 100;
+                Canvas.posY = 100;
             }
             else if (Command.Equals("circle") == true)
             {
                 Shape s = (Shape)commandFactory.GetShape(Command);
-                s.Set(Color.Red, Canvas.DefaultPosX, Canvas.DefaultPosY, 100);
+                s.Set(Color.Red, Canvas.posX, Canvas.posY, 100);
                 s.Draw(g);
             }
             else if (Command.Equals("triangle") == true)
             {
                 Shape s = (Shape)commandFactory.GetShape(Command);
-                s.SetPolygon(Color.Red, new Point[] { new Point(Canvas.DefaultPosX, Canvas.DefaultPosY), new Point(100, 200), new Point(200, 200) });
+                s.SetPolygon(Color.Red, new Point[] { new Point(Canvas.posX, Canvas.posY), new Point(100, 200), new Point(200, 200) });
                 s.Draw(g);
             }
             else if (Command.Equals("rectangle") == true)
             {
                 Shape s = (Shape)commandFactory.GetShape(Command);
-                s.Set(Color.Red, Canvas.DefaultPosX, Canvas.DefaultPosY, 100, 200);
+                s.Set(Color.Red, Canvas.posX, Canvas.posY, 100, 200);
                 s.Draw(g);
+            }
+            else if (Command.Equals("clear") == true)
+            {
+                paintingCanvas.ClearCanvas();
+            }
+            else if (Command.Equals("reset") == true)
+            {
+                paintingCanvas.RestoreCanvas();
             }
             else
             {
