@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ASE_Project
 {
-    internal class Circle : Shape
+    class Circle : Shape
     {
         protected int size;
 
@@ -23,7 +23,12 @@ namespace ASE_Project
 
         override public void Draw(Graphics g)
         {
-            g.DrawEllipse(new Pen(colour), new Rectangle(XPos, YPos, size, size));
+            g.DrawEllipse(new Pen(colour), XPos, YPos, size, size);
+        }
+
+        public override void SetRectangle(Color colour, Point[] points)
+        {
+            throw new NotImplementedException();
         }
     }
 }

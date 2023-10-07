@@ -24,8 +24,10 @@ namespace ASE_Project
             {
                 case "circle":
                     return new Circle();
+                case "triangle":
+                    return new Triangle();
                 default:
-                        return new Circle();
+                    return new Circle();
             }
         }
     }

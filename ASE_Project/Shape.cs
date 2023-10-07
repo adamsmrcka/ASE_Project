@@ -16,6 +16,7 @@ namespace ASE_Project
         {
         }
 
+        abstract public void SetRectangle(Color colour, Point[] points);
         abstract public void Set(Color colour, params int[] parameters);
 
         abstract public void Draw(Graphics g);

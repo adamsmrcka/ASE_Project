@@ -43,7 +43,16 @@ namespace ASE_Project
                 s.Set(Color.Red, 50, 50, 100);
                 s.Draw(g);
             }
-                commandLineBox.Text = "Done";
+            else if (Command.Equals("triangle") == true)
+            {
+                Shape s = (Shape)commandFactory.GetShape(Command);
+                s.SetRectangle(Color.Red, new Point[] { new Point(Canvas.DefaultPosX, Canvas.DefaultPosY), new Point(100, 200), new Point(200, 200) });
+                s.Draw(g);
+            }
+            else
+            {
+                commandLineBox.Text = "Error";
+            }
             Refresh();
         }
 
