@@ -18,7 +18,7 @@ namespace ASE_Project
         {
             throw new NotImplementedException();
         }
-        public override void SetRectangle(Color colour, System.Drawing.Point[] points)
+        public override void SetPolygon(Color colour, System.Drawing.Point[] points)
         {
             this.colour = colour;
             trianglePoints = points;

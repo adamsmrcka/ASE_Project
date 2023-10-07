@@ -26,7 +26,7 @@ namespace ASE_Project
             g.DrawEllipse(new Pen(colour), XPos, YPos, size, size);
         }
 
-        public override void SetRectangle(Color colour, Point[] points)
+        public override void SetPolygon(Color colour, Point[] points)
         {
             throw new NotImplementedException();
         }

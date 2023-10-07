@@ -40,13 +40,19 @@ namespace ASE_Project
             else if (Command.Equals("circle") == true)
             {
                 Shape s = (Shape)commandFactory.GetShape(Command);
-                s.Set(Color.Red, 50, 50, 100);
+                s.Set(Color.Red, Canvas.DefaultPosX, Canvas.DefaultPosY, 100);
                 s.Draw(g);
             }
             else if (Command.Equals("triangle") == true)
             {
                 Shape s = (Shape)commandFactory.GetShape(Command);
-                s.SetRectangle(Color.Red, new Point[] { new Point(Canvas.DefaultPosX, Canvas.DefaultPosY), new Point(100, 200), new Point(200, 200) });
+                s.SetPolygon(Color.Red, new Point[] { new Point(Canvas.DefaultPosX, Canvas.DefaultPosY), new Point(100, 200), new Point(200, 200) });
+                s.Draw(g);
+            }
+            else if (Command.Equals("rectangle") == true)
+            {
+                Shape s = (Shape)commandFactory.GetShape(Command);
+                s.Set(Color.Red, Canvas.DefaultPosX, Canvas.DefaultPosY, 100, 200);
                 s.Draw(g);
             }
             else
