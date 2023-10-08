@@ -33,7 +33,7 @@ namespace ASE_Project
             Refresh();
         }
 
-            private void drawPanel_Paint(object sender, PaintEventArgs e)
+        private void drawPanel_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.DrawImageUnscaled(canvasBitmap, 0, 0);

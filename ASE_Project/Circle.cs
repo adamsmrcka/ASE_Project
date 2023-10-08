@@ -23,7 +23,7 @@ namespace ASE_Project
 
         override public void Draw(Graphics g)
         {
-            g.DrawEllipse(new Pen(colour), xPos, yPos, size, size);
+            g.DrawEllipse(new Pen(colour), xPos - (size/2), yPos - (size / 2), size, size);
         }
     }
 }

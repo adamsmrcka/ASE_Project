@@ -36,20 +36,19 @@ namespace ASE_Project
             shape.Set(colour, posX, posY, parameters);
             shape.Draw(this.g);
         }
-
-        public void DrawLine(int toX, int toY)
-        {
-            g.DrawLine(pen, posX, posY, toX, toY);
-        }
         public void RestoreCanvas()
         {
             posX = DefaultPosX;
             posY = DefaultPosY;
         }
-
         public void ClearCanvas()
         {
             this.g.Clear(Color.White);
+        }
+        public void MoveTo(int[] moveTo)
+        {
+            posX = moveTo[0]; 
+            posY = moveTo[1];
         }
     }
 }

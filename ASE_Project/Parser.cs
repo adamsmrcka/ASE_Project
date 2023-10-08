@@ -1,6 +1,7 @@
 ﻿using ASE_Project;
 using CommandLine;
 using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace ASE_Project
         String command;
         Canvas canvas;
 
+        public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
 
         private static Parser parser = new Parser();
         private Parser()
@@ -37,6 +39,7 @@ namespace ASE_Project
             foreach (String line in lines)
             {
                 command = String.Empty;
+                trimmedCommand = String.Empty;
 
                 trimmedCommand = line.Trim(' ').ToLower();
                 parts = line.Split(' ');
@@ -45,10 +48,33 @@ namespace ASE_Project
                 arg = parts.Skip(1).ToArray();
                 arguments = Array.ConvertAll(arg, int.Parse);
 
-                Shape s = (Shape)commandFactory.GetShape(command);
+                if (IsShape(command))
+                {
+                    Shape s = (Shape)commandFactory.GetShape(command);
 
-                canvas.DrawShape(s, Color.Red, Canvas.posX, Canvas.posY, arguments);
+                    canvas.DrawShape(s, Color.Red, Canvas.posX, Canvas.posY, arguments);
+                }
+                else
+                {
+                    //User has input a predefined command that is not a shape. Handle accordingly.
+                    switch (command)
+                    {
+                        case "clear":
+                            canvas.ClearCanvas();
+                            break;
+                        case "reset":
+                            canvas.RestoreCanvas();
+                            break;
+                        case "moveto":
+                            canvas.MoveTo(arguments);
+                            break;
+                    }
+                }
             }
+        }
+        public bool IsShape(String cmd)
+        {
+            return shapes.Contains(cmd);
         }
 
         /* String Command = commandLineBox.Text.Trim().ToLower();
