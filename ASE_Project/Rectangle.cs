@@ -12,20 +12,17 @@ namespace ASE_Project
         private int[] rectangleParameters;
         public Rectangle() { }
 
-        public override void Set(Color colour, params int[] parameters)
+        public override void Set(Color colour, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
+            xPos = posX;
+            yPos = posY;
             rectangleParameters = parameters;
         }
 
         public override void Draw(Graphics g)
         {
-            g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(rectangleParameters[0], rectangleParameters[1], rectangleParameters[2], rectangleParameters[3]));
-        }
-
-        public override void SetPolygon(Color colour, Point[] points)
-        {
-            throw new NotImplementedException();
+            g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(xPos, yPos, rectangleParameters[0], rectangleParameters[1]));
         }
     }
 }

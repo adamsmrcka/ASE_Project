@@ -11,17 +11,16 @@ namespace ASE_Project
 {
     internal class Triangle : Shape
     {
-        private System.Drawing.Point[] trianglePoints;
+        private System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
         public Triangle() { }
 
-        public override void Set(Color colour, params int[] parameters)
-        {
-            throw new NotImplementedException();
-        }
-        public override void SetPolygon(Color colour, System.Drawing.Point[] points)
+        public override void Set(Color colour, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
-            trianglePoints = points;
+            trianglePoints[0] = new System.Drawing.Point(posX, posY);
+            trianglePoints[1] = new System.Drawing.Point(parameters[0], parameters[1]);
+            trianglePoints[2] = new System.Drawing.Point(parameters[2], parameters[3]);
+
         }
         public override void Draw(Graphics g)
         {

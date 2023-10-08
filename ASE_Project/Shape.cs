@@ -9,15 +9,14 @@ namespace ASE_Project
 {
     public abstract class Shape
     {
-        protected int XPos, YPos;
+        protected int xPos, yPos;
         protected Color colour;
+        protected Graphics g;
 
         public Shape()
         {
         }
-
-        abstract public void SetPolygon(Color colour, Point[] points);
-        abstract public void Set(Color colour, params int[] parameters);
+        abstract public void Set(Color colour, int posX, int posY, params int[] parameters);
 
         abstract public void Draw(Graphics g);
 

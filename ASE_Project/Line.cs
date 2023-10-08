@@ -7,24 +7,24 @@ using System.Threading.Tasks;
 
 namespace ASE_Project
 {
-    class Circle : Shape
+    internal class Line : Shape
     {
-        protected int size;
+        private int toX, toY;
 
-        public Circle() { }
+        public Line() { }
 
         override public void Set(Color colour, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
             xPos = posX;
             yPos = posY;
-            size = parameters[0];
+            toX = parameters[0];
+            toY = parameters[1];
         }
 
         override public void Draw(Graphics g)
         {
-            g.DrawEllipse(new Pen(colour), xPos, yPos, size, size);
+            g.DrawLine(new Pen(colour), xPos, yPos, toX, toY);
         }
     }
 }
-

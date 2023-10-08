@@ -31,6 +31,11 @@ namespace ASE_Project
             this.g = g;
         }
         public Graphics GetGraphics() { return g; }
+        public void DrawShape(Shape shape, Color colour, int posX, int posY, params int[] parameters)
+        {
+            shape.Set(colour, posX, posY, parameters);
+            shape.Draw(this.g);
+        }
 
         public void DrawLine(int toX, int toY)
         {
