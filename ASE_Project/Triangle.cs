@@ -14,7 +14,7 @@ namespace ASE_Project
         private System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
         public Triangle() { }
 
-        public override void Set(Color colour, bool fill, int posX, int posY, params int[] parameters)
+        public override void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
             fillShape = fill;
@@ -23,7 +23,7 @@ namespace ASE_Project
             trianglePoints[2] = new System.Drawing.Point(parameters[2], parameters[3]);
 
         }
-        public override void Draw(Graphics g)
+        public override void draw(Graphics g)
         {
             if (!fillShape)
             {

@@ -18,7 +18,7 @@ namespace ASE_Project
         CommandFactory commandFactory;
         String trimmedCommand;
         String[] parts;
-        string[] arg;
+        string[] args;
         int[] intArguments;
         String command;
         System.Drawing.Color colour;
@@ -29,12 +29,12 @@ namespace ASE_Project
         private static Parser parser = new Parser();
         private Parser()
         {
-            commandFactory = CommandFactory.GetShapeFactory();
+            commandFactory = CommandFactory.getShapeFactory();
         }
 
-        public static Parser GetParser() { return parser; }
+        public static Parser getParser() { return parser; }
 
-        public void SetCanvas(Canvas canvas) { this.canvas = canvas; }
+        public void setCanvas(Canvas canvas) { this.canvas = canvas; }
 
         internal void parseCommand(string[] lines)
         {
@@ -44,17 +44,17 @@ namespace ASE_Project
                 trimmedCommand = String.Empty;
 
                 trimmedCommand = line.Trim(' ').ToLower();
-                parts = line.Split(' ');
+                parts = trimmedCommand.Split(' ');
 
                 command = parts[0];
 
-                if (IsShape(command))
+                if (isShape(command))
                 {
-                    arg = parts.Skip(1).ToArray();
-                    intArguments = Array.ConvertAll(arg, int.Parse);
-                    Shape s = (Shape)commandFactory.GetShape(command);
+                    args = parts.Skip(1).ToArray();
+                    intArguments = Array.ConvertAll(args, int.Parse);
+                    Shape s = (Shape)commandFactory.getShape(command);
 
-                    canvas.DrawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                    canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
                 }
                 else
                 {
@@ -62,29 +62,29 @@ namespace ASE_Project
                     switch (command)
                     {
                         case "clear":
-                            canvas.ClearCanvas();
+                            canvas.clearCanvas();
                             break;
                         case "reset":
-                            canvas.RestoreCanvas();
+                            canvas.restoreCanvas();
                             break;
                         case "moveto":
-                            arg = parts.Skip(1).ToArray();
-                            intArguments = Array.ConvertAll(arg, int.Parse);
-                            canvas.MoveTo(intArguments);
+                            args = parts.Skip(1).ToArray();
+                            intArguments = Array.ConvertAll(args, int.Parse);
+                            canvas.moveTo(intArguments);
                             break;
                         case "colour":
-                            arg = parts.Skip(1).ToArray();
-                            colour = ColorTranslator.FromHtml(arg[0]);
-                            canvas.ChangeColor(colour);
+                            args = parts.Skip(1).ToArray();
+                            colour = ColorTranslator.FromHtml(args[0]);
+                            canvas.changeColor(colour);
                             break;
                         case "fill":
-                            canvas.ToggleFill();
+                            canvas.toggleFill();
                             break;
                     }
                 }
             }
         }
-        public bool IsShape(String cmd)
+        public bool isShape(String cmd)
         {
             return shapes.Contains(cmd);
         }

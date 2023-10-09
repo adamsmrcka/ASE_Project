@@ -17,9 +17,9 @@ namespace ASE_Project
         public Shape()
         {
         }
-        abstract public void Set(Color colour, bool fill, int posX, int posY, params int[] parameters);
+        abstract public void set(Color colour, bool fill, int posX, int posY, params int[] parameters);
 
-        abstract public void Draw(Graphics g);
+        abstract public void draw(Graphics g);
 
     }
 }

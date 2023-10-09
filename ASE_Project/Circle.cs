@@ -13,7 +13,7 @@ namespace ASE_Project
 
         public Circle() { }
 
-        override public void Set(Color colour, bool fill, int posX, int posY, params int[] parameters)
+        override public void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
             xPos = posX;
@@ -22,7 +22,7 @@ namespace ASE_Project
             size = parameters[0];
         }
 
-        override public void Draw(Graphics g)
+        override public void draw(Graphics g)
         {
             if (!fillShape)
             {

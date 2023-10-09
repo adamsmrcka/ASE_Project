@@ -16,14 +16,14 @@ namespace ASE_Project
         /// Returns the CommandFactory instance.
         /// </summary>
         /// <returns>CommandFactory</returns>
-        public static CommandFactory GetShapeFactory() { return commandFactory; }
+        public static CommandFactory getShapeFactory() { return commandFactory; }
 
         /// <summary>
         /// Takes in a String containing the name of a Shape or Command and returns the requested Object, if it exists.
         /// </summary>
         /// <param name="name">Name of Shape or Command.</param>
         /// <returns>Command object.</returns>
-        public Shape GetShape(string name)
+        public Shape getShape(string name)
         {
             switch (name)
             {
@@ -36,7 +36,7 @@ namespace ASE_Project
                 case "drawto":
                     return new Line();
                 default:
-                    throw new Exception ("Variable does not exist or Unknown second parameter");
+                    throw new Exception ("Shape does not exist or Unknown parameter");
 
             }
         }

@@ -35,13 +35,13 @@ namespace ASE_Project
             this.g = g;
             pen = new Pen(penColour, defaultPenWidth);
         }
-        public Graphics GetGraphics() { return g; }
-        public void DrawShape(Shape shape, Color colour, bool fill, int posX, int posY, params int[] parameters)
+        public Graphics getGraphics() { return g; }
+        public void drawShape(Shape shape, Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
-            shape.Set(colour, fill, posX, posY, parameters);
-            shape.Draw(this.g);
+            shape.set(colour, fill, posX, posY, parameters);
+            shape.draw(this.g);
         }
-        public void RestoreCanvas()
+        public void restoreCanvas()
         {
             posX = defaultPosX;
             posY = defaultPosY;
@@ -49,21 +49,21 @@ namespace ASE_Project
             pen = new Pen(penColour);
             fill = defaultFill;
         }
-        public void ClearCanvas() 
+        public void clearCanvas() 
         {
             this.g.Clear(Color.White);
         }
-        public void MoveTo(int[] moveTo)
+        public void moveTo(int[] moveTo)
         {
             posX = moveTo[0]; 
             posY = moveTo[1];
         }
-        public void ChangeColor(Color newcolour)
+        public void changeColor(Color newcolour)
         {
             penColour = newcolour;
             pen = new Pen(penColour);
         }
-        public void ToggleFill()
+        public void toggleFill()
         {
             if (fill)
             {

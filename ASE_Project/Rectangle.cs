@@ -10,27 +10,28 @@ namespace ASE_Project
 {
     internal class Rectangle : Shape
     {
-        private int[] rectangleParameters;
+        private int height, width;
         public Rectangle() { }
 
-        public override void Set(Color colour, bool fill, int posX, int posY, params int[] parameters)
+        public override void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
             xPos = posX;
             yPos = posY;
             fillShape = fill;
-            rectangleParameters = parameters;
+            width = parameters[0];
+            height = parameters[1];
         }
 
-        public override void Draw(Graphics g)
+        public override void draw(Graphics g)
         {
             if (!fillShape)
             {
-                g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(xPos - (rectangleParameters[0] / 2), yPos - (rectangleParameters[1] / 2), rectangleParameters[0], rectangleParameters[1]));
+                g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(xPos - (width / 2), yPos - (height / 2), width, height));
             }
             else
             {
-                g.FillRectangle(new SolidBrush(colour), new System.Drawing.Rectangle(xPos - (rectangleParameters[0] / 2), yPos - (rectangleParameters[1] / 2), rectangleParameters[0], rectangleParameters[1]));
+                g.FillRectangle(new SolidBrush(colour), new System.Drawing.Rectangle(xPos - (width / 2), yPos - (height / 2), width, height));
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.IO;
 using System.Windows.Forms;
 using CommandLine;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace ASE_Project
 {
@@ -24,8 +25,8 @@ namespace ASE_Project
             InitializeComponent();
             paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap));
             commandFactory = new CommandFactory();
-            parser = Parser.GetParser();
-            parser.SetCanvas(paintingCanvas);
+            parser = Parser.getParser();
+            parser.setCanvas(paintingCanvas);
         }
 
         private void drawPanel_Paint(object sender, PaintEventArgs e)
@@ -35,8 +36,20 @@ namespace ASE_Project
         }
         private void runButton_Click(object sender, EventArgs e)
         {
-            parser.parseCommand(commandLineBox.Lines);
-            Refresh();
+            if (!string.IsNullOrEmpty(commandTextBox.Text))
+            {
+                parser.parseCommand(commandTextBox.Lines);
+                Refresh();
+            }
+            else if (!string.IsNullOrEmpty(commandLineBox.Text))
+            {
+                parser.parseCommand(commandLineBox.Lines);
+                Refresh();
+            }
+            else
+            {
+                throw new Exception("No command entered");
+            }
         }
 
         private void commandLineBox_KeyDown(object sender, KeyEventArgs e)
@@ -46,6 +59,16 @@ namespace ASE_Project
                 parser.parseCommand(commandLineBox.Lines);
                 Refresh();
             }
+        }
+
+        private void commandTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                parser.parseCommand(commandTextBox.Lines);
+                Refresh();
+            }
+
         }
     }
 }

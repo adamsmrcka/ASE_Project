@@ -64,6 +64,7 @@
             this.commandTextBox.Name = "commandTextBox";
             this.commandTextBox.Size = new System.Drawing.Size(606, 633);
             this.commandTextBox.TabIndex = 2;
+            this.commandTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.commandTextBox_KeyDown);
             // 
             // commandLineBox
             // 
