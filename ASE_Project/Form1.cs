@@ -27,16 +27,25 @@ namespace ASE_Project
             parser = Parser.GetParser();
             parser.SetCanvas(paintingCanvas);
         }
+
+        private void drawPanel_Paint(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            g.DrawImageUnscaled(canvasBitmap, 0, 0);
+        }
         private void runButton_Click(object sender, EventArgs e)
         {
             parser.parseCommand(commandLineBox.Lines);
             Refresh();
         }
 
-        private void drawPanel_Paint(object sender, PaintEventArgs e)
+        private void commandLineBox_KeyDown(object sender, KeyEventArgs e)
         {
-            Graphics g = e.Graphics;
-            g.DrawImageUnscaled(canvasBitmap, 0, 0);
+            if (e.KeyCode == Keys.Enter)
+            {
+                parser.parseCommand(commandLineBox.Lines);
+                Refresh();
+            }
         }
     }
 }

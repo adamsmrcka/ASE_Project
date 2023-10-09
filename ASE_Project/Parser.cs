@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml.Linq;
 
 namespace ASE_Project
@@ -18,8 +19,9 @@ namespace ASE_Project
         String trimmedCommand;
         String[] parts;
         string[] arg;
-        int[] arguments;
+        int[] intArguments;
         String command;
+        System.Drawing.Color colour;
         Canvas canvas;
 
         public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
@@ -45,14 +47,14 @@ namespace ASE_Project
                 parts = line.Split(' ');
 
                 command = parts[0];
-                arg = parts.Skip(1).ToArray();
-                arguments = Array.ConvertAll(arg, int.Parse);
 
                 if (IsShape(command))
                 {
+                    arg = parts.Skip(1).ToArray();
+                    intArguments = Array.ConvertAll(arg, int.Parse);
                     Shape s = (Shape)commandFactory.GetShape(command);
 
-                    canvas.DrawShape(s, Color.Red, Canvas.posX, Canvas.posY, arguments);
+                    canvas.DrawShape(s, Canvas.penColour, Canvas.posX, Canvas.posY, intArguments);
                 }
                 else
                 {
@@ -66,7 +68,14 @@ namespace ASE_Project
                             canvas.RestoreCanvas();
                             break;
                         case "moveto":
-                            canvas.MoveTo(arguments);
+                            arg = parts.Skip(1).ToArray();
+                            intArguments = Array.ConvertAll(arg, int.Parse);
+                            canvas.MoveTo(intArguments);
+                            break;
+                        case "colour":
+                            arg = parts.Skip(1).ToArray();
+                            colour = ColorTranslator.FromHtml(arg[0]);
+                            canvas.ChangeColor(colour);
                             break;
                     }
                 }
@@ -76,48 +85,5 @@ namespace ASE_Project
         {
             return shapes.Contains(cmd);
         }
-
-        /* String Command = commandLineBox.Text.Trim().ToLower();
-             if (Command.Equals("line") == true)
-             {
-                 paintingCanvas.DrawLine(1000, 1000);
-             }
-             else if (Command.Equals("move to") == true)
-             {
-                 Canvas.posX = 100;
-                 Canvas.posY = 100;
-             }
-             else if (Command.Equals("circle") == true)
- {
-     Shape s = (Shape)commandFactory.GetShape(Command);
-     s.Set(Color.Red, Canvas.posX, Canvas.posY, 100);
-     s.Draw(g);
- }
- else if (Command.Equals("triangle") == true)
- {
-     Shape s = (Shape)commandFactory.GetShape(Command);
-     s.SetPolygon(Color.Red, new Point[] { new Point(Canvas.posX, Canvas.posY), new Point(100, 200), new Point(200, 200) });
-     s.Draw(g);
- }
- else if (Command.Equals("rectangle") == true)
- {
-     Shape s = (Shape)commandFactory.GetShape(Command);
-     s.Set(Color.Red, Canvas.posX, Canvas.posY, 100, 200);
-     s.Draw(g);
- }
- else if (Command.Equals("clear") == true)
- {
-     paintingCanvas.ClearCanvas();
- }
- else if (Command.Equals("reset") == true)
- {
-     paintingCanvas.RestoreCanvas();
- }
- else
- {
-     commandLineBox.Text = "Error";
- }
- Refresh();
-     */
     }
 }

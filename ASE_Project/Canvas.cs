@@ -13,15 +13,17 @@ namespace ASE_Project
     /// </summary>
     public class Canvas
     {
-        private static int DefaultPosX = 10;
-        private static int DefaultPosY = 10;
-        const int DefaultPenWidth = 1;
+        private static int defaultPosX = 10;
+        private static int defaultPosY = 10;
+        private static int defaultPenWidth = 1;
+        private static Color defaultPenColour = Color.Black;
 
         Graphics g;
-        Pen pen = new Pen(Color.Black, DefaultPenWidth);
+        Pen pen;
 
-        public static int posX = DefaultPosX;
-        public static int posY = DefaultPosY;
+        public static int posX = defaultPosX;
+        public static int posY = defaultPosY;
+        public static Color penColour = defaultPenColour;
 
         /// <summary>
         /// Constructor for Canvas. Sets default color and default pen.
@@ -29,6 +31,7 @@ namespace ASE_Project
         public Canvas(Graphics g)
         {
             this.g = g;
+            pen = new Pen(penColour, defaultPenWidth);
         }
         public Graphics GetGraphics() { return g; }
         public void DrawShape(Shape shape, Color colour, int posX, int posY, params int[] parameters)
@@ -38,8 +41,8 @@ namespace ASE_Project
         }
         public void RestoreCanvas()
         {
-            posX = DefaultPosX;
-            posY = DefaultPosY;
+            posX = defaultPosX;
+            posY = defaultPosY;
         }
         public void ClearCanvas()
         {
@@ -49,6 +52,11 @@ namespace ASE_Project
         {
             posX = moveTo[0]; 
             posY = moveTo[1];
+        }
+        public void ChangeColor(Color newcolour)
+        {
+            penColour = newcolour;
+            pen = new Pen(penColour);
         }
     }
 }

@@ -22,7 +22,7 @@ namespace ASE_Project
 
         public override void Draw(Graphics g)
         {
-            g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(xPos, yPos, rectangleParameters[0], rectangleParameters[1]));
+            g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(xPos - (rectangleParameters[0] / 2), yPos - (rectangleParameters[1] / 2), rectangleParameters[0], rectangleParameters[1]));
         }
     }
 }
