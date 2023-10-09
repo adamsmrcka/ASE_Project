@@ -36,7 +36,7 @@ namespace ASE_Project
                 case "drawto":
                     return new Line();
                 default:
-                    throw new Exception ("Shape does not exist or Unknown parameter");
+                    throw new Exception("Shape does not exist or unknown command");
 
             }
         }

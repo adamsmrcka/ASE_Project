@@ -39,8 +39,8 @@ namespace ASE_Project
             if (!fillShape)
             {
                 g.DrawPolygon(new Pen(colour), trianglePoints);
-            } 
-            else 
+            }
+            else
             {
                 g.FillPolygon(new SolidBrush(colour), trianglePoints);
             }

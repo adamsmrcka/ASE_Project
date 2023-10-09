@@ -34,6 +34,11 @@ namespace ASE_Project
             Graphics g = e.Graphics;
             g.DrawImageUnscaled(canvasBitmap, 0, 0);
         }
+        /// <summary>
+        /// Sends instructions to analyse (parse) the command (if not empty) when runButton is pressed. CommandTextBox has priority
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void runButton_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(commandTextBox.Text))
@@ -51,7 +56,11 @@ namespace ASE_Project
                 throw new Exception("No command entered");
             }
         }
-        
+        /// <summary>
+        /// Sends instructions to analyse the command when Enter is pressed when in CommandLineBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void commandLineBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -63,12 +72,11 @@ namespace ASE_Project
 
         private void commandTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter)
+           /* if (e.KeyCode == Keys.Enter)
             {
                 parser.parseCommand(commandTextBox.Lines);
                 Refresh();
-            }
-
+            }*/
         }
     }
 }
