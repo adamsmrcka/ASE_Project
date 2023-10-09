@@ -12,7 +12,14 @@ namespace ASE_Project
         protected int size;
 
         public Circle() { }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="colour"> Colour of the pen</param>
+        /// <param name="fill"> Boolean if fill or just draw</param>
+        /// <param name="posX"> X position of the circle centre</param>
+        /// <param name="posY"> Y position of the circle centre</param>
+        /// <param name="parameters"> Array of parameters (diameter)</param>
         override public void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
@@ -22,6 +29,10 @@ namespace ASE_Project
             size = parameters[0];
         }
 
+        /// <summary>
+        /// Draws the Circle either filled or just an outline
+        /// </summary>
+        /// <param name="g"></param>
         override public void draw(Graphics g)
         {
             if (!fillShape)

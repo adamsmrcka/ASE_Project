@@ -13,12 +13,25 @@ namespace ASE_Project
         protected Color colour;
         protected Graphics g;
         protected bool fillShape;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public Shape()
         {
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="colour"></param>
+        /// <param name="fill"></param>
+        /// <param name="posX"></param>
+        /// <param name="posY"></param>
+        /// <param name="parameters"></param>
         abstract public void set(Color colour, bool fill, int posX, int posY, params int[] parameters);
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="g"></param>
         abstract public void draw(Graphics g);
 
     }

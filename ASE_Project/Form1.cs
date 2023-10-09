@@ -51,7 +51,7 @@ namespace ASE_Project
                 throw new Exception("No command entered");
             }
         }
-
+        
         private void commandLineBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)

@@ -12,7 +12,14 @@ namespace ASE_Project
     {
         private int height, width;
         public Rectangle() { }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="colour"> Colour of the pen</param>
+        /// <param name="fill"> Boolean if fill or just draw</param>
+        /// <param name="posX"> X position of the rectangle centre</param>
+        /// <param name="posY"> Y position of the rectangle centre</param>
+        /// <param name="parameters"> Array of parameters (width and height)</param>
         public override void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
@@ -22,7 +29,10 @@ namespace ASE_Project
             width = parameters[0];
             height = parameters[1];
         }
-
+        /// <summary>
+        /// Draws the Rectangle either filled or just an outline
+        /// </summary>
+        /// <param name="g"></param>
         public override void draw(Graphics g)
         {
             if (!fillShape)

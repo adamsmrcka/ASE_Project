@@ -58,6 +58,7 @@ namespace ASE_Project
             posX = moveTo[0]; 
             posY = moveTo[1];
         }
+
         public void changeColor(Color newcolour)
         {
             penColour = newcolour;

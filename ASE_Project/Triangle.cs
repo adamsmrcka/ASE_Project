@@ -13,7 +13,14 @@ namespace ASE_Project
     {
         private System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
         public Triangle() { }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="colour"> Colour of the pen</param>
+        /// <param name="fill"> Boolean if fill or just draw</param>
+        /// <param name="posX"> X position of the first triangle point</param>
+        /// <param name="posY"> Y position of the first triangle point</param>
+        /// <param name="parameters"> Array of parameters (X and Y values of the other 2 triangle points)</param>
         public override void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
@@ -23,6 +30,10 @@ namespace ASE_Project
             trianglePoints[2] = new System.Drawing.Point(parameters[2], parameters[3]);
 
         }
+        /// <summary>
+        /// Draws a Triangle either filled or just an outline
+        /// </summary>
+        /// <param name="g"></param>
         public override void draw(Graphics g)
         {
             if (!fillShape)
