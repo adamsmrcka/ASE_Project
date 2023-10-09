@@ -13,7 +13,7 @@ namespace ASE_Project
 
         public Line() { }
 
-        override public void Set(Color colour, int posX, int posY, params int[] parameters)
+        override public void Set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
             xPos = posX;

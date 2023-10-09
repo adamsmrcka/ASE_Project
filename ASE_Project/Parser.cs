@@ -54,7 +54,7 @@ namespace ASE_Project
                     intArguments = Array.ConvertAll(arg, int.Parse);
                     Shape s = (Shape)commandFactory.GetShape(command);
 
-                    canvas.DrawShape(s, Canvas.penColour, Canvas.posX, Canvas.posY, intArguments);
+                    canvas.DrawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
                 }
                 else
                 {
@@ -76,6 +76,9 @@ namespace ASE_Project
                             arg = parts.Skip(1).ToArray();
                             colour = ColorTranslator.FromHtml(arg[0]);
                             canvas.ChangeColor(colour);
+                            break;
+                        case "fill":
+                            canvas.ToggleFill();
                             break;
                     }
                 }

@@ -12,11 +12,12 @@ namespace ASE_Project
         protected int xPos, yPos;
         protected Color colour;
         protected Graphics g;
+        protected bool fillShape;
 
         public Shape()
         {
         }
-        abstract public void Set(Color colour, int posX, int posY, params int[] parameters);
+        abstract public void Set(Color colour, bool fill, int posX, int posY, params int[] parameters);
 
         abstract public void Draw(Graphics g);
 

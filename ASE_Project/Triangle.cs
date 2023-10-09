@@ -14,9 +14,10 @@ namespace ASE_Project
         private System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
         public Triangle() { }
 
-        public override void Set(Color colour, int posX, int posY, params int[] parameters)
+        public override void Set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
+            fillShape = fill;
             trianglePoints[0] = new System.Drawing.Point(posX, posY);
             trianglePoints[1] = new System.Drawing.Point(parameters[0], parameters[1]);
             trianglePoints[2] = new System.Drawing.Point(parameters[2], parameters[3]);
@@ -24,7 +25,14 @@ namespace ASE_Project
         }
         public override void Draw(Graphics g)
         {
-            g.DrawPolygon(new Pen(colour), trianglePoints);
+            if (!fillShape)
+            {
+                g.DrawPolygon(new Pen(colour), trianglePoints);
+            } 
+            else 
+            {
+                g.FillPolygon(new SolidBrush(colour), trianglePoints);
+            }
         }
 
 

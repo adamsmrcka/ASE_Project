@@ -13,17 +13,25 @@ namespace ASE_Project
 
         public Circle() { }
 
-        override public void Set(Color colour, int posX, int posY, params int[] parameters)
+        override public void Set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
             this.colour = colour;
             xPos = posX;
             yPos = posY;
+            fillShape = fill;
             size = parameters[0];
         }
 
         override public void Draw(Graphics g)
         {
-            g.DrawEllipse(new Pen(colour), xPos - (size/2), yPos - (size / 2), size, size);
+            if (!fillShape)
+            {
+                g.DrawEllipse(new Pen(colour), xPos - (size / 2), yPos - (size / 2), size, size);
+            }
+            else
+            {
+                g.FillEllipse(new SolidBrush(colour), xPos - (size / 2), yPos - (size / 2), size, size);
+            }
         }
     }
 }
