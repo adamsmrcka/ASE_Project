@@ -24,8 +24,6 @@ namespace ASE_Project
         System.Drawing.Color colour;
         Canvas canvas;
 
-        public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
-
         private static Parser parser = new Parser();
         private Parser()
         {
@@ -55,11 +53,39 @@ namespace ASE_Project
                     //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
                     if (isShape(command))
                     {
-                        args = parts.Skip(1).ToArray();
-                        intArguments = Array.ConvertAll(args, int.Parse);
-                        Shape s = (Shape)commandFactory.getShape(command);
+                        if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
+                        {
+                            args = parts.Skip(1).ToArray();
 
-                        canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                            if (args.Length == expectedArgsCount)
+                            {
+                                intArguments = new int[args.Length];
+                                bool argumentsAreInts = true;
+
+                                for (int i = 0; i < args.Length; i++)
+                                {
+                                    if (!int.TryParse(args[i], out int argValue))
+                                    {
+                                        throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
+                                        argumentsAreInts = false;
+                                        break;
+                                    }
+                                    intArguments[i] = argValue;
+                                }
+
+                                if (argumentsAreInts)
+                                {
+                                    Shape s = (Shape)commandFactory.getShape(command);
+
+                                    canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                                }
+                            }
+                            else
+                            {
+                                // Handle the error as needed, e.g., show an error message or log it.
+                                throw new Exception($"Error: '{command}' command expects {expectedArgsCount} arguments, but {intArguments.Length} were provided.");
+                            }
+                        }
                     }
                     else
                     {
@@ -77,7 +103,7 @@ namespace ASE_Project
                                 intArguments = Array.ConvertAll(args, int.Parse);
                                 canvas.moveTo(intArguments);
                                 break;
-                            case "colour":
+                            case "pen":
                                 args = parts.Skip(1).ToArray();
                                 colour = ColorTranslator.FromHtml(args[0]);
                                 canvas.changeColor(colour);
@@ -86,9 +112,13 @@ namespace ASE_Project
                                 canvas.toggleFill();
                                 break;
                             default:
-                                throw new Exception("Shape does not exist or unknown command");
+                                throw new Exception($"Shape '{command}' does not exist or unknown command");
                         }
                     }
+                }
+                else
+                {
+                    throw new Exception("No command entered");
                 }
             }
         }
@@ -99,7 +129,7 @@ namespace ASE_Project
         /// <returns></returns>
         public bool isShape(String cmd)
         {
-            return shapes.Contains(cmd);
+            return Dictionaries.shapes.Contains(cmd);
         }
     }
 }

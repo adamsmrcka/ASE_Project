@@ -41,7 +41,7 @@ namespace ASE_Project
         /// <param name="e"></param>
         private void runButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(commandTextBox.Text))
+            if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
             {
                 parser.parseCommand(commandTextBox.Lines);
                 Refresh();
@@ -65,17 +65,29 @@ namespace ASE_Project
         {
             if (e.KeyCode == Keys.Enter)
             {
-                parser.parseCommand(commandLineBox.Lines);
-                Refresh();
+                if (commandLineBox.Text.ToLower().Equals("run"))
+                {
+                    parser.parseCommand(commandTextBox.Lines);
+                    Refresh();
+                }
+                else
+                {
+                    parser.parseCommand(commandLineBox.Lines);
+                    Refresh();
+                }
             }
         }
 
         private void commandTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-           /* if (e.KeyCode == Keys.Enter)
+            /*
+            if (e.KeyCode == Keys.Enter)
             {
-                parser.parseCommand(commandTextBox.Lines);
-                Refresh();
+                if (commandLineBox.Text.ToLower().Equals("run"))
+                {
+                    parser.parseCommand(commandTextBox.Lines);
+                    Refresh();
+                }
             }*/
         }
     }
