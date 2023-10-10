@@ -60,7 +60,7 @@ namespace ASE_Project
                 }
                 else
                 {
-                    throw new Exception("No command entered");
+                    throw new Exception("Error: No command entered");
                 }
             }
             catch (Exception ex)
