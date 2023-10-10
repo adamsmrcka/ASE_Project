@@ -14,6 +14,8 @@ namespace ASE_Project
     /// </summary>
     public class Canvas
     {
+        private Form1 form1;
+
         private static int defaultPosX = 10;
         private static int defaultPosY = 10;
         private static int defaultPenWidth = 1;
@@ -33,10 +35,11 @@ namespace ASE_Project
         /// <summary>
         /// Constructor for Canvas. Sets default color and default pen.
         /// </summary>
-        public Canvas(Graphics g)
+        public Canvas(Graphics g, Form1 form1)
         {
             this.g = g;
             pen = new Pen(penColour, defaultPenWidth);
+            this.form1 = form1;
         }
         public Graphics getGraphics() { return g; }
         /// <summary>
@@ -58,11 +61,14 @@ namespace ASE_Project
         /// </summary>
         public void restoreCanvas()
         {
+            oldPosX = posX;
+            oldPosY = posY;
             posX = defaultPosX;
             posY = defaultPosY;
             penColour = defaultPenColour;
             pen = new Pen(penColour);
             fill = defaultFill;
+            idicateCursor();
         }
         /// <summary>
         /// Cleans Canvas - removes all drawings
@@ -70,6 +76,7 @@ namespace ASE_Project
         public void clearCanvas()
         {
             this.g.Clear(Color.White);
+            idicateCursor();
         }
         /// <summary>
         /// Changes the position of the "cursor" for the drawing process
@@ -82,6 +89,7 @@ namespace ASE_Project
             posX = moveTo[0];
             posY = moveTo[1];
             idicateCursor();
+            form1.updateCursorPositionLabel(posX, posY);
         }
         /// <summary>
         /// Changes the pen colour for the drawing process
@@ -91,20 +99,26 @@ namespace ASE_Project
         {
             penColour = newcolour;
             pen = new Pen(penColour);
+            form1.updatePenColourStatusLabel(penColour);
         }
         /// <summary>
         /// Toggles between fill and outline methods for the drawing process
         /// </summary>
-        public void toggleFill()
+        public void toggleFill(string fillRequest)
         {
-            if (fill)
+            if (fillRequest == "off")
             {
                 fill = false;
             }
-            else
+            else if (fillRequest == "on")
             {
                 fill = true;
             }
+            else
+            {
+                throw new Exception($"Error: Incorect Fill parameter '{fillRequest}', Expeted On or Off");
+            }
+            form1.updateFillStatusLabel(fill);
         }
         public void idicateCursor()
         {

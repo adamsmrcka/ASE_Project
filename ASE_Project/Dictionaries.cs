@@ -19,7 +19,7 @@ namespace ASE_Project
             { "triangle", 4 },
             { "drawto", 2 },
             { "moveto", 2 },
-            { "fill", 0},
+            { "fill", 1},
             { "pen", 1 },
             { "clear", 0},
             { "reset", 0},

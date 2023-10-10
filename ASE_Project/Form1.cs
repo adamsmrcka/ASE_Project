@@ -24,11 +24,13 @@ namespace ASE_Project
         public Form1()
         {
             InitializeComponent();
-            paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap));
+            paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap), this);
             commandFactory = new CommandFactory();
             parser = Parser.getParser();
             parser.setCanvas(paintingCanvas);
             updateCursorPositionLabel(Canvas.posX, Canvas.posY);
+            updateFillStatusLabel(Canvas.fill);
+            updatePenColourStatusLabel(Canvas.penColour);
             paintingCanvas.idicateCursor();
         }
 
@@ -49,13 +51,11 @@ namespace ASE_Project
                 if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
                 {
                     parser.parseCommand(commandTextBox.Lines);
-                    updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                     Refresh();
                 }
                 else if (!string.IsNullOrEmpty(commandLineBox.Text))
                 {
                     parser.parseCommand(commandLineBox.Lines);
-                    updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                     Refresh();
                 }
                 else
@@ -86,13 +86,11 @@ namespace ASE_Project
                     if (commandLineBox.Text.ToLower().Equals("run"))
                     {
                         parser.parseCommand(commandTextBox.Lines);
-                        updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                         Refresh();
                     }
                     else
                     {
                         parser.parseCommand(commandLineBox.Lines);
-                        updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                         Refresh();
                     }
                 }
@@ -123,6 +121,23 @@ namespace ASE_Project
         public void updateCursorPositionLabel(int posX, int posY)
         {
             cursorPositionLabel.Text = "Cursor Position: X = " + posX + ", Y = " + posY;
+        }
+        public void updateFillStatusLabel(bool fillStatus)
+        {
+            string fillTextStatus;
+            if (!fillStatus)
+            {
+                fillTextStatus = "Off";
+            }
+            else
+            {
+                fillTextStatus = "On";
+            }
+            fillStatusLabel.Text = "Fill: " + fillTextStatus;
+        }
+        public void updatePenColourStatusLabel(Color colourStatus)
+        {
+            penColourStatusLabel.Text = "Colour: " + colourStatus.Name;
         }
     }
 }

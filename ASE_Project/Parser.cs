@@ -116,7 +116,7 @@ namespace ASE_Project
                                             break;
 
                                         case "fill":
-                                            canvas.toggleFill();
+                                            canvas.toggleFill(args[0]);
                                             break;
 
                                         default:

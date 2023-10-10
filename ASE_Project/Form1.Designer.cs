@@ -36,6 +36,8 @@
             this.simpleCommandLabel = new System.Windows.Forms.Label();
             this.drawPanel = new System.Windows.Forms.PictureBox();
             this.cursorPositionLabel = new System.Windows.Forms.Label();
+            this.penColourStatusLabel = new System.Windows.Forms.Label();
+            this.fillStatusLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -113,12 +115,32 @@
             this.cursorPositionLabel.TabIndex = 8;
             this.cursorPositionLabel.Text = "Cursor Position: X = 10 Y = 10";
             // 
+            // penColourStatusLabel
+            // 
+            this.penColourStatusLabel.AutoSize = true;
+            this.penColourStatusLabel.Location = new System.Drawing.Point(680, 773);
+            this.penColourStatusLabel.Name = "penColourStatusLabel";
+            this.penColourStatusLabel.Size = new System.Drawing.Size(102, 20);
+            this.penColourStatusLabel.TabIndex = 9;
+            this.penColourStatusLabel.Text = "Colour: Black";
+            // 
+            // fillStatusLabel
+            // 
+            this.fillStatusLabel.AutoSize = true;
+            this.fillStatusLabel.Location = new System.Drawing.Point(680, 793);
+            this.fillStatusLabel.Name = "fillStatusLabel";
+            this.fillStatusLabel.Size = new System.Drawing.Size(58, 20);
+            this.fillStatusLabel.TabIndex = 10;
+            this.fillStatusLabel.Text = "Fill: Off";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(1568, 822);
+            this.Controls.Add(this.fillStatusLabel);
+            this.Controls.Add(this.penColourStatusLabel);
             this.Controls.Add(this.cursorPositionLabel);
             this.Controls.Add(this.drawPanel);
             this.Controls.Add(this.simpleCommandLabel);
@@ -145,6 +167,8 @@
         private System.Windows.Forms.Label simpleCommandLabel;
         private System.Windows.Forms.PictureBox drawPanel;
         private System.Windows.Forms.Label cursorPositionLabel;
+        private System.Windows.Forms.Label penColourStatusLabel;
+        private System.Windows.Forms.Label fillStatusLabel;
     }
 }
 
