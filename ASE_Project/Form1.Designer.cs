@@ -35,6 +35,7 @@
             this.complexCommandLabel = new System.Windows.Forms.Label();
             this.simpleCommandLabel = new System.Windows.Forms.Label();
             this.drawPanel = new System.Windows.Forms.PictureBox();
+            this.cursorPositionLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -59,10 +60,10 @@
             // 
             // commandTextBox
             // 
-            this.commandTextBox.Location = new System.Drawing.Point(34, 57);
+            this.commandTextBox.Location = new System.Drawing.Point(34, 51);
             this.commandTextBox.Multiline = true;
             this.commandTextBox.Name = "commandTextBox";
-            this.commandTextBox.Size = new System.Drawing.Size(606, 633);
+            this.commandTextBox.Size = new System.Drawing.Size(606, 649);
             this.commandTextBox.TabIndex = 2;
             this.commandTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.commandTextBox_KeyDown);
             // 
@@ -77,7 +78,7 @@
             // complexCommandLabel
             // 
             this.complexCommandLabel.AutoSize = true;
-            this.complexCommandLabel.Location = new System.Drawing.Point(249, 29);
+            this.complexCommandLabel.Location = new System.Drawing.Point(250, 14);
             this.complexCommandLabel.Name = "complexCommandLabel";
             this.complexCommandLabel.Size = new System.Drawing.Size(177, 20);
             this.complexCommandLabel.TabIndex = 5;
@@ -103,12 +104,22 @@
             this.drawPanel.TabStop = false;
             this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
             // 
+            // cursorPositionLabel
+            // 
+            this.cursorPositionLabel.AutoSize = true;
+            this.cursorPositionLabel.Location = new System.Drawing.Point(1314, 773);
+            this.cursorPositionLabel.Name = "cursorPositionLabel";
+            this.cursorPositionLabel.Size = new System.Drawing.Size(220, 20);
+            this.cursorPositionLabel.TabIndex = 8;
+            this.cursorPositionLabel.Text = "Cursor Position: X = 10 Y = 10";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(1568, 822);
+            this.Controls.Add(this.cursorPositionLabel);
             this.Controls.Add(this.drawPanel);
             this.Controls.Add(this.simpleCommandLabel);
             this.Controls.Add(this.complexCommandLabel);
@@ -133,6 +144,7 @@
         private System.Windows.Forms.Label complexCommandLabel;
         private System.Windows.Forms.Label simpleCommandLabel;
         private System.Windows.Forms.PictureBox drawPanel;
+        private System.Windows.Forms.Label cursorPositionLabel;
     }
 }
 

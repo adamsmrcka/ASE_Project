@@ -5,12 +5,13 @@ using System.IO;
 using System.Windows.Forms;
 using CommandLine;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Windows;
+using System.Security.Policy;
 
 namespace ASE_Project
 {
     public partial class Form1 : Form
     {
-
         const int CanvasBitmapWidth = 850;
         const int CanvasBitmapHeight = 750;
 
@@ -27,6 +28,8 @@ namespace ASE_Project
             commandFactory = new CommandFactory();
             parser = Parser.getParser();
             parser.setCanvas(paintingCanvas);
+            updateCursorPositionLabel(Canvas.posX, Canvas.posY);
+            paintingCanvas.idicateCursor();
         }
 
         private void drawPanel_Paint(object sender, PaintEventArgs e)
@@ -46,11 +49,13 @@ namespace ASE_Project
                 if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
                 {
                     parser.parseCommand(commandTextBox.Lines);
+                    updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                     Refresh();
                 }
                 else if (!string.IsNullOrEmpty(commandLineBox.Text))
                 {
                     parser.parseCommand(commandLineBox.Lines);
+                    updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                     Refresh();
                 }
                 else
@@ -81,11 +86,13 @@ namespace ASE_Project
                     if (commandLineBox.Text.ToLower().Equals("run"))
                     {
                         parser.parseCommand(commandTextBox.Lines);
+                        updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                         Refresh();
                     }
                     else
                     {
                         parser.parseCommand(commandLineBox.Lines);
+                        updateCursorPositionLabel(Canvas.posX, Canvas.posY);
                         Refresh();
                     }
                 }
@@ -111,6 +118,11 @@ namespace ASE_Project
                     Refresh();
                 }
             }*/
+        }
+
+        public void updateCursorPositionLabel(int posX, int posY)
+        {
+            cursorPositionLabel.Text = "Cursor Position: X = " + posX + ", Y = " + posY;
         }
     }
 }

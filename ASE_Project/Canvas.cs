@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Forms;
 
 namespace ASE_Project
 {
@@ -24,6 +25,8 @@ namespace ASE_Project
 
         public static int posX = defaultPosX;
         public static int posY = defaultPosY;
+        public static int oldPosX = posX;
+        public static int oldPosY = posY;
         public static Color penColour = defaultPenColour;
         public static bool fill = defaultFill;
 
@@ -74,8 +77,11 @@ namespace ASE_Project
         /// <param name="moveTo">Array of X and Y values</param>
         public void moveTo(int[] moveTo)
         {
+            oldPosX = posX;
+            oldPosY = posY;
             posX = moveTo[0];
             posY = moveTo[1];
+            idicateCursor();
         }
         /// <summary>
         /// Changes the pen colour for the drawing process
@@ -99,6 +105,13 @@ namespace ASE_Project
             {
                 fill = true;
             }
+        }
+        public void idicateCursor()
+        {
+            int diameter = 2;
+            g.DrawEllipse(new Pen(Color.White), oldPosX - (diameter / 2), oldPosY - (diameter / 2), diameter, diameter);
+            g.DrawEllipse(new Pen(Color.Red), posX - (diameter / 2), posY - (diameter / 2), diameter, diameter);
+
         }
     }
 }
