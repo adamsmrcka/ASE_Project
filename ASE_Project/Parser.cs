@@ -13,7 +13,7 @@ using System.Xml.Linq;
 
 namespace ASE_Project
 {
-    internal class Parser
+    public class Parser
     {
         CommandFactory commandFactory;
         String trimmedCommand;
@@ -23,6 +23,7 @@ namespace ASE_Project
         String command;
         System.Drawing.Color colour;
         Canvas canvas;
+        public static Shape s;
 
         private static Parser parser = new Parser();
         private Parser()
@@ -37,7 +38,7 @@ namespace ASE_Project
         /// Analyses the imput per line and handles instruction according to the imput - differentiates between commands and parameters and divides them accordingly
         /// </summary>
         /// <param name="lines">Array of commands and parameters from commandLineBox or commandTextBox - divided by lines</param>
-        internal void parseCommand(string[] lines)
+        public void parseCommand(string[] lines)
         {
             if (lines.Length > 0)
             {
@@ -75,7 +76,7 @@ namespace ASE_Project
 
                                     if (argumentsAreInts)
                                     {
-                                        Shape s = (Shape)commandFactory.getShape(command);
+                                        s = (Shape)commandFactory.getShape(command);
 
                                         canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
                                     }

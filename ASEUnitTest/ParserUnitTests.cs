@@ -1,0 +1,155 @@
+﻿using ASE_Project;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace ASEUnitTest
+{
+    [TestClass]
+    public class ParserUnitTests
+    {
+        private Parser parser;
+        private Canvas canvas;
+        PictureBox pictureBox = new PictureBox();
+
+        Form1 form1 = new Form1();
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            parser = Parser.getParser();
+            Canvas canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
+            parser.setCanvas(canvas);
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenNoCommandEntered()
+        {
+            // Arrange
+            string[] lines = { "" }; // Empty command
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenUnknownCommand()
+        {
+            // Arrange
+            string[] lines = { "unknowncommand" };
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenIncorrectArgumentCount()
+        {
+            // Arrange
+            string[] lines = { "rectangle 1 2 3" }; // Rectangle expects 2 arguments
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType()
+        {
+            // Arrange
+            string[] lines = { "rectangle rectangle rectangle " }; // Rectangle expects ints
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenIncorrectStringArgumentType()
+        {
+            // Arrange
+            string[] lines = { "fill 20" }; // Rectangle expects ints
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldParseValidShapeCommand()
+        {
+            // Arrange
+            string[] lines = { "rectangle 10 20" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldParseValidNonShapeCommand()
+        {
+            // Arrange
+            string[] lines = { "fill on" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Canvas.fill, true);
+        }
+
+        [TestMethod]
+        public void TestIsShape_ShouldReturnTrue_WhenCommandIsShape()
+        {
+            // Arrange
+            string shapeCommand = "circle";
+
+            // Act
+            bool isShape = parser.isShape(shapeCommand);
+
+            // Assert
+            Assert.IsTrue(isShape);
+        }
+
+        [TestMethod]
+        public void TestIsShape_ShouldReturnFalse_WhenCommandIsNotShape()
+        {
+            // Arrange
+            string nonShapeCommand = "pen";
+
+            // Act
+            bool isShape = parser.isShape(nonShapeCommand);
+
+            // Assert
+            Assert.IsFalse(isShape);
+        }
+
+        [TestMethod]
+        public void TestIsShape_ShouldReturnFalse_WhenCommandIsEmpty()
+        {
+            // Arrange
+            string emptyCommand = "";
+
+            // Act
+            bool isShape = parser.isShape(emptyCommand);
+
+            // Assert
+            Assert.IsFalse(isShape);
+        }
+
+        [TestMethod]
+        public void TestIsShape_ShouldReturnFalse_WhenCommandIsUnknown()
+        {
+            // Arrange
+            string unknownCommand = "unknown";
+
+            // Act
+            bool isShape = parser.isShape(unknownCommand);
+
+            // Assert
+            Assert.IsFalse(isShape);
+        }
+    }
+}
