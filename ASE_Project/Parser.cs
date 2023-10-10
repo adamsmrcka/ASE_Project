@@ -89,36 +89,55 @@ namespace ASE_Project
                     }
                     else
                     {
-                        //User has input a predefined command that is not a shape. Handle accordingly.
-                        switch (command)
+                        // User has input a predefined command that is not a shape. Handle accordingly.
+                        if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
                         {
-                            case "clear":
-                                canvas.clearCanvas();
-                                break;
-                            case "reset":
-                                canvas.restoreCanvas();
-                                break;
-                            case "moveto":
-                                args = parts.Skip(1).ToArray();
-                                intArguments = Array.ConvertAll(args, int.Parse);
-                                canvas.moveTo(intArguments);
-                                break;
-                            case "pen":
-                                args = parts.Skip(1).ToArray();
-                                colour = ColorTranslator.FromHtml(args[0]);
-                                canvas.changeColor(colour);
-                                break;
-                            case "fill":
-                                canvas.toggleFill();
-                                break;
-                            default:
-                                throw new Exception($"Shape '{command}' does not exist or unknown command");
+                            args = parts.Skip(1).ToArray();
+                            if (args.Length == expectedArgsCount)
+                            {
+                                switch (command)
+                                {
+                                    case "clear":
+                                        canvas.clearCanvas();
+                                        break;
+
+                                    case "reset":
+                                        canvas.restoreCanvas();
+                                        break;
+
+                                    case "moveto":
+                                        intArguments = Array.ConvertAll(args, int.Parse);
+                                        canvas.moveTo(intArguments);
+                                        break;
+
+                                    case "pen":
+                                        colour = ColorTranslator.FromHtml(args[0]);
+                                        canvas.changeColor(colour);
+                                        break;
+
+                                    case "fill":
+                                        canvas.toggleFill();
+                                        break;
+
+                                    default:
+                                        throw new Exception($"Error: Unknown command '{command}'");
+                                        // Handle the error as needed.
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception($"Error: '{command}' command expects {expectedArgsCount} arguments, but {args.Length} were provided.");
+                                // Handle the error as needed.
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception($"Error: Unknown command '{command}'");
+                            // Handle the error as needed.
                         }
                     }
-                }
-                else
-                {
-                    throw new Exception("No command entered");
+
                 }
             }
         }
