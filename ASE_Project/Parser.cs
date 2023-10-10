@@ -46,7 +46,6 @@ namespace ASE_Project
 
                 trimmedCommand = line.Trim(' ').ToLower();
                 parts = trimmedCommand.Split(' ');
-
                 if (!string.IsNullOrEmpty(parts[0]))
                 {
                     command = parts[0];
@@ -56,19 +55,18 @@ namespace ASE_Project
                         if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
                         {
                             args = parts.Skip(1).ToArray();
+                            intArguments = new int[args.Length];
 
                             if (args.Length == expectedArgsCount)
                             {
-                                intArguments = new int[args.Length];
                                 bool argumentsAreInts = true;
 
                                 for (int i = 0; i < args.Length; i++)
                                 {
                                     if (!int.TryParse(args[i], out int argValue))
                                     {
-                                        throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
                                         argumentsAreInts = false;
-                                        break;
+                                        throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
                                     }
                                     intArguments[i] = argValue;
                                 }
@@ -83,7 +81,7 @@ namespace ASE_Project
                             else
                             {
                                 // Handle the error as needed, e.g., show an error message or log it.
-                                throw new Exception($"Error: '{command}' command expects {expectedArgsCount} arguments, but {intArguments.Length} were provided.");
+                                throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {intArguments.Length} were provided.");
                             }
                         }
                     }
@@ -122,12 +120,11 @@ namespace ASE_Project
                                     default:
                                         throw new Exception($"Error: Unknown command '{command}'");
                                         // Handle the error as needed.
-                                        break;
                                 }
                             }
                             else
                             {
-                                throw new Exception($"Error: '{command}' command expects {expectedArgsCount} arguments, but {args.Length} were provided.");
+                                throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {args.Length} were provided.");
                                 // Handle the error as needed.
                             }
                         }

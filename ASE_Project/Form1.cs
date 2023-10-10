@@ -41,19 +41,30 @@ namespace ASE_Project
         /// <param name="e"></param>
         private void runButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
+            try
             {
-                parser.parseCommand(commandTextBox.Lines);
-                Refresh();
+                if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
+                {
+                    parser.parseCommand(commandTextBox.Lines);
+                    Refresh();
+                }
+                else if (!string.IsNullOrEmpty(commandLineBox.Text))
+                {
+                    parser.parseCommand(commandLineBox.Lines);
+                    Refresh();
+                }
+                else
+                {
+                    throw new Exception("No command entered");
+                }
             }
-            else if (!string.IsNullOrEmpty(commandLineBox.Text))
+            catch (Exception ex)
             {
-                parser.parseCommand(commandLineBox.Lines);
-                Refresh();
-            }
-            else
-            {
-                throw new Exception("No command entered");
+                Dictionaries.errorMessages.Add(ex.Message);
+
+                ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                errorMessageForm.SetErrorMessages(Dictionaries.errorMessages);
+                errorMessageForm.ShowDialog();
             }
         }
         /// <summary>
@@ -65,15 +76,26 @@ namespace ASE_Project
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if (commandLineBox.Text.ToLower().Equals("run"))
+                try
                 {
-                    parser.parseCommand(commandTextBox.Lines);
-                    Refresh();
+                    if (commandLineBox.Text.ToLower().Equals("run"))
+                    {
+                        parser.parseCommand(commandTextBox.Lines);
+                        Refresh();
+                    }
+                    else
+                    {
+                        parser.parseCommand(commandLineBox.Lines);
+                        Refresh();
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    parser.parseCommand(commandLineBox.Lines);
-                    Refresh();
+                    Dictionaries.errorMessages.Add(ex.Message);
+
+                    ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                    errorMessageForm.SetErrorMessages(Dictionaries.errorMessages);
+                    errorMessageForm.ShowDialog();
                 }
             }
         }

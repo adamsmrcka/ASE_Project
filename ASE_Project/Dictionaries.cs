@@ -24,5 +24,7 @@ namespace ASE_Project
             { "clear", 0},
             { "reset", 0},
         };
+
+        public static List<string> errorMessages = new List<string>();
     }
 }
