@@ -18,7 +18,7 @@ namespace ASE_Project
         ShapeFactory commandFactory;
         String trimmedCommand;
         String[] parts;
-        string[] args;
+        public string[] args;
         public static int[] intArguments;
         String command;
         System.Drawing.Color colour;
@@ -112,7 +112,14 @@ namespace ASE_Project
                                             break;
 
                                         case "pen":
-                                            colour = ColorTranslator.FromHtml(args[0]);
+                                            try
+                                            {
+                                                colour = ColorTranslator.FromHtml(args[0]);
+                                            }
+                                            catch 
+                                            {
+                                                throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
+                                            }
                                             canvas.changeColor(colour);
                                             break;
 

@@ -39,6 +39,7 @@ namespace ASEUnitTest
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
         }
 
         [TestMethod]
@@ -53,6 +54,7 @@ namespace ASEUnitTest
 
             // Assert
             Assert.AreEqual(false, Canvas.fill);
+            Canvas.fill = false;
         }
 
         [TestMethod]
@@ -67,6 +69,7 @@ namespace ASEUnitTest
 
             // Assert
             Assert.AreEqual(ColorTranslator.FromHtml("#FF0000"), Canvas.penColour);
+            Canvas.penColour = Color.Black;
         }
 
         [TestMethod]
@@ -81,6 +84,34 @@ namespace ASEUnitTest
 
             // Assert
             Assert.AreEqual(Color.Red, Canvas.penColour);
+            Canvas.penColour = Color.Black;
+        }
+
+        [TestMethod]
+        public void TestCommands_ShouldThrowException_InvalidColour()
+        {
+            // Arrange
+            string[] lines = { "pen incorrectColour" };
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestCommands_ShouldDraw_MoveTo()
+        {
+            // Arrange
+            string[] lines = { "moveto 50 50" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(50, Canvas.posX);
+            Assert.AreEqual(50, Canvas.posY);
+
+            Canvas.posX = Canvas.defaultPosX;
+            Canvas.posY = Canvas.defaultPosY;
         }
     }
 }

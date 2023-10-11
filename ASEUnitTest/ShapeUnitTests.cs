@@ -30,7 +30,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_Rectangle()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = false;
             // Arrange
             string[] lines = { "Rectangle 10 20" };
@@ -51,7 +50,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_FillRectangle()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = true;
             // Arrange
             string[] lines = { "Rectangle 10 20" };
@@ -72,7 +70,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_Circle()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = false;
             // Arrange
             string[] lines = { "Circle 50" };
@@ -92,7 +89,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_FillCircle()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = true;
             // Arrange
             string[] lines = { "Circle 50" };
@@ -112,7 +108,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_Triangle()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = false;
             Point[] testPoints = new Point[3];
             testPoints[0] = new Point(10, 10);
@@ -136,7 +131,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_FillTriangle()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = true;
             Point[] testPoints = new Point[3];
             testPoints[0] = new Point(10, 10);
@@ -160,7 +154,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_DrawTo()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = false;
             // Arrange
             string[] lines = { "Drawto 40 50" };
@@ -181,7 +174,6 @@ namespace ASEUnitTest
         [TestMethod]
         public void TestShapes_ShouldDraw_FillDrawTo()
         {
-            Canvas.penColour = Color.Black;
             Canvas.fill = true;
             // Arrange
             string[] lines = { "Drawto 40 50" };

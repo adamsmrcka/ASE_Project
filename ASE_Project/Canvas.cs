@@ -16,8 +16,8 @@ namespace ASE_Project
     {
         private Form1 form1;
 
-        private static int defaultPosX = 10;
-        private static int defaultPosY = 10;
+        public static int defaultPosX = 10;
+        public static int defaultPosY = 10;
         private static int defaultPenWidth = 1;
         private static bool defaultFill = false;
         private static Color defaultPenColour = Color.Black;
