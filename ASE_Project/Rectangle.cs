@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace ASE_Project
 {
-    internal class Rectangle : Shape
+    public class Rectangle : Shape
     {
-        private int height, width;
+        public static int height, width;
         public Rectangle() { }
         /// <summary>
         /// 
@@ -22,7 +22,7 @@ namespace ASE_Project
         /// <param name="parameters"> Array of parameters (width and height)</param>
         public override void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
-            this.colour = colour;
+            colourShape = colour;
             xPos = posX;
             yPos = posY;
             fillShape = fill;
@@ -37,11 +37,11 @@ namespace ASE_Project
         {
             if (!fillShape)
             {
-                g.DrawRectangle(new Pen(colour), new System.Drawing.Rectangle(xPos - (width / 2), yPos - (height / 2), width, height));
+                g.DrawRectangle(new Pen(colourShape), new System.Drawing.Rectangle(xPos - (width / 2), yPos - (height / 2), width, height));
             }
             else
             {
-                g.FillRectangle(new SolidBrush(colour), new System.Drawing.Rectangle(xPos - (width / 2), yPos - (height / 2), width, height));
+                g.FillRectangle(new SolidBrush(colourShape), new System.Drawing.Rectangle(xPos - (width / 2), yPos - (height / 2), width, height));
             }
         }
     }

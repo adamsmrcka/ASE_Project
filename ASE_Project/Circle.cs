@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ASE_Project
 {
-    class Circle : Shape
+    public class Circle : Shape
     {
-        protected int size;
+        public static int circleSize;
 
         public Circle() { }
         /// <summary>
@@ -22,11 +22,11 @@ namespace ASE_Project
         /// <param name="parameters"> Array of parameters (diameter)</param>
         override public void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
-            this.colour = colour;
+            colourShape = colour;
             xPos = posX;
             yPos = posY;
             fillShape = fill;
-            size = parameters[0];
+            circleSize = parameters[0];
         }
 
         /// <summary>
@@ -37,11 +37,11 @@ namespace ASE_Project
         {
             if (!fillShape)
             {
-                g.DrawEllipse(new Pen(colour), xPos - (size / 2), yPos - (size / 2), size, size);
+                g.DrawEllipse(new Pen(colourShape), xPos - (circleSize / 2), yPos - (circleSize / 2), circleSize, circleSize);
             }
             else
             {
-                g.FillEllipse(new SolidBrush(colour), xPos - (size / 2), yPos - (size / 2), size, size);
+                g.FillEllipse(new SolidBrush(colourShape), xPos - (circleSize / 2), yPos - (circleSize / 2), circleSize, circleSize);
             }
         }
     }

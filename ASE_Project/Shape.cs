@@ -9,10 +9,10 @@ namespace ASE_Project
 {
     public abstract class Shape
     {
-        protected int xPos, yPos;
-        protected Color colour;
+        public static int xPos, yPos;
+        public static Color colourShape;
         protected Graphics g;
-        protected bool fillShape;
+        public static bool fillShape;
         /// <summary>
         /// 
         /// </summary>

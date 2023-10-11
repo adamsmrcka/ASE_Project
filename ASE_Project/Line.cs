@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace ASE_Project
 {
-    internal class Line : Shape
+    public class Line : Shape
     {
-        private int toX, toY;
+        public static int toX, toY;
 
         public Line() { }
         /// <summary>
@@ -22,7 +22,7 @@ namespace ASE_Project
         /// <param name="parameters"> Array of parameters (X and Y values of the end points)</param>
         override public void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
-            this.colour = colour;
+            colourShape = colour;
             xPos = posX;
             yPos = posY;
             toX = parameters[0];
@@ -34,7 +34,7 @@ namespace ASE_Project
         /// <param name="g"></param>
         override public void draw(Graphics g)
         {
-            g.DrawLine(new Pen(colour), xPos, yPos, toX, toY);
+            g.DrawLine(new Pen(colourShape), xPos, yPos, toX, toY);
         }
     }
 }

@@ -9,9 +9,9 @@ using System.Windows;
 
 namespace ASE_Project
 {
-    internal class Triangle : Shape
+    public class Triangle : Shape
     {
-        private System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
+        public static System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
         public Triangle() { }
         /// <summary>
         /// 
@@ -23,7 +23,7 @@ namespace ASE_Project
         /// <param name="parameters"> Array of parameters (X and Y values of the other 2 triangle points)</param>
         public override void set(Color colour, bool fill, int posX, int posY, params int[] parameters)
         {
-            this.colour = colour;
+            colourShape = colour;
             fillShape = fill;
             trianglePoints[0] = new System.Drawing.Point(posX, posY);
             trianglePoints[1] = new System.Drawing.Point(parameters[0], parameters[1]);
@@ -38,11 +38,11 @@ namespace ASE_Project
         {
             if (!fillShape)
             {
-                g.DrawPolygon(new Pen(colour), trianglePoints);
+                g.DrawPolygon(new Pen(colourShape), trianglePoints);
             }
             else
             {
-                g.FillPolygon(new SolidBrush(colour), trianglePoints);
+                g.FillPolygon(new SolidBrush(colourShape), trianglePoints);
             }
         }
 
