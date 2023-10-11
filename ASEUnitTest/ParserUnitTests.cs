@@ -34,11 +34,30 @@ namespace ASEUnitTest
             Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
         }
 
+        public void TestParseCommand_ShouldThrowException_WhenNoCommandEntered_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fill on", "" };
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
         [TestMethod]
         public void TestParseCommand_ShouldThrowException_WhenUnknownCommand()
         {
             // Arrange
             string[] lines = { "unknowncommand" };
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenUnknownCommand_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fill on", "unknowncommand" };
 
             // Act & Assert
             Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
@@ -55,10 +74,30 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenIncorrectArgumentCount_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fill on", "rectangle 1 2 3" };
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
         public void TestParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType()
         {
             // Arrange
-            string[] lines = { "rectangle rectangle rectangle " }; // Rectangle expects ints
+            string[] lines = { "rectangle rectangle rectangle" }; // Rectangle expects ints
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fill on", "rectangle rectangle rectangle" };
 
             // Act & Assert
             Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
@@ -69,6 +108,16 @@ namespace ASEUnitTest
         {
             // Arrange
             string[] lines = { "fill 20" }; // Rectangle expects ints
+
+            // Act & Assert
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldThrowException_WhenIncorrectStringArgumentType_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fill on", "fill 20" };
 
             // Act & Assert
             Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
@@ -88,10 +137,64 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
+        public void TestParseCommand_ShouldParseValidShapeCommand_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fill on", "rectangle 10 20" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+            Assert.AreEqual(Canvas.fill, true);
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldParseValidShapeCommand_Uppercase()
+        {
+            // Arrange
+            string[] lines = { "RecTangle 10 20" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+        }
+
+        [TestMethod]
         public void TestParseCommand_ShouldParseValidNonShapeCommand()
         {
             // Arrange
             string[] lines = { "fill on" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Canvas.fill, true);
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldParseValidNonShapeCommand_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "rectangle 10 20", "fill on" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Canvas.fill, true);
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+        }
+
+        [TestMethod]
+        public void TestParseCommand_ShouldParseValidNonShapeCommand_Uppercase()
+        {
+            // Arrange
+            string[] lines = { "fiLL oN" };
 
             // Act
             parser.parseCommand(lines);

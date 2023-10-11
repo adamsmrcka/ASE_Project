@@ -7,16 +7,16 @@ using System.Windows.Shapes;
 
 namespace ASE_Project
 {
-    public class CommandFactory
+    public class ShapeFactory
     {
-        public static CommandFactory commandFactory = new CommandFactory();
+        public static ShapeFactory commandFactory = new ShapeFactory();
 
-        public CommandFactory() { }
+        public ShapeFactory() { }
         /// <summary>
         /// Returns the CommandFactory instance.
         /// </summary>
         /// <returns>CommandFactory</returns>
-        public static CommandFactory getShapeFactory() { return commandFactory; }
+        public static ShapeFactory getShapeFactory() { return commandFactory; }
 
         /// <summary>
         /// Takes in a String containing the name of a Shape or Command and returns the requested Object, if it exists.

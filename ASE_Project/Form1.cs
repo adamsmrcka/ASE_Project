@@ -17,7 +17,7 @@ namespace ASE_Project
 
         Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
         Canvas paintingCanvas;
-        CommandFactory commandFactory;
+        ShapeFactory commandFactory;
         Graphics g;
         Parser parser;
 
@@ -25,7 +25,7 @@ namespace ASE_Project
         {
             InitializeComponent();
             paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap), this);
-            commandFactory = new CommandFactory();
+            commandFactory = new ShapeFactory();
             parser = Parser.getParser();
             parser.setCanvas(paintingCanvas);
             updateCursorPositionLabel(Canvas.posX, Canvas.posY);

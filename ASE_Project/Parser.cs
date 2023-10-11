@@ -15,7 +15,7 @@ namespace ASE_Project
 {
     public class Parser
     {
-        CommandFactory commandFactory;
+        ShapeFactory commandFactory;
         String trimmedCommand;
         String[] parts;
         string[] args;
@@ -28,7 +28,7 @@ namespace ASE_Project
         private static Parser parser = new Parser();
         private Parser()
         {
-            commandFactory = CommandFactory.getShapeFactory();
+            commandFactory = ShapeFactory.getShapeFactory();
         }
 
         public static Parser getParser() { return parser; }
