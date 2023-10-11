@@ -104,5 +104,89 @@ namespace ASEUnitTest
             Assert.AreEqual(Canvas.posY, 10);
             Assert.AreEqual(Parser.intArguments[0], 50);
         }
+
+        [TestMethod]
+        public void TestShapes_ShouldDraw_Triangle()
+        {
+            Canvas.fill = false;
+            // Arrange
+            string[] lines = { "Triangle 40 50 120 60" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "triangle");
+            Assert.AreEqual(Canvas.penColour, Color.Black);
+            Assert.AreEqual(Canvas.fill, false);
+            Assert.AreEqual(Canvas.posX, 10);
+            Assert.AreEqual(Canvas.posY, 10);
+            Assert.AreEqual(Parser.intArguments[0], 40);
+            Assert.AreEqual(Parser.intArguments[1], 50);
+            Assert.AreEqual(Parser.intArguments[2], 120);
+            Assert.AreEqual(Parser.intArguments[3], 60);
+        }
+
+        [TestMethod]
+        public void TestShapes_ShouldDraw_FillTriangle()
+        {
+            Canvas.fill = true;
+            // Arrange
+            string[] lines = { "Triangle 40 50 120 60" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "triangle");
+            Assert.AreEqual(Canvas.penColour, Color.Black);
+            Assert.AreEqual(Canvas.fill, true);
+            Assert.AreEqual(Canvas.posX, 10);
+            Assert.AreEqual(Canvas.posY, 10);
+            Assert.AreEqual(Parser.intArguments[0], 40);
+            Assert.AreEqual(Parser.intArguments[1], 50);
+            Assert.AreEqual(Parser.intArguments[2], 120);
+            Assert.AreEqual(Parser.intArguments[3], 60);
+        }
+
+        [TestMethod]
+        public void TestShapes_ShouldDraw_DrawTo()
+        {
+            Canvas.fill = false;
+            // Arrange
+            string[] lines = { "Drawto 40 50" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "line");
+            Assert.AreEqual(Canvas.penColour, Color.Black);
+            Assert.AreEqual(Canvas.fill, false);
+            Assert.AreEqual(Canvas.posX, 10);
+            Assert.AreEqual(Canvas.posY, 10);
+            Assert.AreEqual(Parser.intArguments[0], 40);
+            Assert.AreEqual(Parser.intArguments[1], 50);
+        }
+
+        [TestMethod]
+        public void TestShapes_ShouldDraw_FillDrawTo()
+        {
+            Canvas.fill = true;
+            // Arrange
+            string[] lines = { "Drawto 40 50" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "line");
+            Assert.AreEqual(Canvas.penColour, Color.Black);
+            Assert.AreEqual(Canvas.fill, true);
+            Assert.AreEqual(Canvas.posX, 10);
+            Assert.AreEqual(Canvas.posY, 10);
+            Assert.AreEqual(Parser.intArguments[0], 40);
+            Assert.AreEqual(Parser.intArguments[1], 50);
+        }
     }
 }
