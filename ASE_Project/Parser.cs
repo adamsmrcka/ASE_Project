@@ -19,7 +19,7 @@ namespace ASE_Project
         String trimmedCommand;
         String[] parts;
         string[] args;
-        int[] intArguments;
+        public static int[] intArguments;
         String command;
         System.Drawing.Color colour;
         Canvas canvas;
