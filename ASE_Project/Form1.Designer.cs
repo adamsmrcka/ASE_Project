@@ -43,55 +43,62 @@
             // 
             // runButton
             // 
-            this.runButton.Location = new System.Drawing.Point(254, 782);
+            this.runButton.Location = new System.Drawing.Point(113, 508);
+            this.runButton.Margin = new System.Windows.Forms.Padding(2);
             this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(140, 34);
-            this.runButton.TabIndex = 0;
+            this.runButton.Size = new System.Drawing.Size(93, 22);
+            this.runButton.TabIndex = 2;
             this.runButton.Text = "Run";
             this.runButton.UseVisualStyleBackColor = true;
             this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
             // syntaxButton
             // 
-            this.syntaxButton.Location = new System.Drawing.Point(798, 715);
+            this.syntaxButton.Location = new System.Drawing.Point(242, 508);
+            this.syntaxButton.Margin = new System.Windows.Forms.Padding(2);
             this.syntaxButton.Name = "syntaxButton";
-            this.syntaxButton.Size = new System.Drawing.Size(140, 34);
-            this.syntaxButton.TabIndex = 1;
+            this.syntaxButton.Size = new System.Drawing.Size(93, 22);
+            this.syntaxButton.TabIndex = 3;
             this.syntaxButton.Text = "Syntax";
             this.syntaxButton.UseVisualStyleBackColor = true;
+            this.syntaxButton.Click += new System.EventHandler(this.syntaxButton_Click);
             // 
             // commandTextBox
             // 
-            this.commandTextBox.Location = new System.Drawing.Point(34, 51);
+            this.commandTextBox.Location = new System.Drawing.Point(23, 33);
+            this.commandTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.commandTextBox.Multiline = true;
             this.commandTextBox.Name = "commandTextBox";
-            this.commandTextBox.Size = new System.Drawing.Size(606, 649);
-            this.commandTextBox.TabIndex = 2;
+            this.commandTextBox.Size = new System.Drawing.Size(405, 423);
+            this.commandTextBox.TabIndex = 0;
             this.commandTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.commandTextBox_KeyDown);
             // 
             // commandLineBox
             // 
-            this.commandLineBox.Location = new System.Drawing.Point(34, 745);
+            this.commandLineBox.Location = new System.Drawing.Point(23, 484);
+            this.commandLineBox.Margin = new System.Windows.Forms.Padding(2);
             this.commandLineBox.Name = "commandLineBox";
-            this.commandLineBox.Size = new System.Drawing.Size(606, 26);
-            this.commandLineBox.TabIndex = 3;
+            this.commandLineBox.Size = new System.Drawing.Size(405, 20);
+            this.commandLineBox.TabIndex = 1;
             this.commandLineBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.commandLineBox_KeyDown);
             // 
             // complexCommandLabel
             // 
             this.complexCommandLabel.AutoSize = true;
-            this.complexCommandLabel.Location = new System.Drawing.Point(250, 14);
+            this.complexCommandLabel.Location = new System.Drawing.Point(167, 9);
+            this.complexCommandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.complexCommandLabel.Name = "complexCommandLabel";
-            this.complexCommandLabel.Size = new System.Drawing.Size(177, 20);
+            this.complexCommandLabel.Size = new System.Drawing.Size(117, 13);
             this.complexCommandLabel.TabIndex = 5;
             this.complexCommandLabel.Text = "Enter Complex Program";
             // 
             // simpleCommandLabel
             // 
             this.simpleCommandLabel.AutoSize = true;
-            this.simpleCommandLabel.Location = new System.Drawing.Point(249, 715);
+            this.simpleCommandLabel.Location = new System.Drawing.Point(166, 465);
+            this.simpleCommandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.simpleCommandLabel.Name = "simpleCommandLabel";
-            this.simpleCommandLabel.Size = new System.Drawing.Size(177, 20);
+            this.simpleCommandLabel.Size = new System.Drawing.Size(116, 13);
             this.simpleCommandLabel.TabIndex = 6;
             this.simpleCommandLabel.Text = "Enter Simple Command";
             // 
@@ -99,9 +106,10 @@
             // 
             this.drawPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.drawPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.drawPanel.Location = new System.Drawing.Point(684, 20);
+            this.drawPanel.Location = new System.Drawing.Point(456, 6);
+            this.drawPanel.Margin = new System.Windows.Forms.Padding(2);
             this.drawPanel.Name = "drawPanel";
-            this.drawPanel.Size = new System.Drawing.Size(850, 750);
+            this.drawPanel.Size = new System.Drawing.Size(580, 490);
             this.drawPanel.TabIndex = 7;
             this.drawPanel.TabStop = false;
             this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
@@ -109,36 +117,39 @@
             // cursorPositionLabel
             // 
             this.cursorPositionLabel.AutoSize = true;
-            this.cursorPositionLabel.Location = new System.Drawing.Point(1314, 773);
+            this.cursorPositionLabel.Location = new System.Drawing.Point(876, 502);
+            this.cursorPositionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cursorPositionLabel.Name = "cursorPositionLabel";
-            this.cursorPositionLabel.Size = new System.Drawing.Size(220, 20);
+            this.cursorPositionLabel.Size = new System.Drawing.Size(148, 13);
             this.cursorPositionLabel.TabIndex = 8;
             this.cursorPositionLabel.Text = "Cursor Position: X = 10 Y = 10";
             // 
             // penColourStatusLabel
             // 
             this.penColourStatusLabel.AutoSize = true;
-            this.penColourStatusLabel.Location = new System.Drawing.Point(680, 773);
+            this.penColourStatusLabel.Location = new System.Drawing.Point(453, 502);
+            this.penColourStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.penColourStatusLabel.Name = "penColourStatusLabel";
-            this.penColourStatusLabel.Size = new System.Drawing.Size(102, 20);
+            this.penColourStatusLabel.Size = new System.Drawing.Size(70, 13);
             this.penColourStatusLabel.TabIndex = 9;
             this.penColourStatusLabel.Text = "Colour: Black";
             // 
             // fillStatusLabel
             // 
             this.fillStatusLabel.AutoSize = true;
-            this.fillStatusLabel.Location = new System.Drawing.Point(680, 793);
+            this.fillStatusLabel.Location = new System.Drawing.Point(453, 515);
+            this.fillStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.fillStatusLabel.Name = "fillStatusLabel";
-            this.fillStatusLabel.Size = new System.Drawing.Size(58, 20);
+            this.fillStatusLabel.Size = new System.Drawing.Size(39, 13);
             this.fillStatusLabel.TabIndex = 10;
             this.fillStatusLabel.Text = "Fill: Off";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1568, 822);
+            this.ClientSize = new System.Drawing.Size(1045, 534);
             this.Controls.Add(this.fillStatusLabel);
             this.Controls.Add(this.penColourStatusLabel);
             this.Controls.Add(this.cursorPositionLabel);
@@ -149,6 +160,7 @@
             this.Controls.Add(this.commandTextBox);
             this.Controls.Add(this.syntaxButton);
             this.Controls.Add(this.runButton);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).EndInit();

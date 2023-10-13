@@ -16,7 +16,14 @@ namespace ASE_Project
         {
             InitializeComponent();
         }
-        public void SetErrorMessages(List<string> errorMessages)
+        public void setLabelMessage(string label)
+        {
+            string labelText = label;
+
+            // Set the text of the TextBox to display the error messages
+            label1.Text = labelText;
+        }
+        public void setErrorMessages(List<string> errorMessages)
         {
             string errorMessageText = string.Join(Environment.NewLine, errorMessages);
 

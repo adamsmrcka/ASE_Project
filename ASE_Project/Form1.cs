@@ -7,13 +7,15 @@ using CommandLine;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows;
 using System.Security.Policy;
+using System.Collections.Generic;
 
 namespace ASE_Project
 {
     public partial class Form1 : Form
     {
-        const int CanvasBitmapWidth = 850;
-        const int CanvasBitmapHeight = 750;
+        const int CanvasBitmapWidth = 580;
+        const int CanvasBitmapHeight = 490;
+        private bool draw = false;
 
         Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
         Canvas paintingCanvas;
@@ -25,7 +27,6 @@ namespace ASE_Project
         {
             InitializeComponent();
             paintingCanvas = new Canvas(Graphics.FromImage(canvasBitmap), this);
-            commandFactory = new ShapeFactory();
             parser = Parser.getParser();
             parser.setCanvas(paintingCanvas);
             updateCursorPositionLabel(Canvas.posX, Canvas.posY);
@@ -36,7 +37,7 @@ namespace ASE_Project
 
         private void drawPanel_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            g = e.Graphics;
             g.DrawImageUnscaled(canvasBitmap, 0, 0);
         }
         /// <summary>
@@ -46,17 +47,25 @@ namespace ASE_Project
         /// <param name="e"></param>
         private void runButton_Click(object sender, EventArgs e)
         {
+            draw = true;
             try
             {
                 if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
                 {
-                    parser.parseCommand(commandTextBox.Lines);
+                    parser.parseCommand(commandTextBox.Lines, draw);
                     Refresh();
                 }
                 else if (!string.IsNullOrEmpty(commandLineBox.Text))
                 {
-                    parser.parseCommand(commandLineBox.Lines);
+                    parser.parseCommand(commandLineBox.Lines, draw);
                     Refresh();
+                }
+                else if (!string.IsNullOrEmpty(commandTextBox.Text) && !commandLineBox.Text.ToLower().Equals("run"))
+                {
+                    draw = false;
+                    parser.parseCommand(commandTextBox.Lines, draw);
+                    Refresh();
+                    throw new Exception("You need to enter 'run' into the 'Simple Command Box' in order to successfully run the command");
                 }
                 else
                 {
@@ -68,7 +77,7 @@ namespace ASE_Project
                 Dictionaries.errorMessages.Add(ex.Message);
 
                 ErrorMessageForm errorMessageForm = new ErrorMessageForm();
-                errorMessageForm.SetErrorMessages(Dictionaries.errorMessages);
+                errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
                 errorMessageForm.ShowDialog();
             }
         }
@@ -81,16 +90,17 @@ namespace ASE_Project
         {
             if (e.KeyCode == Keys.Enter)
             {
+                draw = true;
                 try
                 {
                     if (commandLineBox.Text.ToLower().Equals("run"))
                     {
-                        parser.parseCommand(commandTextBox.Lines);
+                        parser.parseCommand(commandTextBox.Lines, draw);
                         Refresh();
                     }
                     else
                     {
-                        parser.parseCommand(commandLineBox.Lines);
+                        parser.parseCommand(commandLineBox.Lines, draw);
                         Refresh();
                     }
                 }
@@ -99,7 +109,7 @@ namespace ASE_Project
                     Dictionaries.errorMessages.Add(ex.Message);
 
                     ErrorMessageForm errorMessageForm = new ErrorMessageForm();
-                    errorMessageForm.SetErrorMessages(Dictionaries.errorMessages);
+                    errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
                     errorMessageForm.ShowDialog();
                 }
             }
@@ -138,6 +148,50 @@ namespace ASE_Project
         public void updatePenColourStatusLabel(Color colourStatus)
         {
             penColourStatusLabel.Text = "Colour: " + colourStatus.Name;
+        }
+
+        private void syntaxButton_Click(object sender, EventArgs e)
+        {
+            draw = false;
+            try
+            {
+                if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
+                {
+                    parser.parseCommand(commandTextBox.Lines, draw);
+                    Refresh();
+                }
+                else if (!string.IsNullOrEmpty(commandTextBox.Text) && !commandLineBox.Text.ToLower().Equals("run"))
+                {
+                    parser.parseCommand(commandTextBox.Lines, draw);
+                    Refresh();
+                    throw new Exception("Error: The command syntax is correct BUT you need to enter 'run' into 'Simple Command Box' in order to successfully run the command");
+                }
+                else if (!string.IsNullOrEmpty(commandLineBox.Text))
+                {
+                    parser.parseCommand(commandLineBox.Lines, draw);
+                    Refresh();
+                }
+                else
+                {
+                    throw new Exception("Error: No command entered");
+                }
+                ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                errorMessageForm.setLabelMessage("Command is correct");
+                List<string> errorMessage = new List<string>();
+                errorMessage.Add("No errors found. You can run this command");
+                errorMessageForm.setErrorMessages(errorMessage);
+                errorMessageForm.ShowDialog();
+
+            }
+            catch (Exception ex)
+            {
+                Dictionaries.errorMessages.Add(ex.Message);
+                ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
+                errorMessageForm.ShowDialog();
+            }
+
+
         }
     }
 }

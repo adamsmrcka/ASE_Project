@@ -35,7 +35,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);
@@ -50,7 +50,7 @@ namespace ASEUnitTest
             string[] lines = { "fill off" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(false, Canvas.fill);
@@ -65,7 +65,7 @@ namespace ASEUnitTest
             string[] lines = { "pen #FF0000" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(ColorTranslator.FromHtml("#FF0000"), Canvas.penColour);
@@ -80,7 +80,7 @@ namespace ASEUnitTest
             string[] lines = { "pen red" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(Color.Red, Canvas.penColour);
@@ -94,7 +94,7 @@ namespace ASEUnitTest
             string[] lines = { "pen incorrectColour" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace ASEUnitTest
             string[] lines = { "moveto 50 50" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(50, Canvas.posX);
@@ -123,7 +123,7 @@ namespace ASEUnitTest
             string[] lines = { "reset" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(Canvas.defaultPosX, Canvas.posX);

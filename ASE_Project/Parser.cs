@@ -38,7 +38,7 @@ namespace ASE_Project
         /// Analyses the imput per line and handles instruction according to the imput - differentiates between commands and parameters and divides them accordingly
         /// </summary>
         /// <param name="lines">Array of commands and parameters from commandLineBox or commandTextBox - divided by lines</param>
-        public void parseCommand(string[] lines)
+        public void parseCommand(string[] lines, bool draw)
         {
             if (lines.Length > 0)
             {
@@ -77,8 +77,10 @@ namespace ASE_Project
                                     if (argumentsAreInts)
                                     {
                                         s = (Shape)commandFactory.getShape(command);
-
-                                        canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                                        if (draw == true)
+                                        {
+                                            canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                                        }
                                     }
                                 }
                                 else
@@ -94,7 +96,7 @@ namespace ASE_Project
                             if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
                             {
                                 args = parts.Skip(1).ToArray();
-                                if (args.Length == expectedArgsCount)
+                                if (args.Length == expectedArgsCount && draw == true)
                                 {
                                     switch (command)
                                     {
@@ -116,7 +118,7 @@ namespace ASE_Project
                                             {
                                                 colour = ColorTranslator.FromHtml(args[0]);
                                             }
-                                            catch 
+                                            catch
                                             {
                                                 throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
                                             }
@@ -125,6 +127,39 @@ namespace ASE_Project
 
                                         case "fill":
                                             canvas.toggleFill(args[0]);
+                                            break;
+
+                                        default:
+                                            throw new Exception($"Error: Unknown command '{command}'");
+                                            // Handle the error as needed.
+                                    }
+                                }
+                                else if (args.Length == expectedArgsCount && draw == false)
+                                {
+                                    switch (command)
+                                    {
+                                        case "clear":
+                                            break;
+
+                                        case "reset":
+                                            break;
+
+                                        case "moveto":
+                                            intArguments = Array.ConvertAll(args, int.Parse);
+                                            break;
+
+                                        case "pen":
+                                            try
+                                            {
+                                                colour = ColorTranslator.FromHtml(args[0]);
+                                            }
+                                            catch
+                                            {
+                                                throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
+                                            }
+                                            break;
+
+                                        case "fill":
                                             break;
 
                                         default:

@@ -31,7 +31,7 @@ namespace ASEUnitTest
             string[] lines = { "" }; // Empty command
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         public void TestParseCommand_ShouldThrowException_WhenNoCommandEntered_MultipleCommands()
@@ -40,7 +40,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on", "" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ASEUnitTest
             string[] lines = { "unknowncommand" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on", "unknowncommand" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -70,7 +70,7 @@ namespace ASEUnitTest
             string[] lines = { "rectangle 1 2 3" }; // Rectangle expects 2 arguments
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -80,7 +80,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on", "rectangle 1 2 3" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace ASEUnitTest
             string[] lines = { "rectangle rectangle rectangle" }; // Rectangle expects ints
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -100,7 +100,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on", "rectangle rectangle rectangle" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -110,7 +110,7 @@ namespace ASEUnitTest
             string[] lines = { "fill 20" }; // Rectangle expects ints
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -120,7 +120,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on", "fill 20" };
 
             // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines));
+            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
         [TestMethod]
@@ -130,7 +130,7 @@ namespace ASEUnitTest
             string[] lines = { "rectangle 10 20" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -143,7 +143,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on", "rectangle 10 20" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -157,7 +157,7 @@ namespace ASEUnitTest
             string[] lines = { "RecTangle 10 20" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -170,7 +170,7 @@ namespace ASEUnitTest
             string[] lines = { "fill on" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);
@@ -183,7 +183,7 @@ namespace ASEUnitTest
             string[] lines = { "rectangle 10 20", "fill on" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);
@@ -197,7 +197,7 @@ namespace ASEUnitTest
             string[] lines = { "fiLL oN" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true );
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);

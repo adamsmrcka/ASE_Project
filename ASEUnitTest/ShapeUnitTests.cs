@@ -35,7 +35,7 @@ namespace ASEUnitTest
             string[] lines = { "Rectangle 10 20" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -55,7 +55,7 @@ namespace ASEUnitTest
             string[] lines = { "Rectangle 10 20" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -75,7 +75,7 @@ namespace ASEUnitTest
             string[] lines = { "Circle 50" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("circle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -94,7 +94,7 @@ namespace ASEUnitTest
             string[] lines = { "Circle 50" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("circle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -117,7 +117,7 @@ namespace ASEUnitTest
             string[] lines = { "Triangle 40 50 120 60" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("triangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -140,7 +140,7 @@ namespace ASEUnitTest
             string[] lines = { "Triangle 40 50 120 60" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("triangle", Parser.s.ToString().ToLower().Split('.').Last());
@@ -159,7 +159,7 @@ namespace ASEUnitTest
             string[] lines = { "Drawto 40 50" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("line", Parser.s.ToString().ToLower().Split('.').Last());
@@ -179,7 +179,7 @@ namespace ASEUnitTest
             string[] lines = { "Drawto 40 50" };
 
             // Act
-            parser.parseCommand(lines);
+            parser.parseCommand(lines, true);
 
             // Assert
             Assert.AreEqual("line", Parser.s.ToString().ToLower().Split('.').Last());
