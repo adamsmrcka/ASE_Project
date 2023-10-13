@@ -20,7 +20,7 @@ namespace ASEUnitTest
         public void Initialize()
         {
             parser = Parser.getParser();
-            Canvas canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
+            canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
             parser.setCanvas(canvas);
         }
 
@@ -133,7 +133,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
         }
 
         [TestMethod]
@@ -146,8 +146,8 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
-            Assert.AreEqual(Canvas.fill, true);
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(true, Canvas.fill);
         }
 
         [TestMethod]
@@ -160,7 +160,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
         }
 
         [TestMethod]
@@ -173,7 +173,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Canvas.fill, true);
+            Assert.AreEqual(true, Canvas.fill);
         }
 
         [TestMethod]
@@ -186,8 +186,8 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Canvas.fill, true);
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
+            Assert.AreEqual(true, Canvas.fill);
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
         }
 
         [TestMethod]
@@ -200,7 +200,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Canvas.fill, true);
+            Assert.AreEqual(true, Canvas.fill);
         }
 
         [TestMethod]

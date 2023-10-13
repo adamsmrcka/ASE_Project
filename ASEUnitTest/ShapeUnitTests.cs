@@ -23,7 +23,7 @@ namespace ASEUnitTest
         public void Initialize()
         {
             parser = Parser.getParser();
-            Canvas canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
+            canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
             parser.setCanvas(canvas);
         }
 
@@ -38,13 +38,13 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, false);
-            Assert.AreEqual(Shape.xPos, 10);
-            Assert.AreEqual(Shape.yPos, 10);
-            Assert.AreEqual(ASE_Project.Rectangle.width, 10);
-            Assert.AreEqual(ASE_Project.Rectangle.height, 20);
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(false, Shape.fillShape);
+            Assert.AreEqual(10, Shape.xPos);
+            Assert.AreEqual(10, Shape.yPos);
+            Assert.AreEqual(10, ASE_Project.Rectangle.width);
+            Assert.AreEqual(20, ASE_Project.Rectangle.height);
         }
 
         [TestMethod]
@@ -58,13 +58,13 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "rectangle");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, true);
-            Assert.AreEqual(Shape.xPos, 10);
-            Assert.AreEqual(Shape.yPos, 10);
-            Assert.AreEqual(ASE_Project.Rectangle.width, 10);
-            Assert.AreEqual(ASE_Project.Rectangle.height, 20);
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(true, Shape.fillShape);
+            Assert.AreEqual(10, Shape.xPos);
+            Assert.AreEqual(10, Shape.yPos);
+            Assert.AreEqual(10, ASE_Project.Rectangle.width);
+            Assert.AreEqual(20, ASE_Project.Rectangle.height);
         }
 
         [TestMethod]
@@ -78,12 +78,12 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "circle");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, false);
-            Assert.AreEqual(Shape.xPos, 10);
-            Assert.AreEqual(Shape.yPos, 10);
-            Assert.AreEqual(Circle.circleSize, 50);
+            Assert.AreEqual("circle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(false, Shape.fillShape);
+            Assert.AreEqual(10, Shape.xPos);
+            Assert.AreEqual(10, Shape.yPos);
+            Assert.AreEqual(50, Circle.circleSize);
         }
 
         [TestMethod]
@@ -97,12 +97,12 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "circle");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, true);
-            Assert.AreEqual(Shape.xPos, 10);
-            Assert.AreEqual(Shape.yPos, 10);
-            Assert.AreEqual(Parser.intArguments[0], 50);
+            Assert.AreEqual("circle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(true, Shape.fillShape);
+            Assert.AreEqual(10, Shape.xPos);
+            Assert.AreEqual(10, Shape.yPos);
+            Assert.AreEqual(50, Parser.intArguments[0]);
         }
 
         [TestMethod]
@@ -120,12 +120,12 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "triangle");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, false);
-            Assert.AreEqual(Triangle.trianglePoints[0], testPoints[0]);
-            Assert.AreEqual(Triangle.trianglePoints[1], testPoints[1]);
-            Assert.AreEqual(Triangle.trianglePoints[2], testPoints[2]);
+            Assert.AreEqual("triangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(false, Shape.fillShape);
+            Assert.AreEqual(testPoints[0], Triangle.trianglePoints[0]);
+            Assert.AreEqual(testPoints[1], Triangle.trianglePoints[1]);
+            Assert.AreEqual(testPoints[2], Triangle.trianglePoints[2]);
         }
 
         [TestMethod]
@@ -143,12 +143,12 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "triangle");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, true);
-            Assert.AreEqual(Triangle.trianglePoints[0], testPoints[0]);
-            Assert.AreEqual(Triangle.trianglePoints[1], testPoints[1]);
-            Assert.AreEqual(Triangle.trianglePoints[2], testPoints[2]);
+            Assert.AreEqual("triangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(true, Shape.fillShape);
+            Assert.AreEqual(testPoints[0], Triangle.trianglePoints[0]);
+            Assert.AreEqual(testPoints[1], Triangle.trianglePoints[1]);
+            Assert.AreEqual(testPoints[2], Triangle.trianglePoints[2]);
         }
 
         [TestMethod]
@@ -162,13 +162,13 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "line");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, false);
-            Assert.AreEqual(Shape.xPos, 10);
-            Assert.AreEqual(Shape.yPos, 10);
-            Assert.AreEqual(Line.toX, 40);
-            Assert.AreEqual(Line.toY, 50);
+            Assert.AreEqual("line", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(false, Shape.fillShape);
+            Assert.AreEqual(10, Shape.xPos);
+            Assert.AreEqual(10, Shape.yPos);
+            Assert.AreEqual(40, Line.toX);
+            Assert.AreEqual(50, Line.toY);
         }
 
         [TestMethod]
@@ -182,13 +182,13 @@ namespace ASEUnitTest
             parser.parseCommand(lines);
 
             // Assert
-            Assert.AreEqual(Parser.s.ToString().ToLower().Split('.').Last(), "line");
-            Assert.AreEqual(Shape.colourShape, Color.Black);
-            Assert.AreEqual(Shape.fillShape, true);
-            Assert.AreEqual(Shape.xPos, 10);
-            Assert.AreEqual(Shape.yPos, 10);
-            Assert.AreEqual(Line.toX, 40);
-            Assert.AreEqual(Line.toY, 50);
+            Assert.AreEqual("line", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(Color.Black, Shape.colourShape);
+            Assert.AreEqual(true, Shape.fillShape);
+            Assert.AreEqual(10, Shape.xPos);
+            Assert.AreEqual(10, Shape.yPos);
+            Assert.AreEqual(40, Line.toX);
+            Assert.AreEqual(50, Line.toY);
         }
     }
 }

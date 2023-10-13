@@ -23,7 +23,7 @@ namespace ASEUnitTest
         public void Initialize()
         {
             parser = Parser.getParser();
-            Canvas canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
+            canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
             parser.setCanvas(canvas);
         }
 
