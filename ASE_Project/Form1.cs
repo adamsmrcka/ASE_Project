@@ -8,6 +8,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Windows;
 using System.Security.Policy;
 using System.Collections.Generic;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ASE_Project
 {
@@ -65,7 +66,7 @@ namespace ASE_Project
                     draw = false;
                     parser.parseCommand(commandTextBox.Lines, draw);
                     Refresh();
-                    throw new Exception("You need to enter 'run' into the 'Simple Command Box' in order to successfully run the command");
+                    throw new Exception("You need to enter 'Run' into the 'Simple Command Box' in order to successfully run the command");
                 }
                 else
                 {
@@ -164,7 +165,7 @@ namespace ASE_Project
                 {
                     parser.parseCommand(commandTextBox.Lines, draw);
                     Refresh();
-                    throw new Exception("Error: The command syntax is correct BUT you need to enter 'run' into 'Simple Command Box' in order to successfully run the command");
+                    throw new Exception("Error: The command syntax is correct BUT you need to enter 'Run' into 'Simple Command Box' in order to successfully run the command");
                 }
                 else if (!string.IsNullOrEmpty(commandLineBox.Text))
                 {
@@ -190,8 +191,34 @@ namespace ASE_Project
                 errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
                 errorMessageForm.ShowDialog();
             }
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (SaveProgram() == true)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog(); 
+                saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+                saveFileDialog.RestoreDirectory = true;
 
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    File.WriteAllText(saveFileDialog.FileName, commandTextBox.Text);
+                }
 
+            };
+        }
+
+        public static bool SaveProgram()
+        {
+            const string message = "Would you like to save your drawing program before you leave?";
+            const string caption = "Save Program";
+            var result = MessageBox.Show(message, caption,
+                                         MessageBoxButtons.YesNo,
+                                         MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+                return true;
+            else
+                return false;
         }
     }
 }
