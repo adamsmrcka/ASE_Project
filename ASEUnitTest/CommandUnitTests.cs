@@ -113,6 +113,43 @@ namespace ASEUnitTest
             Canvas.posX = Canvas.defaultPosX;
             Canvas.posY = Canvas.defaultPosY;
         }
+
+        [TestMethod]
+        public void TestCommands_ShouldDraw_Reset()
+        {
+            Canvas.posX = 50;
+            Canvas.posY = 50;
+            // Arrange
+            string[] lines = { "reset" };
+
+            // Act
+            parser.parseCommand(lines);
+
+            // Assert
+            Assert.AreEqual(Canvas.defaultPosX, Canvas.posX);
+            Assert.AreEqual(Canvas.defaultPosY, Canvas.posY);
+        }
+
+        [TestMethod]
+        public void TestCommands_ShouldDraw_Clear()
+        {
+            // Arrange
+            // Create a Graphics object and a Canvas
+            Bitmap bitmap = new Bitmap(800, 600);
+            Graphics graphics = Graphics.FromImage(bitmap);
+            Canvas canvas = new Canvas(graphics, null);
+
+            // Draw something on the canvas
+            canvas.getGraphics().FillRectangle(new SolidBrush(Color.Black), 10, 10, 100, 100);
+
+            // Act
+            canvas.clearCanvas();
+
+            // Assert
+            // After clearing, the canvas should be empty (white background)
+            Color pixelColor = bitmap.GetPixel(10, 10); // Assuming defaultPosX and defaultPosY
+            Assert.AreEqual(ColorTranslator.FromHtml("#FFFFFF"), pixelColor);
+        }
     }
 }
 
