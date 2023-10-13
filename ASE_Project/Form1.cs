@@ -194,7 +194,7 @@ namespace ASE_Project
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (SaveProgram() == true)
+            if (saveProgram() == true)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog(); 
                 saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -208,7 +208,7 @@ namespace ASE_Project
             };
         }
 
-        public static bool SaveProgram()
+        public static bool saveProgram()
         {
             const string message = "Would you like to save your drawing program before you leave?";
             const string caption = "Save Program";

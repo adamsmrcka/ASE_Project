@@ -76,9 +76,9 @@ namespace ASE_Project
 
                                     if (argumentsAreInts)
                                     {
-                                        s = (Shape)commandFactory.getShape(command);
                                         if (draw == true)
                                         {
+                                            s = (Shape)commandFactory.getShape(command);
                                             canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
                                         }
                                     }
@@ -126,7 +126,14 @@ namespace ASE_Project
                                             break;
 
                                         case "fill":
-                                            canvas.toggleFill(args[0]);
+                                            if (args[0] == "on" || args[0] == "off")
+                                            {
+                                                canvas.toggleFill(args[0]);
+                                            }
+                                            else
+                                            {
+                                                throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
+                                            }
                                             break;
 
                                         default:
@@ -160,6 +167,13 @@ namespace ASE_Project
                                             break;
 
                                         case "fill":
+                                            if (args[0] == "on" || args[0] == "off")
+                                            {
+                                            }
+                                            else
+                                            {
+                                                throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
+                                            }
                                             break;
 
                                         default:

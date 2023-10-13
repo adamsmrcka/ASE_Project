@@ -28,7 +28,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_Rectangle()
+        public void testShapes_ShouldDraw_Rectangle()
         {
             Canvas.fill = false;
             // Arrange
@@ -48,7 +48,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_FillRectangle()
+        public void testShapes_ShouldDraw_FillRectangle()
         {
             Canvas.fill = true;
             // Arrange
@@ -68,7 +68,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_Circle()
+        public void testShapes_ShouldDraw_Circle()
         {
             Canvas.fill = false;
             // Arrange
@@ -87,7 +87,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_FillCircle()
+        public void testShapes_ShouldDraw_FillCircle()
         {
             Canvas.fill = true;
             // Arrange
@@ -106,7 +106,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_Triangle()
+        public void testShapes_ShouldDraw_Triangle()
         {
             Canvas.fill = false;
             Point[] testPoints = new Point[3];
@@ -129,7 +129,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_FillTriangle()
+        public void testShapes_ShouldDraw_FillTriangle()
         {
             Canvas.fill = true;
             Point[] testPoints = new Point[3];
@@ -152,7 +152,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_DrawTo()
+        public void testShapes_ShouldDraw_DrawTo()
         {
             Canvas.fill = false;
             // Arrange
@@ -172,7 +172,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestShapes_ShouldDraw_FillDrawTo()
+        public void testShapes_ShouldDraw_FillDrawTo()
         {
             Canvas.fill = true;
             // Arrange

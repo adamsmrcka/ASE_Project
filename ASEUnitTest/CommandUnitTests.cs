@@ -28,7 +28,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_FillOn()
+        public void testCommands_ShouldDraw_FillOn()
         {
             Canvas.fill = false;
             // Arrange
@@ -43,7 +43,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_FillOff()
+        public void testCommands_ShouldDraw_FillOff()
         {
             Canvas.fill = true;
             // Arrange
@@ -58,7 +58,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_ColourRedHex()
+        public void testCommands_ShouldDraw_ColourRedHex()
         {
             Canvas.penColour = Color.Black;
             // Arrange
@@ -73,7 +73,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_ColourRedString()
+        public void testCommands_ShouldDraw_ColourRedString()
         {
             Canvas.penColour = Color.Black;
             // Arrange
@@ -88,7 +88,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldThrowException_InvalidColour()
+        public void testCommands_ShouldThrowException_InvalidColour()
         {
             // Arrange
             string[] lines = { "pen incorrectColour" };
@@ -98,7 +98,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_MoveTo()
+        public void testCommands_ShouldDraw_MoveTo()
         {
             // Arrange
             string[] lines = { "moveto 50 50" };
@@ -115,7 +115,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_Reset()
+        public void testCommands_ShouldDraw_Reset()
         {
             Canvas.posX = 50;
             Canvas.posY = 50;
@@ -131,7 +131,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestCommands_ShouldDraw_Clear()
+        public void testCommands_ShouldDraw_Clear()
         {
             // Arrange
             // Create a Graphics object and a Canvas

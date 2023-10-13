@@ -10,6 +10,7 @@ namespace ASEUnitTest
     [TestClass]
     public class ParserUnitTests
     {
+        ShapeFactory commandFactory;
         private Parser parser;
         private Canvas canvas;
         PictureBox pictureBox = new PictureBox();
@@ -22,10 +23,11 @@ namespace ASEUnitTest
             parser = Parser.getParser();
             canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
             parser.setCanvas(canvas);
+            commandFactory = ShapeFactory.getShapeFactory();
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenNoCommandEntered()
+        public void testParseCommand_ShouldThrowException_WhenNoCommandEntered()
         {
             // Arrange
             string[] lines = { "" }; // Empty command
@@ -34,7 +36,7 @@ namespace ASEUnitTest
             Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
-        public void TestParseCommand_ShouldThrowException_WhenNoCommandEntered_MultipleCommands()
+        public void testParseCommand_ShouldThrowException_WhenNoCommandEntered_MultipleCommands()
         {
             // Arrange
             string[] lines = { "fill on", "" };
@@ -44,7 +46,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenUnknownCommand()
+        public void testParseCommand_ShouldThrowException_WhenUnknownCommand()
         {
             // Arrange
             string[] lines = { "unknowncommand" };
@@ -54,7 +56,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenUnknownCommand_MultipleCommands()
+        public void testParseCommand_ShouldThrowException_WhenUnknownCommand_MultipleCommands()
         {
             // Arrange
             string[] lines = { "fill on", "unknowncommand" };
@@ -64,7 +66,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenIncorrectArgumentCount()
+        public void testParseCommand_ShouldThrowException_WhenIncorrectArgumentCount()
         {
             // Arrange
             string[] lines = { "rectangle 1 2 3" }; // Rectangle expects 2 arguments
@@ -74,7 +76,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenIncorrectArgumentCount_MultipleCommands()
+        public void testParseCommand_ShouldThrowException_WhenIncorrectArgumentCount_MultipleCommands()
         {
             // Arrange
             string[] lines = { "fill on", "rectangle 1 2 3" };
@@ -84,7 +86,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType()
+        public void testParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType()
         {
             // Arrange
             string[] lines = { "rectangle rectangle rectangle" }; // Rectangle expects ints
@@ -94,7 +96,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType_MultipleCommands()
+        public void testParseCommand_ShouldThrowException_WhenIncorrectIntArgumentType_MultipleCommands()
         {
             // Arrange
             string[] lines = { "fill on", "rectangle rectangle rectangle" };
@@ -104,7 +106,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenIncorrectStringArgumentType()
+        public void testParseCommand_ShouldThrowException_WhenIncorrectStringArgumentType()
         {
             // Arrange
             string[] lines = { "fill 20" }; // Rectangle expects ints
@@ -114,7 +116,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldThrowException_WhenIncorrectStringArgumentType_MultipleCommands()
+        public void testParseCommand_ShouldThrowException_WhenIncorrectStringArgumentType_MultipleCommands()
         {
             // Arrange
             string[] lines = { "fill on", "fill 20" };
@@ -124,7 +126,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldParseValidShapeCommand()
+        public void testParseCommand_ShouldParseValidShapeCommand()
         {
             // Arrange
             string[] lines = { "rectangle 10 20" };
@@ -137,7 +139,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldParseValidShapeCommand_MultipleCommands()
+        public void testParseCommand_ShouldParseValidShapeCommand_MultipleCommands()
         {
             // Arrange
             string[] lines = { "fill on", "rectangle 10 20" };
@@ -151,7 +153,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldParseValidShapeCommand_Uppercase()
+        public void testParseCommand_ShouldParseValidShapeCommand_Uppercase()
         {
             // Arrange
             string[] lines = { "RecTangle 10 20" };
@@ -164,7 +166,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldParseValidNonShapeCommand()
+        public void testParseCommand_ShouldParseValidNonShapeCommand()
         {
             // Arrange
             string[] lines = { "fill on" };
@@ -174,10 +176,11 @@ namespace ASEUnitTest
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldParseValidNonShapeCommand_MultipleCommands()
+        public void testParseCommand_ShouldParseValidNonShapeCommand_MultipleCommands()
         {
             // Arrange
             string[] lines = { "rectangle 10 20", "fill on" };
@@ -188,10 +191,11 @@ namespace ASEUnitTest
             // Assert
             Assert.AreEqual(true, Canvas.fill);
             Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Canvas.fill = false;
         }
 
         [TestMethod]
-        public void TestParseCommand_ShouldParseValidNonShapeCommand_Uppercase()
+        public void testParseCommand_ShouldParseValidNonShapeCommand_Uppercase()
         {
             // Arrange
             string[] lines = { "fiLL oN" };
@@ -201,10 +205,11 @@ namespace ASEUnitTest
 
             // Assert
             Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
         }
 
         [TestMethod]
-        public void TestIsShape_ShouldReturnTrue_WhenCommandIsShape()
+        public void testIsShape_ShouldReturnTrue_WhenCommandIsShape()
         {
             // Arrange
             string shapeCommand = "circle";
@@ -217,7 +222,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestIsShape_ShouldReturnFalse_WhenCommandIsNotShape()
+        public void testIsShape_ShouldReturnFalse_WhenCommandIsNotShape()
         {
             // Arrange
             string nonShapeCommand = "pen";
@@ -230,7 +235,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestIsShape_ShouldReturnFalse_WhenCommandIsEmpty()
+        public void testIsShape_ShouldReturnFalse_WhenCommandIsEmpty()
         {
             // Arrange
             string emptyCommand = "";
@@ -243,7 +248,7 @@ namespace ASEUnitTest
         }
 
         [TestMethod]
-        public void TestIsShape_ShouldReturnFalse_WhenCommandIsUnknown()
+        public void testIsShape_ShouldReturnFalse_WhenCommandIsUnknown()
         {
             // Arrange
             string unknownCommand = "unknown";
