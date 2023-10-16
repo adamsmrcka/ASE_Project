@@ -194,21 +194,17 @@ namespace ASE_Project
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (saveProgram() == true)
+            if (saveProgramDialog() == true)
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog(); 
-                saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                saveFileDialog.RestoreDirectory = true;
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                string directory = getDirectory();
+                if (directory != "")
                 {
-                    File.WriteAllText(saveFileDialog.FileName, commandTextBox.Text);
+                    saveToTXT(directory, commandTextBox.Lines);
                 }
-
             };
         }
 
-        public static bool saveProgram()
+        public static bool saveProgramDialog()
         {
             const string message = "Would you like to save your drawing program before you leave?";
             const string caption = "Save Program";
@@ -220,5 +216,27 @@ namespace ASE_Project
             else
                 return false;
         }
+
+        public string getDirectory()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog.RestoreDirectory = true;
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return saveFileDialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        public void saveToTXT(string directory, string[] saveText)
+        {
+            File.WriteAllLines(directory, saveText);
+        }
     }
 }
+
