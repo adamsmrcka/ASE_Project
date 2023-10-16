@@ -18,7 +18,7 @@ namespace ASE_Project
         const int CanvasBitmapHeight = 490;
         private bool draw = false;
 
-        Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
+        public Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
         Canvas paintingCanvas;
         ShapeFactory commandFactory;
         Graphics g;
@@ -192,6 +192,10 @@ namespace ASE_Project
                 errorMessageForm.ShowDialog();
             }
         }
+        /// <summary>
+        /// On closure of the app the app will prompt a user to save their code and acts accordingly
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (saveProgramDialog() == true)
@@ -203,7 +207,10 @@ namespace ASE_Project
                 }
             };
         }
-
+        /// <summary>
+        /// Prompts user via message box to save their graphical program code
+        /// </summary>
+        /// <returns> Bool with their response</returns>
         public static bool saveProgramDialog()
         {
             const string message = "Would you like to save your drawing program before you leave?";
@@ -216,7 +223,10 @@ namespace ASE_Project
             else
                 return false;
         }
-
+        /// <summary>
+        /// A save dialog appears for a user to select directory and file name for the file
+        /// </summary>
+        /// <returns>File destination</returns>
         public string getDirectory()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -233,6 +243,11 @@ namespace ASE_Project
             }
         }
 
+        /// <summary>
+        /// Saves all lines stored in the command text box to a file
+        /// </summary>
+        /// <param name="directory"> The user selected location(directory for the file)</param>
+        /// <param name="saveText"> The text being saved</param>
         public void saveToTXT(string directory, string[] saveText)
         {
             File.WriteAllLines(directory, saveText);

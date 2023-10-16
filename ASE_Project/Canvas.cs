@@ -55,6 +55,7 @@ namespace ASE_Project
         {
             shape.set(colour, fill, posX, posY, parameters);
             shape.draw(this.g);
+            idicateCursor();
         }
         /// <summary>
         /// Resets the drawing(Canvas) settings to the default settings (cursor position, colour and fill settings)
@@ -95,9 +96,9 @@ namespace ASE_Project
         /// Changes the pen colour for the drawing process
         /// </summary>
         /// <param name="newcolour">User selected new colour</param>
-        public void changeColor(Color newcolour)
+        public void changeColor(Color newColour)
         {
-            penColour = newcolour;
+            penColour = newColour;
             pen = new Pen(penColour);
             form1.updatePenColourStatusLabel(penColour);
         }
@@ -120,10 +121,23 @@ namespace ASE_Project
             }
             form1.updateFillStatusLabel(fill);
         }
+        /// <summary>
+        /// Draws a small red circle on the cursor position, on position change the circle disappears
+        /// </summary>
         public void idicateCursor()
         {
             int diameter = 2;
-            g.DrawEllipse(new Pen(Color.White), oldPosX - (diameter / 2), oldPosY - (diameter / 2), diameter, diameter);
+            Color pixelColor1 = form1.canvasBitmap.GetPixel(oldPosX, oldPosY);
+            Color pixelColor2 = form1.canvasBitmap.GetPixel(oldPosX + 2, oldPosY);
+            if (pixelColor1 == Color.FromArgb(0, 0, 0, 0) || pixelColor1 == Color.White || pixelColor2 == Color.FromArgb(0, 0, 0, 0) || pixelColor2 == Color.White)
+            {
+                g.DrawEllipse(new Pen(Color.White), oldPosX - (diameter / 2), oldPosY - (diameter / 2), diameter, diameter);
+
+            }
+            else 
+            {
+                g.DrawEllipse(new Pen(pixelColor1), oldPosX - (diameter / 2), oldPosY - (diameter / 2), diameter, diameter);
+            }
             g.DrawEllipse(new Pen(Color.Red), posX - (diameter / 2), posY - (diameter / 2), diameter, diameter);
 
         }
