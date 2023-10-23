@@ -13,20 +13,17 @@ namespace ASE_Project
         public static Color colourShape;
         protected Graphics g;
         public static bool fillShape;
-        /// <summary>
-        /// 
-        /// </summary>
         public Shape()
         {
         }
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="colour"></param>
-        /// <param name="fill"></param>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
-        /// <param name="parameters"></param>
+        /// <param name="colour">Pen colour</param>
+        /// <param name="fill">Boolean fill or outline</param>
+        /// <param name="posX">Starting x position</param>
+        /// <param name="posY">Starting y position</param>
+        /// <param name="parameters">Array of entered parameters for the command</param>
         abstract public void set(Color colour, bool fill, int posX, int posY, params int[] parameters);
         /// <summary>
         /// 

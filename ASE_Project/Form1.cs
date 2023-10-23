@@ -20,7 +20,6 @@ namespace ASE_Project
 
         public Bitmap canvasBitmap = new Bitmap(CanvasBitmapWidth, CanvasBitmapHeight);
         Canvas paintingCanvas;
-        ShapeFactory commandFactory;
         Graphics g;
         Parser parser;
 
@@ -63,9 +62,6 @@ namespace ASE_Project
                 }
                 else if (!string.IsNullOrEmpty(commandTextBox.Text) && !commandLineBox.Text.ToLower().Equals("run"))
                 {
-                    draw = false;
-                    parser.parseCommand(commandTextBox.Lines, draw);
-                    Refresh();
                     throw new Exception("You need to enter 'Run' into the 'Simple Command Box' in order to successfully run the command");
                 }
                 else
@@ -77,6 +73,12 @@ namespace ASE_Project
             {
                 Dictionaries.errorMessages.Add(ex.Message);
 
+                ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
+                errorMessageForm.ShowDialog();
+            }
+            if (parser.errors != 0)
+            {
                 ErrorMessageForm errorMessageForm = new ErrorMessageForm();
                 errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
                 errorMessageForm.ShowDialog();
@@ -113,26 +115,28 @@ namespace ASE_Project
                     errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
                     errorMessageForm.ShowDialog();
                 }
+                if (parser.errors != 0)
+                {
+                    ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                    errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
+                    errorMessageForm.ShowDialog();
+                }
             }
         }
-
-        private void commandTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            /*
-            if (e.KeyCode == Keys.Enter)
-            {
-                if (commandLineBox.Text.ToLower().Equals("run"))
-                {
-                    parser.parseCommand(commandTextBox.Lines);
-                    Refresh();
-                }
-            }*/
-        }
-
+        /// <summary>
+        /// Updates the cursor position label on the form
+        /// </summary>
+        /// <param name="posX">The x position of the cursor</param>
+        /// <param name="posY">The y position of the cursor</param>
         public void updateCursorPositionLabel(int posX, int posY)
         {
             cursorPositionLabel.Text = "Cursor Position: X = " + posX + ", Y = " + posY;
         }
+
+        /// <summary>
+        /// Updates the fill status label on the form
+        /// </summary>
+        /// <param name="fillStatus"> Boolean of the fill status entered by the user</param>
         public void updateFillStatusLabel(bool fillStatus)
         {
             string fillTextStatus;
@@ -146,11 +150,20 @@ namespace ASE_Project
             }
             fillStatusLabel.Text = "Fill: " + fillTextStatus;
         }
+        /// <summary>
+        /// Updates the pen colour label on the form
+        /// </summary>
+        /// <param name="colourStatus">current pen colour used</param>
         public void updatePenColourStatusLabel(Color colourStatus)
         {
             penColourStatusLabel.Text = "Colour: " + colourStatus.Name;
         }
 
+        /// <summary>
+        /// On Syntax button click commands syntax is validated and all errors are displayed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void syntaxButton_Click(object sender, EventArgs e)
         {
             draw = false;
@@ -165,7 +178,7 @@ namespace ASE_Project
                 {
                     parser.parseCommand(commandTextBox.Lines, draw);
                     Refresh();
-                    throw new Exception("Error: The command syntax is correct BUT you need to enter 'Run' into 'Simple Command Box' in order to successfully run the command");
+                    throw new Exception("Error: You need to enter 'Run' into 'Simple Command Box' in order to successfully run the command");
                 }
                 else if (!string.IsNullOrEmpty(commandLineBox.Text))
                 {
@@ -176,12 +189,21 @@ namespace ASE_Project
                 {
                     throw new Exception("Error: No command entered");
                 }
-                ErrorMessageForm errorMessageForm = new ErrorMessageForm();
-                errorMessageForm.setLabelMessage("Command is correct");
-                List<string> errorMessage = new List<string>();
-                errorMessage.Add("No errors found. You can run this command");
-                errorMessageForm.setErrorMessages(errorMessage);
-                errorMessageForm.ShowDialog();
+                if (parser.errors == 0)
+                {
+                    ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                    errorMessageForm.setLabelMessage("Command is correct");
+                    List<string> errorMessage = new List<string>();
+                    errorMessage.Add("No errors found. You can run this command");
+                    errorMessageForm.setErrorMessages(errorMessage);
+                    errorMessageForm.ShowDialog();
+                }
+                else
+                {
+                    ErrorMessageForm errorMessageForm = new ErrorMessageForm();
+                    errorMessageForm.setErrorMessages(Dictionaries.errorMessages);
+                    errorMessageForm.ShowDialog();
+                }
 
             }
             catch (Exception ex)

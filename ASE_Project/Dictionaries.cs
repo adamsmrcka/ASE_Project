@@ -9,7 +9,7 @@ namespace ASE_Project
 {
     internal class Dictionaries
     {
-
+        // List/Dictionaries of supported commands - Commands, Shapes and their respective required number of variables.
         public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
         public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill" };
 
@@ -25,6 +25,7 @@ namespace ASE_Project
             { "reset", 0},
         };
 
+        // List storing all error messages
         public static List<string> errorMessages = new List<string>();
     }
 }
