@@ -13,6 +13,9 @@ using System.Xml.Linq;
 
 namespace ASE_Project
 {
+    /// <summary>
+    /// Parses a String[] one line at a time, identifies commands and variables, and executes them if they are correct.
+    /// </summary>
     public class Parser
     {
         ShapeFactory commandFactory;
@@ -27,17 +30,27 @@ namespace ASE_Project
         public int errors;
 
         private static Parser parser = new Parser();
+
+        /// <summary>
+        /// Constructor, gets ShapeFactory instances.
+        /// </summary>
         private Parser()
         {
             commandFactory = ShapeFactory.getShapeFactory();
         }
+
         /// <summary>
         /// Returns the parser instance.
         /// </summary>
         /// <returns>Parser</returns>
         public static Parser getParser() { return parser; }
 
+        /// <summary>
+        /// Sets the Canvas object reference
+        /// </summary>
+        /// <param name="canvas">Canvas Object</param>
         public void setCanvas(Canvas canvas) { this.canvas = canvas; }
+
         /// <summary>
         /// Analyses the imput per line and handles instruction according to the imput - differentiates between commands and parameters and divides them accordingly
         /// </summary>
@@ -55,151 +68,150 @@ namespace ASE_Project
                     try
                     {
                         trimmedCommand = line.Trim(' ').ToLower();
-                        parts = trimmedCommand.Split(' ');
-                        if (!string.IsNullOrEmpty(parts[0]))
+                        if (trimmedCommand.Equals(String.Empty))
                         {
-                            command = parts[0];
+                            continue;
+                        };
+                        parts = trimmedCommand.Split(' ');
+                        command = parts[0];
 
-                            //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
-                            if (isShape(command))
+                        //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
+                        if (isShape(command))
+                        {
+                            if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
                             {
-                                if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
+                                args = parts.Skip(1).ToArray();
+                                intArguments = new int[args.Length];
+
+                                if (args.Length == expectedArgsCount)
                                 {
-                                    args = parts.Skip(1).ToArray();
-                                    intArguments = new int[args.Length];
+                                    bool argumentsAreInts = true;
 
-                                    if (args.Length == expectedArgsCount)
+                                    for (int i = 0; i < args.Length; i++)
                                     {
-                                        bool argumentsAreInts = true;
-
-                                        for (int i = 0; i < args.Length; i++)
+                                        if (!int.TryParse(args[i], out int argValue))
                                         {
-                                            if (!int.TryParse(args[i], out int argValue))
-                                            {
-                                                argumentsAreInts = false;
-                                                throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
-                                            }
-                                            intArguments[i] = argValue;
+                                            argumentsAreInts = false;
+                                            throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
                                         }
+                                        intArguments[i] = argValue;
+                                    }
 
-                                        if (argumentsAreInts)
+                                    if (argumentsAreInts)
+                                    {
+                                        if (draw == true)
                                         {
-                                            if (draw == true)
-                                            {
-                                                s = (Shape)commandFactory.getShape(command);
-                                                canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
-                                            }
+                                            s = (Shape)commandFactory.getShape(command);
+                                            canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
                                         }
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {intArguments.Length} were provided.");
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // User has input a predefined command that is not a shape. Checks number of arguments and handles accordingly.
-                                if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
-                                {
-                                    args = parts.Skip(1).ToArray();
-                                    if (args.Length == expectedArgsCount && draw == true)
-                                    {
-                                        switch (command)
-                                        {
-                                            case "clear":
-                                                canvas.clearCanvas();
-                                                break;
-
-                                            case "reset":
-                                                canvas.restoreCanvas();
-                                                break;
-
-                                            case "moveto":
-                                                intArguments = Array.ConvertAll(args, int.Parse);
-                                                canvas.moveTo(intArguments);
-                                                break;
-
-                                            case "pen":
-                                                try
-                                                {
-                                                    colour = ColorTranslator.FromHtml(args[0]);
-                                                }
-                                                catch
-                                                {
-                                                    throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
-                                                }
-                                                canvas.changeColor(colour);
-                                                break;
-
-                                            case "fill":
-                                                if (args[0] == "on" || args[0] == "off")
-                                                {
-                                                    canvas.toggleFill(args[0]);
-                                                }
-                                                else
-                                                {
-                                                    throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
-                                                }
-                                                break;
-
-                                            default:
-                                                throw new Exception($"Error: Unknown command '{command}'");
-                                        }
-                                    }
-                                    else if (args.Length == expectedArgsCount && draw == false)
-                                    {
-                                        switch (command)
-                                        {
-                                            case "clear":
-                                                break;
-
-                                            case "reset":
-                                                break;
-
-                                            case "moveto":
-                                                intArguments = Array.ConvertAll(args, int.Parse);
-                                                break;
-
-                                            case "pen":
-                                                try
-                                                {
-                                                    colour = ColorTranslator.FromHtml(args[0]);
-                                                }
-                                                catch
-                                                {
-                                                    throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
-                                                }
-                                                break;
-
-                                            case "fill":
-                                                if (args[0] == "on" || args[0] == "off")
-                                                {
-                                                }
-                                                else
-                                                {
-                                                    throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
-                                                }
-                                                break;
-
-                                            default:
-                                                throw new Exception($"Error: Unknown command '{command}'");
-                                        }
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {args.Length} were provided.");
                                     }
                                 }
                                 else
                                 {
-                                    throw new Exception($"Error: Unknown command '{command}'");
+                                    throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {intArguments.Length} were provided.");
                                 }
                             }
                         }
                         else
                         {
+                            // User has input a predefined command that is not a shape. Checks number of arguments and handle accordingly.
+                            if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
+                            {
+                                args = parts.Skip(1).ToArray();
+                                if (args.Length == expectedArgsCount && draw == true)
+                                {
+                                    switch (command)
+                                    {
+                                        case "clear":
+                                            canvas.clearCanvas();
+                                            break;
+
+                                        case "reset":
+                                            canvas.restoreCanvas();
+                                            break;
+
+                                        case "moveto":
+                                            intArguments = Array.ConvertAll(args, int.Parse);
+                                            canvas.moveTo(intArguments);
+                                            break;
+
+                                        case "pen":
+                                            try
+                                            {
+                                                colour = ColorTranslator.FromHtml(args[0]);
+                                            }
+                                            catch
+                                            {
+                                                throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
+                                            }
+                                            canvas.changeColor(colour);
+                                            break;
+
+                                        case "fill":
+                                            if (args[0] == "on" || args[0] == "off")
+                                            {
+                                                canvas.toggleFill(args[0]);
+                                            }
+                                            else
+                                            {
+                                                throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
+                                            }
+                                            break;
+
+                                        default:
+                                            throw new Exception($"Error: Unknown command '{command}'");
+                                    }
+                                }
+                                else if (args.Length == expectedArgsCount && draw == false)
+                                {
+                                    switch (command)
+                                    {
+                                        case "clear":
+                                            break;
+
+                                        case "reset":
+                                            break;
+
+                                        case "moveto":
+                                            intArguments = Array.ConvertAll(args, int.Parse);
+                                            break;
+
+                                        case "pen":
+                                            try
+                                            {
+                                                colour = ColorTranslator.FromHtml(args[0]);
+                                            }
+                                            catch
+                                            {
+                                                throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
+                                            }
+                                            break;
+
+                                        case "fill":
+                                            if (args[0] == "on" || args[0] == "off")
+                                            {
+                                            }
+                                            else
+                                            {
+                                                throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
+                                            }
+                                            break;
+
+                                        default:
+                                            throw new Exception($"Error: Unknown command '{command}'");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {args.Length} were provided.");
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception($"Error: Unknown command '{command}'");
+                            }
                         }
+
                     }
                     catch (Exception ex)
                     {

@@ -58,7 +58,7 @@ namespace ASE_Project
             idicateCursor();
         }
         /// <summary>
-        /// Resets the drawing(Canvas) settings to the default settings (cursor position, colour and fill settings)
+        /// Resets the drawing (Canvas) settings to the default settings (cursor position, colour and fill settings)
         /// </summary>
         public void restoreCanvas()
         {
@@ -122,7 +122,7 @@ namespace ASE_Project
             form1.updateFillStatusLabel(fill);
         }
         /// <summary>
-        /// Draws a small red circle on the cursor position, on position change the circle disappears
+        /// Draws a small red circle on the cursor position, on position change the circle moves
         /// </summary>
         public void idicateCursor()
         {

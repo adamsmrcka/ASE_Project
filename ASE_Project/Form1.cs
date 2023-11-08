@@ -23,6 +23,9 @@ namespace ASE_Project
         Graphics g;
         Parser parser;
 
+        /// <summary>
+        /// Constructor. Initializes component. Gets Parser instances. Sets Graphics context for Canvas. Initializes GUI Label elements 
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -34,17 +37,22 @@ namespace ASE_Project
             updatePenColourStatusLabel(Canvas.penColour);
             paintingCanvas.idicateCursor();
         }
-
+        /// <summary>
+        /// Paints the contents of the Bitmap onto the Canvas
+        /// </summary>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
         private void drawPanel_Paint(object sender, PaintEventArgs e)
         {
             g = e.Graphics;
             g.DrawImageUnscaled(canvasBitmap, 0, 0);
         }
         /// <summary>
-        /// Sends instructions to analyse (parse) the command (if not empty) when runButton is pressed. CommandTextBox has priority
+        /// Sends instructions to analyse (parse) the command (if not empty) when runButton is pressed. CommandTextBox has priority.
+        /// Catches error messages and displays dialog
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
         private void runButton_Click(object sender, EventArgs e)
         {
             draw = true;
@@ -86,6 +94,9 @@ namespace ASE_Project
         }
         /// <summary>
         /// Sends instructions to analyse the command when Enter is pressed when in CommandLineBox
+        /// If CommandLineBox is "run" the commandTextBox is analysed
+        /// Else the CommandLineBox is run.
+        /// Catches error messages and displays dialog.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -136,7 +147,7 @@ namespace ASE_Project
         /// <summary>
         /// Updates the fill status label on the form
         /// </summary>
-        /// <param name="fillStatus"> Boolean of the fill status entered by the user</param>
+        /// <param name="fillStatus">Boolean of the fill status entered by the user</param>
         public void updateFillStatusLabel(bool fillStatus)
         {
             string fillTextStatus;
@@ -153,7 +164,7 @@ namespace ASE_Project
         /// <summary>
         /// Updates the pen colour label on the form
         /// </summary>
-        /// <param name="colourStatus">current pen colour used</param>
+        /// <param name="colourStatus">Current pen colour used</param>
         public void updatePenColourStatusLabel(Color colourStatus)
         {
             penColourStatusLabel.Text = "Colour: " + colourStatus.Name;
@@ -162,8 +173,8 @@ namespace ASE_Project
         /// <summary>
         /// On Syntax button click commands syntax is validated and all errors are displayed
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
         private void syntaxButton_Click(object sender, EventArgs e)
         {
             draw = false;
@@ -217,7 +228,7 @@ namespace ASE_Project
         /// <summary>
         /// On closure of the app the app will prompt a user to save their code and acts accordingly
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Event args</param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (saveProgramDialog() == true)
@@ -230,9 +241,9 @@ namespace ASE_Project
             };
         }
         /// <summary>
-        /// Prompts user via message box to save their graphical program code
+        /// Prompts user via message box to save users program code
         /// </summary>
-        /// <returns> Bool with their response</returns>
+        /// <returns>Bool with users response</returns>
         public static bool saveProgramDialog()
         {
             const string message = "Would you like to save your drawing program before you leave?";

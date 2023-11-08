@@ -13,7 +13,7 @@ namespace ASE_Project
 
         public Circle() { }
         /// <summary>
-        /// 
+        /// Sets the properties of the Circle and prepares it for drawing
         /// </summary>
         /// <param name="colour"> Colour of the pen</param>
         /// <param name="fill"> Boolean if fill or just draw</param>
@@ -32,7 +32,7 @@ namespace ASE_Project
         /// <summary>
         /// Draws the Circle either filled or just an outline
         /// </summary>
-        /// <param name="g"></param>
+        /// <param name="g">Graphics context for the drawing</param>
         override public void draw(Graphics g)
         {
             if (!fillShape)

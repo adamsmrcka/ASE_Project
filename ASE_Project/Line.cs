@@ -13,7 +13,7 @@ namespace ASE_Project
 
         public Line() { }
         /// <summary>
-        /// 
+        /// Sets the properties of the DrawLine and prepares it for drawing
         /// </summary>
         /// <param name="colour"> Colour of the pen</param>
         /// <param name="fill"> Boolean if fill or just draw</param>
@@ -29,9 +29,9 @@ namespace ASE_Project
             toY = parameters[1];
         }
         /// <summary>
-        /// Draws a line
+        /// Draws the line
         /// </summary>
-        /// <param name="g"></param>
+        /// <param name="g">Graphics context for the drawing</param>
         override public void draw(Graphics g)
         {
             g.DrawLine(new Pen(colourShape), xPos, yPos, toX, toY);

@@ -17,7 +17,7 @@ namespace ASE_Project
         {
         }
         /// <summary>
-        /// 
+        /// Sets a default set shape method
         /// </summary>
         /// <param name="colour">Pen colour</param>
         /// <param name="fill">Boolean fill or outline</param>
@@ -26,9 +26,9 @@ namespace ASE_Project
         /// <param name="parameters">Array of entered parameters for the command</param>
         abstract public void set(Color colour, bool fill, int posX, int posY, params int[] parameters);
         /// <summary>
-        /// 
+        /// Sets a default draw shape method
         /// </summary>
-        /// <param name="g"></param>
+        /// <param name="g">Graphics context for the drawing</param>
         abstract public void draw(Graphics g);
 
     }

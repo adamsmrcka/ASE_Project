@@ -9,10 +9,11 @@ namespace ASE_Project
 {
     internal class Dictionaries
     {
-        // List/Dictionaries of supported commands - Commands, Shapes and their respective required number of variables.
+        // List of supported Commands and Shapes
         public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
         public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill" };
 
+        // Dictionary of Commands and Shapes and their respective required number of variables
         public static Dictionary<String, int> validArgsNumber = new Dictionary<String, int>() {
             { "circle",  1 },
             { "rectangle", 2},

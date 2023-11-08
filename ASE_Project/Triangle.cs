@@ -14,7 +14,7 @@ namespace ASE_Project
         public static System.Drawing.Point[] trianglePoints = new System.Drawing.Point[3];
         public Triangle() { }
         /// <summary>
-        /// 
+        /// Sets the properties of the Triangle and prepares it for drawing
         /// </summary>
         /// <param name="colour"> Colour of the pen</param>
         /// <param name="fill"> Boolean if fill or just draw</param>
@@ -33,7 +33,7 @@ namespace ASE_Project
         /// <summary>
         /// Draws a Triangle either filled or just an outline
         /// </summary>
-        /// <param name="g"></param>
+        /// <param name="g">Graphics context for the drawing</param>
         public override void draw(Graphics g)
         {
             if (!fillShape)
