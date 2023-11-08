@@ -11,6 +11,9 @@ using System.Windows.Forms;
 
 namespace ASEUnitTest
 {
+    /// <summary>
+    /// Test class testing functionality of Forms1 Class
+    /// </summary>
     [TestClass]
     public class Form1UnitTests
     {
@@ -20,21 +23,24 @@ namespace ASEUnitTest
 
         Form1 form1 = new Form1();
 
+        /// <summary>
+        /// Sets Objects used during tests
+        /// </summary>
         [TestInitialize]
         public void Initialize()
         {
-            parser = Parser.getParser();
-            canvas = new Canvas(pictureBox.CreateGraphics(), form1); // Create a dummy canvas for testing
-            parser.setCanvas(canvas);
         }
 
+        /// <summary>
+        /// A program is successfully saved to a txt file
+        /// </summary>
         [TestMethod]
         public void testProgramSave_ShouldSaveAndMatch()
         {
             // Arrange
             Random rnd = new Random();
             int[] variables = { rnd.Next(), rnd.Next() };
-            string[] fileText = { "rectangle " + variables[0], "circle " + variables[1] };
+            string[] fileText = { "rectangle " + variables[0] + " " + variables[0], "circle " + variables[1] };
 
             // Define a unique file name for the test
             string testFileName = "test_program_save.txt";

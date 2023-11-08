@@ -28,6 +28,7 @@ namespace ASE_Project
         Canvas canvas;
         public static Shape s;
         public int errors;
+        Exception caughtException = null;
 
         private static Parser parser = new Parser();
 
@@ -217,11 +218,13 @@ namespace ASE_Project
                     {
                         errors++;
                         Dictionaries.errorMessages.Add(ex.Message);
+                        caughtException = ex;
                     }
                 }
             }
             else
             {
+                errors++;
                 throw new Exception($"Error: No command entered.");
             }
         }

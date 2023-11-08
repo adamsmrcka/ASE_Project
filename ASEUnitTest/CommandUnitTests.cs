@@ -93,8 +93,11 @@ namespace ASEUnitTest
             // Arrange
             string[] lines = { "pen incorrectColour" };
 
-            // Act & Assert
-            Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
+            // Act
+            parser.parseCommand(lines, true);
+
+            //Assert
+            Assert.IsTrue(parser.errors > 0);
         }
 
         [TestMethod]

@@ -77,7 +77,7 @@ namespace ASE_Project
         public void clearCanvas()
         {
             this.g.Clear(Color.White);
-            idicateCursor();
+            reidicateCursor();
         }
         /// <summary>
         /// Changes the position of the "cursor" for the drawing process
@@ -139,7 +139,17 @@ namespace ASE_Project
                 g.DrawEllipse(new Pen(pixelColor1), oldPosX - (diameter / 2), oldPosY - (diameter / 2), diameter, diameter);
             }
             g.DrawEllipse(new Pen(Color.Red), posX - (diameter / 2), posY - (diameter / 2), diameter, diameter);
+        }
+        /// <summary>
+        /// indicates coursor position after clearing
+        /// </summary>
+        public void reidicateCursor()
+        {
+            int diameter = 2;
+            g.DrawEllipse(new Pen(Color.Red), posX - (diameter / 2), posY - (diameter / 2), diameter, diameter);
 
         }
+
+
     }
 }

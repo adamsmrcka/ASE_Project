@@ -7,13 +7,24 @@ using System.Threading.Tasks;
 
 namespace ASE_Project
 {
+    /// <summary>
+    /// Class with lists of supported commands, their arguments and recorded error messages
+    /// </summary>
     internal class Dictionaries
     {
-        // List of supported Commands and Shapes
+        /// <summary>
+        /// List of supported Shapes
+        /// </summary>
         public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
+
+        /// <summary>
+        /// List of supported Non-Shape commands
+        /// </summary>
         public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill" };
 
-        // Dictionary of Commands and Shapes and their respective required number of variables
+        /// <summary>
+        /// Dictionary of Commands and Shapes and their respective required number of variables
+        /// </summary>
         public static Dictionary<String, int> validArgsNumber = new Dictionary<String, int>() {
             { "circle",  1 },
             { "rectangle", 2},
@@ -26,7 +37,9 @@ namespace ASE_Project
             { "reset", 0},
         };
 
-        // List storing all error messages
+        /// <summary>
+        /// List storing all error messages
+        /// </summary>
         public static List<string> errorMessages = new List<string>();
     }
 }

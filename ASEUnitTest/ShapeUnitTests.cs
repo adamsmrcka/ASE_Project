@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace ASEUnitTest
 {
+    /// <summary>
+    /// Test class testing functionality of Shapes classes
+    /// </summary>
     [TestClass]
     public class ShapeUnitTests
     {
@@ -19,6 +22,9 @@ namespace ASEUnitTest
 
         Form1 form1 = new Form1();
 
+        /// <summary>
+        /// Sets Objects used during tests
+        /// </summary>
         [TestInitialize]
         public void Initialize()
         {
@@ -27,6 +33,9 @@ namespace ASEUnitTest
             parser.setCanvas(canvas);
         }
 
+        /// <summary>
+        /// Parser should set Rectangle when a valid Draw command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_Rectangle()
         {
@@ -47,6 +56,9 @@ namespace ASEUnitTest
             Assert.AreEqual(20, ASE_Project.Rectangle.height);
         }
 
+        /// <summary>
+        /// Parser should set Rectangle when a valid Fill command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_FillRectangle()
         {
@@ -67,6 +79,9 @@ namespace ASEUnitTest
             Assert.AreEqual(20, ASE_Project.Rectangle.height);
         }
 
+        /// <summary>
+        /// Parser should set Circle when a valid Draw command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_Circle()
         {
@@ -86,6 +101,9 @@ namespace ASEUnitTest
             Assert.AreEqual(50, Circle.circleSize);
         }
 
+        /// <summary>
+        /// Parser should set Circle when a valid Fill command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_FillCircle()
         {
@@ -105,6 +123,9 @@ namespace ASEUnitTest
             Assert.AreEqual(50, Parser.intArguments[0]);
         }
 
+        /// <summary>
+        /// Parser should set Triangle when a valid Draw command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_Triangle()
         {
@@ -128,6 +149,9 @@ namespace ASEUnitTest
             Assert.AreEqual(testPoints[2], Triangle.trianglePoints[2]);
         }
 
+        /// <summary>
+        /// Parser should set Triangle when a valid Fill command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_FillTriangle()
         {
@@ -151,6 +175,9 @@ namespace ASEUnitTest
             Assert.AreEqual(testPoints[2], Triangle.trianglePoints[2]);
         }
 
+        /// <summary>
+        /// Parser should set DrawLine when a valid Draw command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_DrawTo()
         {
@@ -171,6 +198,9 @@ namespace ASEUnitTest
             Assert.AreEqual(50, Line.toY);
         }
 
+        /// <summary>
+        /// Parser should set DrawLine when a valid Fill command is entered
+        /// </summary>
         [TestMethod]
         public void testShapes_ShouldDraw_FillDrawTo()
         {
