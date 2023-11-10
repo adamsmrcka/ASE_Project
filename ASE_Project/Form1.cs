@@ -9,6 +9,7 @@ using System.Windows;
 using System.Security.Policy;
 using System.Collections.Generic;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System.Linq;
 
 namespace ASE_Project
 {
@@ -37,6 +38,7 @@ namespace ASE_Project
             updatePenColourStatusLabel(Canvas.penColour);
             paintingCanvas.idicateCursor();
         }
+
         /// <summary>
         /// Paints the contents of the Bitmap onto the Canvas
         /// </summary>
@@ -47,6 +49,7 @@ namespace ASE_Project
             g = e.Graphics;
             g.DrawImageUnscaled(canvasBitmap, 0, 0);
         }
+
         /// <summary>
         /// Sends instructions to analyse (parse) the command (if not empty) when runButton is pressed. CommandTextBox has priority.
         /// Catches error messages and displays dialog
@@ -92,6 +95,7 @@ namespace ASE_Project
                 errorMessageForm.ShowDialog();
             }
         }
+
         /// <summary>
         /// Sends instructions to analyse the command when Enter is pressed when in CommandLineBox
         /// If CommandLineBox is "run" the commandTextBox is analysed
@@ -134,6 +138,7 @@ namespace ASE_Project
                 }
             }
         }
+
         /// <summary>
         /// Updates the cursor position label on the form
         /// </summary>
@@ -161,6 +166,7 @@ namespace ASE_Project
             }
             fillStatusLabel.Text = "Fill: " + fillTextStatus;
         }
+
         /// <summary>
         /// Updates the pen colour label on the form
         /// </summary>
@@ -225,21 +231,52 @@ namespace ASE_Project
                 errorMessageForm.ShowDialog();
             }
         }
+
+        /// <summary>
+        /// On Save button click user is promted to save the written program
+        /// </summary>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(commandTextBox.Text))
+            {
+                string directory = getSaveDirectory();
+                if (directory != "")
+                {
+                    saveToTXT(directory, commandTextBox.Lines);
+                    commandTextBox.Text = "";
+                }
+            }
+            else
+            {
+                const string message = "The command text box is empty - Enter program to be saved";
+                const string caption = "Unable to save Program";
+                var result = MessageBox.Show(message, caption,
+                                             MessageBoxButtons.OK,
+                                             MessageBoxIcon.Error);
+            }
+        }
+
         /// <summary>
         /// On closure of the app the app will prompt a user to save their code and acts accordingly
         /// </summary>
         /// <param name="e">Event args</param>
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (saveProgramDialog() == true)
+            if (!string.IsNullOrEmpty(commandTextBox.Text))
             {
-                string directory = getDirectory();
-                if (directory != "")
+                if (saveProgramDialog() == true)
                 {
-                    saveToTXT(directory, commandTextBox.Lines);
+                    string directory = getSaveDirectory();
+                    if (directory != "")
+                    {
+                        saveToTXT(directory, commandTextBox.Lines);
+                    }
                 }
-            };
+            }
         }
+
         /// <summary>
         /// Prompts user via message box to save users program code
         /// </summary>
@@ -256,11 +293,12 @@ namespace ASE_Project
             else
                 return false;
         }
+
         /// <summary>
         /// A save dialog appears for a user to select directory and file name for the file
         /// </summary>
         /// <returns>File destination</returns>
-        public string getDirectory()
+        public string getSaveDirectory()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
@@ -284,6 +322,55 @@ namespace ASE_Project
         public void saveToTXT(string directory, string[] saveText)
         {
             File.WriteAllLines(directory, saveText);
+        }
+
+        /// <summary>
+        /// On Load button click user is promted to choose a file to be loaded to the GUI
+        /// </summary>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
+        private void loadButton_Click(object sender, EventArgs e)
+        {
+            string directory = getLoadDirectory();
+            if (directory != "")
+            {
+                string[] textFromFile = loadFromTXT(directory);
+                commandTextBox.Text = "";
+                foreach (string command in textFromFile)
+                {
+                    commandTextBox.AppendText(command + Environment.NewLine);
+                }
+            }
+        }
+
+        /// <summary>
+        /// An Open File dialog appears for a user to select the file to be loaded
+        /// </summary>
+        /// <returns></returns>
+        public string getLoadDirectory()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                return openFileDialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Reads all lines stored in the choosen file
+        /// </summary>
+        /// <param name="directory">Directory of the file being read</param>
+        /// <returns>Array of strings saved in the file</returns>
+        public string[] loadFromTXT(string directory)
+        {
+            return File.ReadAllLines(directory).ToArray();
         }
     }
 }

@@ -38,15 +38,16 @@
             this.cursorPositionLabel = new System.Windows.Forms.Label();
             this.penColourStatusLabel = new System.Windows.Forms.Label();
             this.fillStatusLabel = new System.Windows.Forms.Label();
+            this.saveButton = new System.Windows.Forms.Button();
+            this.loadButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).BeginInit();
             this.SuspendLayout();
             // 
             // runButton
             // 
-            this.runButton.Location = new System.Drawing.Point(113, 508);
-            this.runButton.Margin = new System.Windows.Forms.Padding(2);
+            this.runButton.Location = new System.Drawing.Point(34, 785);
             this.runButton.Name = "runButton";
-            this.runButton.Size = new System.Drawing.Size(93, 22);
+            this.runButton.Size = new System.Drawing.Size(140, 34);
             this.runButton.TabIndex = 2;
             this.runButton.Text = "Run";
             this.runButton.UseVisualStyleBackColor = true;
@@ -54,10 +55,9 @@
             // 
             // syntaxButton
             // 
-            this.syntaxButton.Location = new System.Drawing.Point(242, 508);
-            this.syntaxButton.Margin = new System.Windows.Forms.Padding(2);
+            this.syntaxButton.Location = new System.Drawing.Point(189, 785);
             this.syntaxButton.Name = "syntaxButton";
-            this.syntaxButton.Size = new System.Drawing.Size(93, 22);
+            this.syntaxButton.Size = new System.Drawing.Size(140, 34);
             this.syntaxButton.TabIndex = 3;
             this.syntaxButton.Text = "Syntax";
             this.syntaxButton.UseVisualStyleBackColor = true;
@@ -65,39 +65,35 @@
             // 
             // commandTextBox
             // 
-            this.commandTextBox.Location = new System.Drawing.Point(23, 33);
-            this.commandTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.commandTextBox.Location = new System.Drawing.Point(34, 51);
             this.commandTextBox.Multiline = true;
             this.commandTextBox.Name = "commandTextBox";
-            this.commandTextBox.Size = new System.Drawing.Size(405, 423);
+            this.commandTextBox.Size = new System.Drawing.Size(606, 649);
             this.commandTextBox.TabIndex = 0;
             // 
             // commandLineBox
             // 
-            this.commandLineBox.Location = new System.Drawing.Point(23, 484);
-            this.commandLineBox.Margin = new System.Windows.Forms.Padding(2);
+            this.commandLineBox.Location = new System.Drawing.Point(34, 745);
             this.commandLineBox.Name = "commandLineBox";
-            this.commandLineBox.Size = new System.Drawing.Size(405, 20);
+            this.commandLineBox.Size = new System.Drawing.Size(606, 26);
             this.commandLineBox.TabIndex = 1;
             this.commandLineBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.commandLineBox_KeyDown);
             // 
             // complexCommandLabel
             // 
             this.complexCommandLabel.AutoSize = true;
-            this.complexCommandLabel.Location = new System.Drawing.Point(167, 9);
-            this.complexCommandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.complexCommandLabel.Location = new System.Drawing.Point(250, 14);
             this.complexCommandLabel.Name = "complexCommandLabel";
-            this.complexCommandLabel.Size = new System.Drawing.Size(117, 13);
+            this.complexCommandLabel.Size = new System.Drawing.Size(177, 20);
             this.complexCommandLabel.TabIndex = 5;
             this.complexCommandLabel.Text = "Enter Complex Program";
             // 
             // simpleCommandLabel
             // 
             this.simpleCommandLabel.AutoSize = true;
-            this.simpleCommandLabel.Location = new System.Drawing.Point(166, 465);
-            this.simpleCommandLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.simpleCommandLabel.Location = new System.Drawing.Point(249, 715);
             this.simpleCommandLabel.Name = "simpleCommandLabel";
-            this.simpleCommandLabel.Size = new System.Drawing.Size(116, 13);
+            this.simpleCommandLabel.Size = new System.Drawing.Size(177, 20);
             this.simpleCommandLabel.TabIndex = 6;
             this.simpleCommandLabel.Text = "Enter Simple Command";
             // 
@@ -105,10 +101,9 @@
             // 
             this.drawPanel.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.drawPanel.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.drawPanel.Location = new System.Drawing.Point(456, 6);
-            this.drawPanel.Margin = new System.Windows.Forms.Padding(2);
+            this.drawPanel.Location = new System.Drawing.Point(684, 9);
             this.drawPanel.Name = "drawPanel";
-            this.drawPanel.Size = new System.Drawing.Size(580, 490);
+            this.drawPanel.Size = new System.Drawing.Size(868, 752);
             this.drawPanel.TabIndex = 7;
             this.drawPanel.TabStop = false;
             this.drawPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawPanel_Paint);
@@ -116,39 +111,58 @@
             // cursorPositionLabel
             // 
             this.cursorPositionLabel.AutoSize = true;
-            this.cursorPositionLabel.Location = new System.Drawing.Point(876, 502);
-            this.cursorPositionLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.cursorPositionLabel.Location = new System.Drawing.Point(1314, 772);
             this.cursorPositionLabel.Name = "cursorPositionLabel";
-            this.cursorPositionLabel.Size = new System.Drawing.Size(148, 13);
+            this.cursorPositionLabel.Size = new System.Drawing.Size(220, 20);
             this.cursorPositionLabel.TabIndex = 8;
             this.cursorPositionLabel.Text = "Cursor Position: X = 10 Y = 10";
             // 
             // penColourStatusLabel
             // 
             this.penColourStatusLabel.AutoSize = true;
-            this.penColourStatusLabel.Location = new System.Drawing.Point(453, 502);
-            this.penColourStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.penColourStatusLabel.Location = new System.Drawing.Point(680, 772);
             this.penColourStatusLabel.Name = "penColourStatusLabel";
-            this.penColourStatusLabel.Size = new System.Drawing.Size(70, 13);
+            this.penColourStatusLabel.Size = new System.Drawing.Size(102, 20);
             this.penColourStatusLabel.TabIndex = 9;
             this.penColourStatusLabel.Text = "Colour: Black";
             // 
             // fillStatusLabel
             // 
             this.fillStatusLabel.AutoSize = true;
-            this.fillStatusLabel.Location = new System.Drawing.Point(453, 515);
-            this.fillStatusLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.fillStatusLabel.Location = new System.Drawing.Point(680, 792);
             this.fillStatusLabel.Name = "fillStatusLabel";
-            this.fillStatusLabel.Size = new System.Drawing.Size(39, 13);
+            this.fillStatusLabel.Size = new System.Drawing.Size(58, 20);
             this.fillStatusLabel.TabIndex = 10;
             this.fillStatusLabel.Text = "Fill: Off";
             // 
+            // saveButton
+            // 
+            this.saveButton.Location = new System.Drawing.Point(345, 785);
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(140, 34);
+            this.saveButton.TabIndex = 11;
+            this.saveButton.Text = "Save";
+            this.saveButton.UseVisualStyleBackColor = true;
+            this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+            // 
+            // loadButton
+            // 
+            this.loadButton.Location = new System.Drawing.Point(500, 785);
+            this.loadButton.Name = "loadButton";
+            this.loadButton.Size = new System.Drawing.Size(140, 34);
+            this.loadButton.TabIndex = 12;
+            this.loadButton.Text = "Load";
+            this.loadButton.UseVisualStyleBackColor = true;
+            this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1045, 534);
+            this.ClientSize = new System.Drawing.Size(1568, 822);
+            this.Controls.Add(this.loadButton);
+            this.Controls.Add(this.saveButton);
             this.Controls.Add(this.fillStatusLabel);
             this.Controls.Add(this.penColourStatusLabel);
             this.Controls.Add(this.cursorPositionLabel);
@@ -159,7 +173,6 @@
             this.Controls.Add(this.commandTextBox);
             this.Controls.Add(this.syntaxButton);
             this.Controls.Add(this.runButton);
-            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).EndInit();
@@ -180,6 +193,8 @@
         private System.Windows.Forms.Label cursorPositionLabel;
         private System.Windows.Forms.Label penColourStatusLabel;
         private System.Windows.Forms.Label fillStatusLabel;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button loadButton;
     }
 }
 
