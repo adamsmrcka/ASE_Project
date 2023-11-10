@@ -70,6 +70,9 @@ namespace ASE_Project
             pen = new Pen(penColour);
             fill = defaultFill;
             idicateCursor();
+            form1.updateCursorPositionLabel(posX, posY);
+            form1.updateFillStatusLabel(fill);
+            form1.updatePenColourStatusLabel(penColour);
         }
         /// <summary>
         /// Cleans Canvas - removes all drawings

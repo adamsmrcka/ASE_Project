@@ -245,7 +245,6 @@ namespace ASE_Project
                 if (directory != "")
                 {
                     saveToTXT(directory, commandTextBox.Lines);
-                    commandTextBox.Text = "";
                 }
             }
             else
