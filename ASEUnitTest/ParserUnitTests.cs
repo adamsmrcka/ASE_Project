@@ -33,6 +33,113 @@ namespace ASEUnitTest
         }
 
         /// <summary>
+        /// Command should parse when valid non-shape command is entered
+        /// </summary>
+        [TestMethod]
+        public void testParseCommand_ShouldParseValidNonShapeCommand()
+        {
+            // Arrange
+            string[] lines = { "fill on" };
+            Canvas.fill = false;
+
+            // Act
+            parser.parseCommand(lines, true);
+
+            // Assert
+            Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
+        }
+
+        /// <summary>
+        /// Command should parse when valid shape is entered
+        /// </summary>
+        [TestMethod]
+        public void testParseCommand_ShouldParseValidShapeCommand()
+        {
+            // Arrange
+            string[] lines = { "rectangle 10 20" };
+
+            // Act
+            parser.parseCommand(lines, true);
+
+            // Assert
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+        }
+
+        /// <summary>
+        /// Command should parse when valid non-shape command is entered - random capital letters
+        /// </summary>
+        [TestMethod]
+        public void testParseCommand_ShouldParseValidNonShapeCommand_Uppercase()
+        {
+            // Arrange
+            string[] lines = { "fiLL oN" };
+            Canvas.fill = false;
+
+            // Act
+            parser.parseCommand(lines, true);
+
+            // Assert
+            Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
+        }
+
+        /// <summary>
+        /// Command should parse when valid shape is entered - Random capital letters
+        /// </summary>
+        [TestMethod]
+        public void testParseCommand_ShouldParseValidShapeCommand_Uppercase()
+        {
+            // Arrange
+            string[] lines = { "RecTangle 10 20" };
+
+            // Act
+            parser.parseCommand(lines, true);
+
+            // Assert
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+        }
+
+
+        /// <summary>
+        /// Command should parse when valid non-shape command is entered - multiple commands
+        /// </summary>
+        [TestMethod]
+        public void testParseCommand_ShouldParseValidNonShapeCommand_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "rectangle 10 20", "fill on" };
+            Canvas.fill = false;
+
+            // Act
+            parser.parseCommand(lines, true);
+
+            // Assert
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
+        }
+
+        /// <summary>
+        /// Command should parse when valid shape is entered - multiple commands
+        /// </summary>
+        [TestMethod]
+        public void testParseCommand_ShouldParseValidShapeCommand_MultipleCommands()
+        {
+            // Arrange
+            string[] lines = { "fiLl on", "rEctangle 10 20" };
+            Canvas.fill = false;
+
+            // Act
+            parser.parseCommand(lines, true);
+
+            // Assert
+            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
+            Assert.AreEqual(true, Canvas.fill);
+            Canvas.fill = false;
+        }
+
+        /// <summary>
         /// Command should parse when second line is empty - multiple commands
         /// </summary>
         [TestMethod]
@@ -186,112 +293,6 @@ namespace ASEUnitTest
 
             //Assert
             Assert.IsTrue(parser.errors > 0);
-        }
-
-        /// <summary>
-        /// Command should parse when valid shape is entered
-        /// </summary>
-        [TestMethod]
-        public void testParseCommand_ShouldParseValidShapeCommand()
-        {
-            // Arrange
-            string[] lines = { "rectangle 10 20" };
-
-            // Act
-            parser.parseCommand(lines, true);
-
-            // Assert
-            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
-        }
-
-        /// <summary>
-        /// Command should parse when valid shape is entered - multiple commands
-        /// </summary>
-        [TestMethod]
-        public void testParseCommand_ShouldParseValidShapeCommand_MultipleCommands()
-        {
-            // Arrange
-            string[] lines = { "fill on", "rectangle 10 20" };
-            Canvas.fill = false;
-
-            // Act
-            parser.parseCommand(lines, true);
-
-            // Assert
-            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
-            Assert.AreEqual(true, Canvas.fill);
-            Canvas.fill = false;
-        }
-
-        /// <summary>
-        /// Command should parse when valid shape is entered - Random capital letters
-        /// </summary>
-        [TestMethod]
-        public void testParseCommand_ShouldParseValidShapeCommand_Uppercase()
-        {
-            // Arrange
-            string[] lines = { "RecTangle 10 20" };
-
-            // Act
-            parser.parseCommand(lines, true);
-
-            // Assert
-            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
-        }
-
-        /// <summary>
-        /// Command should parse when valid non-shape command is entered
-        /// </summary>
-        [TestMethod]
-        public void testParseCommand_ShouldParseValidNonShapeCommand()
-        {
-            // Arrange
-            string[] lines = { "fill on" };
-            Canvas.fill = false;
-
-            // Act
-            parser.parseCommand(lines, true);
-
-            // Assert
-            Assert.AreEqual(true, Canvas.fill);
-            Canvas.fill = false;
-        }
-
-        /// <summary>
-        /// Command should parse when valid non-shape command is entered - multiple commands
-        /// </summary>
-        [TestMethod]
-        public void testParseCommand_ShouldParseValidNonShapeCommand_MultipleCommands()
-        {
-            // Arrange
-            string[] lines = { "rectangle 10 20", "fill on" };
-            Canvas.fill = false;
-
-            // Act
-            parser.parseCommand(lines, true);
-
-            // Assert
-            Assert.AreEqual("rectangle", Parser.s.ToString().ToLower().Split('.').Last());
-            Assert.AreEqual(true, Canvas.fill);
-            Canvas.fill = false;
-        }
-
-        /// <summary>
-        /// Command should parse when valid non-shape command is entered - random capital letters
-        /// </summary>
-        [TestMethod]
-        public void testParseCommand_ShouldParseValidNonShapeCommand_Uppercase()
-        {
-            // Arrange
-            string[] lines = { "fiLL oN" };
-            Canvas.fill = false;
-
-            // Act
-            parser.parseCommand(lines, true );
-
-            // Assert
-            Assert.AreEqual(true, Canvas.fill);
-            Canvas.fill = false;
         }
 
         /// <summary>

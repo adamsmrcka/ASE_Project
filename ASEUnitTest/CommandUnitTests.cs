@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace ASEUnitTest
 {
+    /// <summary>
+    /// Test class testing functionality of Commands
+    /// </summary>
     [TestClass]
     public class CommandUnitTests
     {
@@ -19,6 +22,9 @@ namespace ASEUnitTest
 
         Form1 form1 = new Form1();
 
+        /// <summary>
+        /// Sets Objects used during tests
+        /// </summary>
         [TestInitialize]
         public void Initialize()
         {
@@ -27,6 +33,9 @@ namespace ASEUnitTest
             parser.setCanvas(canvas);
         }
 
+        /// <summary>
+        /// Fill on command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_FillOn()
         {
@@ -42,6 +51,9 @@ namespace ASEUnitTest
             Canvas.fill = false;
         }
 
+        /// <summary>
+        /// Fill off command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_FillOff()
         {
@@ -57,6 +69,9 @@ namespace ASEUnitTest
             Canvas.fill = false;
         }
 
+        /// <summary>
+        /// Colour red hex command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_ColourRedHex()
         {
@@ -72,6 +87,9 @@ namespace ASEUnitTest
             Canvas.penColour = Color.Black;
         }
 
+        /// <summary>
+        /// Colour red string command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_ColourRedString()
         {
@@ -87,6 +105,9 @@ namespace ASEUnitTest
             Canvas.penColour = Color.Black;
         }
 
+        /// <summary>
+        /// invalid command should throw error message
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldThrowException_InvalidColour()
         {
@@ -100,6 +121,9 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// Move to command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_MoveTo()
         {
@@ -117,11 +141,16 @@ namespace ASEUnitTest
             Canvas.posY = Canvas.defaultPosY;
         }
 
+        /// <summary>
+        /// Reset command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_Reset()
         {
             Canvas.posX = 50;
             Canvas.posY = 50;
+            Canvas.fill = true;
+            Canvas.penColour = Color.Red;
             // Arrange
             string[] lines = { "reset" };
 
@@ -131,8 +160,13 @@ namespace ASEUnitTest
             // Assert
             Assert.AreEqual(Canvas.defaultPosX, Canvas.posX);
             Assert.AreEqual(Canvas.defaultPosY, Canvas.posY);
+            Assert.AreEqual(Color.Black, Canvas.penColour);
+            Assert.AreEqual(false, Canvas.fill);
         }
 
+        /// <summary>
+        /// Clear command should be parsed
+        /// </summary>
         [TestMethod]
         public void testCommands_ShouldDraw_Clear()
         {

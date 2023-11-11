@@ -25,6 +25,7 @@ namespace ASE_Project
             colourShape = colour;
             xPos = posX;
             yPos = posY;
+            fillShape = fill;
             toX = parameters[0];
             toY = parameters[1];
         }
