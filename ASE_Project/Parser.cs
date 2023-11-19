@@ -113,7 +113,7 @@ namespace ASE_Project
                                 }
                             }
                         }
-                        else
+                        else if (Dictionaries.commands.Contains(command))
                         {
                             // User has input a predefined command that is not a shape. Checks number of arguments and handle accordingly.
                             if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
@@ -212,7 +212,31 @@ namespace ASE_Project
                                 throw new Exception($"Error: Unknown command '{command}'");
                             }
                         }
-
+                        else if (Dictionaries.variables[0].Contains(command))
+                        {
+                            if (parts.Length == 3 && parts[1] == "=")
+                            {
+                                if (int.TryParse(parts[2], out int argValue))
+                                {
+                                    // Update the existing variable
+                                    foreach (var variable in Dictionaries.variables)
+                                    {
+                                        if (variable[0] == parts[0])
+                                        {
+                                            variable[1] = parts[2];
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (parts.Length == 3 && parts[1] == "=")
+                        {
+                            if (int.TryParse(parts[2], out int argValue))
+                            {
+                                Dictionaries.variables.Add(new[] { parts[0], parts[2] });
+                            }
+                        }
                     }
                     catch (Exception ex)
                     {

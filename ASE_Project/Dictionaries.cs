@@ -41,5 +41,7 @@ namespace ASE_Project
         /// List storing all error messages
         /// </summary>
         public static List<string> errorMessages = new List<string>();
+
+        public static List<string[]> variables = new List<string[]>();
     }
 }
