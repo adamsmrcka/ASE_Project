@@ -40,8 +40,10 @@ namespace ASE_Project
         /// <summary>
         /// List storing all error messages
         /// </summary>
-        public static List<string> errorMessages = new List<string>();
+        public static List<String> errorMessages = new List<string>();
 
-        public static List<string[]> variables = new List<string[]>();
+        public static List<String> calcualtions = new List<String>() { "+", "-", "*", "/" };
+
+        public static Dictionary<String, int> variables = new Dictionary<String, int>() { };
     }
 }

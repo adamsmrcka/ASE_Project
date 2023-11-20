@@ -3,11 +3,13 @@ using CommandLine;
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Xml.Linq;
 
@@ -90,12 +92,21 @@ namespace ASE_Project
 
                                     for (int i = 0; i < args.Length; i++)
                                     {
-                                        if (!int.TryParse(args[i], out int argValue))
+                                        if (Dictionaries.variables.TryGetValue(args[i], out int varValue))
+                                        {
+                                            intArguments[i] = varValue;
+
+                                        }
+                                        else if (int.TryParse(args[i], out int argValue))
+                                        {
+                                            intArguments[i] = argValue;
+                                        }
+                                        else
                                         {
                                             argumentsAreInts = false;
                                             throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
                                         }
-                                        intArguments[i] = argValue;
+
                                     }
 
                                     if (argumentsAreInts)
@@ -113,6 +124,7 @@ namespace ASE_Project
                                 }
                             }
                         }
+                        // Checking non-shape Commands
                         else if (Dictionaries.commands.Contains(command))
                         {
                             // User has input a predefined command that is not a shape. Checks number of arguments and handle accordingly.
@@ -212,31 +224,98 @@ namespace ASE_Project
                                 throw new Exception($"Error: Unknown command '{command}'");
                             }
                         }
-                        else if (Dictionaries.variables[0].Contains(command))
+                        // Check if it is declaring Variables
+                        else if (parts.Length == 3 && parts[1] == "=")
                         {
-                            if (parts.Length == 3 && parts[1] == "=")
+
+                            if (int.TryParse(parts[2], out int argValue))
                             {
-                                if (int.TryParse(parts[2], out int argValue))
+                                if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                                 {
                                     // Update the existing variable
-                                    foreach (var variable in Dictionaries.variables)
+                                    Dictionaries.variables[command] = int.Parse(parts[2]);
+                                }
+                                else
+                                {
+                                    Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
+                                }
+                            }
+                            else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
+                            {
+                                if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                                {
+                                    // Update the existing variable
+                                    Dictionaries.variables[command] = newVarValue;
+                                }
+                                else
+                                {
+                                    Dictionaries.variables.Add(parts[0], newVarValue);
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception($"Error: Argument '{parts[2]}' for Variable '{command}' is not a valid parameter.");
+                            }
+                        }
+
+                        // Check for a complex Variable declaration
+                        else if (parts.Length > 4 && parts[1] == "=")
+                        {
+                            string calculation = "";
+                            DataTable table = new DataTable();
+                            bool errors = false;
+
+                            for (int i = 2; i < parts.Length; i = i + 2)
+                            {
+                                if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
+                                {
+                                    parts[i] = newVarValue.ToString();
+
+                                }
+                                else if (!int.TryParse(parts[i], out int argValue))
+                                {
+                                    errors = true;
+                                    throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid parameter.");
+
+                                }
+                            }
+                            for (int i = 3; i < parts.Length; i = i + 2)
+                            {
+                                if (!Dictionaries.calcualtions.Contains(parts[i]))
+                                {
+                                    errors = true;
+                                    throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid equation parameter.");
+                                }
+                            }
+                            if (errors == false)
+                            {
+                                foreach (string cmd in parts.Skip(2))
+                                {
+                                    calculation += cmd;
+                                }
+                                Console.WriteLine(calculation);
+                                var result = table.Compute(calculation, null);
+                                if (result != null)
+                                {
+                                    string resultString = result.ToString();
+                                    Console.WriteLine(resultString);
+                                    if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                                     {
-                                        if (variable[0] == parts[0])
-                                        {
-                                            variable[1] = parts[2];
-                                            break;
-                                        }
+                                        // Update the existing variable
+                                        Dictionaries.variables[command] = int.Parse(resultString);
+                                    }
+                                    else
+                                    {
+                                        Dictionaries.variables.Add(parts[0], int.Parse(resultString));
                                     }
                                 }
                             }
                         }
-                        else if (parts.Length == 3 && parts[1] == "=")
+                        else
                         {
-                            if (int.TryParse(parts[2], out int argValue))
-                            {
-                                Dictionaries.variables.Add(new[] { parts[0], parts[2] });
-                            }
+                            throw new Exception($"Error: '{command}' is an Unknown command.");
                         }
+
                     }
                     catch (Exception ex)
                     {
