@@ -20,7 +20,7 @@ namespace ASE_Project
         /// <summary>
         /// List of supported Non-Shape commands
         /// </summary>
-        public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill" };
+        public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill", "while", "endloop" };
 
         /// <summary>
         /// Dictionary of Commands and Shapes and their respective required number of variables
@@ -35,6 +35,7 @@ namespace ASE_Project
             { "pen", 1 },
             { "clear", 0},
             { "reset", 0},
+            { "while", 3}
         };
 
         /// <summary>
@@ -43,6 +44,8 @@ namespace ASE_Project
         public static List<String> errorMessages = new List<string>();
 
         public static List<String> calcualtions = new List<String>() { "+", "-", "*", "/" };
+
+        public static List<String> loopSymbols = new List<String>() { ">", "<"};
 
         public static Dictionary<String, int> variables = new Dictionary<String, int>() { };
     }

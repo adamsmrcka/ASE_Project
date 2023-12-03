@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Xml.Linq;
 
 namespace ASE_Project
@@ -21,16 +22,16 @@ namespace ASE_Project
     public class Parser
     {
         ShapeFactory commandFactory;
-        String trimmedCommand;
-        String[] parts;
         public string[] args;
         public static int[] intArguments;
-        String command;
         System.Drawing.Color colour;
         Canvas canvas;
         public static Shape s;
         public int errors;
         Exception caughtException = null;
+        bool loopFlag = false;
+        string[] loopArgs;
+        List<String> loopCommands = new List<String>();
 
         private static Parser parser = new Parser();
 
@@ -66,8 +67,8 @@ namespace ASE_Project
             {
                 foreach (String line in lines)
                 {
-                    command = String.Empty;
-                    trimmedCommand = String.Empty;
+                    string command = String.Empty;
+                    string trimmedCommand = String.Empty;
                     try
                     {
                         trimmedCommand = line.Trim(' ').ToLower();
@@ -75,247 +76,83 @@ namespace ASE_Project
                         {
                             continue;
                         };
-                        parts = trimmedCommand.Split(' ');
-                        command = parts[0];
+                        string[] parts = trimmedCommand.Split(' ');
 
-                        //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
-                        if (isShape(command))
+                        if (loopFlag == true)
                         {
-                            if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
+                            if (parts[0] != "endloop")
                             {
-                                args = parts.Skip(1).ToArray();
-                                intArguments = new int[args.Length];
-
-                                if (args.Length == expectedArgsCount)
+                                loopCommands.Add(line);
+                            }
+                            else if (parts[0] == "endloop")
+                            {
+                                string e1 = "";
+                                string e2 = "";
+                                int numberOfCycles = 0;
+                                bool isLoopExCorrect;
+                                bool e1Assigned = false;
+                                bool e2Assigned = false;
+                                do
                                 {
-                                    bool argumentsAreInts = true;
-
-                                    for (int i = 0; i < args.Length; i++)
+                                    string[] loopParts;
+                                    try
                                     {
-                                        if (Dictionaries.variables.TryGetValue(args[i], out int varValue))
-                                        {
-                                            intArguments[i] = varValue;
-
-                                        }
-                                        else if (int.TryParse(args[i], out int argValue))
-                                        {
-                                            intArguments[i] = argValue;
-                                        }
-                                        else
-                                        {
-                                            argumentsAreInts = false;
-                                            throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
-                                        }
-
+                                        e1 = Dictionaries.variables[loopArgs[0]].ToString();
+                                        e1Assigned = true;
                                     }
-
-                                    if (argumentsAreInts)
+                                    catch (Exception)
                                     {
-                                        if (draw == true)
+                                        if (!e1Assigned)
                                         {
-                                            s = (Shape)commandFactory.getShape(command);
-                                            canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                                            e1 = loopArgs[0];
+                                            e1Assigned = true;
                                         }
                                     }
+                                    try
+                                    {
+                                        e2 = Dictionaries.variables[loopArgs[2]].ToString();
+                                        e2Assigned = true;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        if (!e2Assigned)
+                                        {
+                                            e2 = loopArgs[2];
+                                            e2Assigned = true;
+                                        }
+                                    }
+
+                                    string equation = e1 + " " + loopArgs[1] + " " + e2;
+                                    isLoopExCorrect = validateLoopExpression(equation);
+
+                                    if (isLoopExCorrect)
+                                    {
+                                        foreach (String loopLine in loopCommands)
+                                        {
+                                            string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
+                                            loopParts = loopTrimmedCommand.Split(' ');
+                                            analyses(loopParts, draw);
+                                        }
+                                    }
+                                    numberOfCycles++;
+                                }
+                                while (isLoopExCorrect && numberOfCycles < 100);
+
+                                if (numberOfCycles > 100)
+                                {
+                                    loopFlag = true;
+                                    throw new Exception($"Error: Loop command has ended automatically after 100 cycles");
                                 }
                                 else
                                 {
-                                    throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {intArguments.Length} were provided.");
-                                }
-                            }
-                        }
-                        // Checking non-shape Commands
-                        else if (Dictionaries.commands.Contains(command))
-                        {
-                            // User has input a predefined command that is not a shape. Checks number of arguments and handle accordingly.
-                            if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
-                            {
-                                args = parts.Skip(1).ToArray();
-                                if (args.Length == expectedArgsCount && draw == true)
-                                {
-                                    switch (command)
-                                    {
-                                        case "clear":
-                                            canvas.clearCanvas();
-                                            break;
-
-                                        case "reset":
-                                            canvas.restoreCanvas();
-                                            break;
-
-                                        case "moveto":
-                                            intArguments = Array.ConvertAll(args, int.Parse);
-                                            canvas.moveTo(intArguments);
-                                            break;
-
-                                        case "pen":
-                                            try
-                                            {
-                                                colour = ColorTranslator.FromHtml(args[0]);
-                                            }
-                                            catch
-                                            {
-                                                throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
-                                            }
-                                            canvas.changeColor(colour);
-                                            break;
-
-                                        case "fill":
-                                            if (args[0] == "on" || args[0] == "off")
-                                            {
-                                                canvas.toggleFill(args[0]);
-                                            }
-                                            else
-                                            {
-                                                throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
-                                            }
-                                            break;
-
-                                        default:
-                                            throw new Exception($"Error: Unknown command '{command}'");
-                                    }
-                                }
-                                else if (args.Length == expectedArgsCount && draw == false)
-                                {
-                                    switch (command)
-                                    {
-                                        case "clear":
-                                            break;
-
-                                        case "reset":
-                                            break;
-
-                                        case "moveto":
-                                            intArguments = Array.ConvertAll(args, int.Parse);
-                                            break;
-
-                                        case "pen":
-                                            try
-                                            {
-                                                colour = ColorTranslator.FromHtml(args[0]);
-                                            }
-                                            catch
-                                            {
-                                                throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
-                                            }
-                                            break;
-
-                                        case "fill":
-                                            if (args[0] == "on" || args[0] == "off")
-                                            {
-                                            }
-                                            else
-                                            {
-                                                throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
-                                            }
-                                            break;
-
-                                        default:
-                                            throw new Exception($"Error: Unknown command '{command}'");
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {args.Length} were provided.");
-                                }
-                            }
-                            else
-                            {
-                                throw new Exception($"Error: Unknown command '{command}'");
-                            }
-                        }
-                        // Check if it is declaring Variables
-                        else if (parts.Length == 3 && parts[1] == "=")
-                        {
-
-                            if (int.TryParse(parts[2], out int argValue))
-                            {
-                                if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
-                                {
-                                    // Update the existing variable
-                                    Dictionaries.variables[command] = int.Parse(parts[2]);
-                                }
-                                else
-                                {
-                                    Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
-                                }
-                            }
-                            else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
-                            {
-                                if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
-                                {
-                                    // Update the existing variable
-                                    Dictionaries.variables[command] = newVarValue;
-                                }
-                                else
-                                {
-                                    Dictionaries.variables.Add(parts[0], newVarValue);
-                                }
-                            }
-                            else
-                            {
-                                throw new Exception($"Error: Argument '{parts[2]}' for Variable '{command}' is not a valid parameter.");
-                            }
-                        }
-
-                        // Check for a complex Variable declaration
-                        else if (parts.Length > 4 && parts[1] == "=")
-                        {
-                            string calculation = "";
-                            DataTable table = new DataTable();
-                            bool errors = false;
-
-                            for (int i = 2; i < parts.Length; i = i + 2)
-                            {
-                                if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
-                                {
-                                    parts[i] = newVarValue.ToString();
-
-                                }
-                                else if (!int.TryParse(parts[i], out int argValue))
-                                {
-                                    errors = true;
-                                    throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid parameter.");
-
-                                }
-                            }
-                            for (int i = 3; i < parts.Length; i = i + 2)
-                            {
-                                if (!Dictionaries.calcualtions.Contains(parts[i]))
-                                {
-                                    errors = true;
-                                    throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid equation parameter.");
-                                }
-                            }
-                            if (errors == false)
-                            {
-                                foreach (string cmd in parts.Skip(2))
-                                {
-                                    calculation += cmd;
-                                }
-                                Console.WriteLine(calculation);
-                                var result = table.Compute(calculation, null);
-                                if (result != null)
-                                {
-                                    string resultString = result.ToString();
-                                    Console.WriteLine(resultString);
-                                    if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
-                                    {
-                                        // Update the existing variable
-                                        Dictionaries.variables[command] = int.Parse(resultString);
-                                    }
-                                    else
-                                    {
-                                        Dictionaries.variables.Add(parts[0], int.Parse(resultString));
-                                    }
+                                    loopFlag = false;
                                 }
                             }
                         }
                         else
                         {
-                            throw new Exception($"Error: '{command}' is an Unknown command.");
+                            analyses(parts, draw);
                         }
-
                     }
                     catch (Exception ex)
                     {
@@ -324,13 +161,325 @@ namespace ASE_Project
                         caughtException = ex;
                     }
                 }
+                if (loopFlag)
+                {
+                    errors++;
+                    throw new Exception($"Error: Loop command is not correctly ended");
+                }
             }
             else
             {
                 errors++;
                 throw new Exception($"Error: No command entered.");
             }
+
         }
+
+        private bool validateLoopExpression(string equation)
+        {
+            try
+            {
+                DataTable table = new DataTable();
+                var result = table.Compute(equation, "");
+                return Convert.ToBoolean(result);
+            }
+            catch (Exception e)
+            {
+                // An exception may occur for invalid expressions
+                return false;
+            }
+        }
+
+        public void analyses(string[] parts, bool draw)
+        {
+
+            string command = parts[0];
+            //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
+            if (isShape(command))
+            {
+                if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
+                {
+                    args = parts.Skip(1).ToArray();
+                    intArguments = new int[args.Length];
+
+                    if (args.Length == expectedArgsCount)
+                    {
+                        bool argumentsAreInts = true;
+
+                        for (int i = 0; i < args.Length; i++)
+                        {
+                            if (Dictionaries.variables.TryGetValue(args[i], out int varValue))
+                            {
+                                intArguments[i] = varValue;
+                            }
+                            else if (int.TryParse(args[i], out int argValue))
+                            {
+                                intArguments[i] = argValue;
+                            }
+                            else
+                            {
+                                argumentsAreInts = false;
+                                throw new Exception($"Error: Argument {i + 1} for '{command}' is not a valid integer: '{args[i]}'");
+                            }
+                        }
+
+                        if (argumentsAreInts)
+                        {
+                            if (draw == true)
+                            {
+                                s = (Shape)commandFactory.getShape(command);
+                                canvas.drawShape(s, Canvas.penColour, Canvas.fill, Canvas.posX, Canvas.posY, intArguments);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {intArguments.Length} were provided.");
+                    }
+                }
+            }
+            // Checking non-shape Commands
+            else if (Dictionaries.commands.Contains(command))
+            {
+                // User has input a predefined command that is not a shape. Checks number of arguments and handle accordingly.
+                if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
+                {
+                    args = parts.Skip(1).ToArray();
+                    if (args.Length == expectedArgsCount && draw == true)
+                    {
+                        switch (command)
+                        {
+                            case "clear":
+                                canvas.clearCanvas();
+                                break;
+
+                            case "reset":
+                                canvas.restoreCanvas();
+                                break;
+
+                            case "moveto":
+                                intArguments = Array.ConvertAll(args, int.Parse);
+                                canvas.moveTo(intArguments);
+                                break;
+
+                            case "pen":
+                                try
+                                {
+                                    colour = ColorTranslator.FromHtml(args[0]);
+                                }
+                                catch
+                                {
+                                    throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
+                                }
+                                canvas.changeColor(colour);
+                                break;
+
+                            case "fill":
+                                if (args[0] == "on" || args[0] == "off")
+                                {
+                                    canvas.toggleFill(args[0]);
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
+                                }
+                                break;
+                            case "while":
+                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int argVarValue1) || int.TryParse(args[0], out int argValue1) && Dictionaries.variables.TryGetValue(args[2], out int argVarValue2) || int.TryParse(args[2], out int argValue2))
+                                {
+                                    int e1, e2;
+                                    bool isLoopExCorrect;
+                                    try
+                                    {
+                                        e1 = int.Parse(args[0]);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e1 = Dictionaries.variables[args[0]];
+                                    }
+                                    try
+                                    {
+                                        e2 = int.Parse(args[2]);
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        e2 = Dictionaries.variables[args[2]];
+                                    }
+
+                                    string equation = e1.ToString() + " " + args[1] + " " + e2.ToString();
+                                    isLoopExCorrect = validateLoopExpression(equation);
+
+                                    if (isLoopExCorrect)
+                                    {
+                                        loopFlag = true;
+                                        loopArgs = new string[] { args[0], args[1], args[2] };
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command While loop");
+                                }
+                                break;
+
+                            default:
+                                throw new Exception($"Error: Unknown command '{command}'");
+                        }
+                    }
+                    else if (args.Length == expectedArgsCount && draw == false)
+                    {
+                        switch (command)
+                        {
+                            case "clear":
+                                break;
+
+                            case "reset":
+                                break;
+
+                            case "moveto":
+                                intArguments = Array.ConvertAll(args, int.Parse);
+                                break;
+
+                            case "pen":
+                                try
+                                {
+                                    colour = ColorTranslator.FromHtml(args[0]);
+                                }
+                                catch
+                                {
+                                    throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
+                                }
+                                break;
+
+                            case "fill":
+                                if (args[0] == "on" || args[0] == "off")
+                                {
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
+                                }
+                                break;
+
+                            case "while":
+                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int argVarValue1) || Dictionaries.variables.TryGetValue(args[2], out int argVarValue2) && int.TryParse(args[0], out int argValue1) || int.TryParse(args[2], out int argValue2))
+                                {
+                                    loopFlag = true;
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command While loop");
+                                }
+                                break;
+
+                            default:
+                                throw new Exception($"Error: Unknown command '{command}'");
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Error: '{command}' command expects {expectedArgsCount} argument(s), but {args.Length} were provided.");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Error: Unknown command '{command}'");
+                }
+            }
+            // Check if it is declaring Variables
+            else if (parts.Length == 3 && parts[1] == "=")
+            {
+
+                if (int.TryParse(parts[2], out int argValue))
+                {
+                    if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                    {
+                        // Update the existing variable
+                        Dictionaries.variables[command] = int.Parse(parts[2]);
+                    }
+                    else
+                    {
+                        Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
+                    }
+                }
+                else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
+                {
+                    if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                    {
+                        // Update the existing variable
+                        Dictionaries.variables[command] = newVarValue;
+                    }
+                    else
+                    {
+                        Dictionaries.variables.Add(parts[0], newVarValue);
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Error: Argument '{parts[2]}' for Variable '{command}' is not a valid parameter.");
+                }
+            }
+
+            // Check for a complex Variable declaration
+            else if (parts.Length > 4 && parts[1] == "=")
+            {
+                string calculation = "";
+                DataTable table = new DataTable();
+                bool errors = false;
+
+                for (int i = 2; i < parts.Length; i = i + 2)
+                {
+                    if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
+                    {
+                        parts[i] = newVarValue.ToString();
+
+                    }
+                    else if (!int.TryParse(parts[i], out int argValue))
+                    {
+                        errors = true;
+                        throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid parameter.");
+
+                    }
+                }
+                for (int i = 3; i < parts.Length; i = i + 2)
+                {
+                    if (!Dictionaries.calcualtions.Contains(parts[i]))
+                    {
+                        errors = true;
+                        throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid equation parameter.");
+                    }
+                }
+                if (errors == false)
+                {
+                    foreach (string cmd in parts.Skip(2))
+                    {
+                        calculation += cmd;
+                    }
+                    var result = table.Compute(calculation, null);
+                    if (result != null)
+                    {
+                        string resultString = result.ToString();
+                        if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                        {
+                            // Update the existing variable
+                            Dictionaries.variables[command] = int.Parse(resultString);
+                        }
+                        else
+                        {
+                            Dictionaries.variables.Add(parts[0], int.Parse(resultString));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                throw new Exception($"Error: '{command}' is an Unknown command.");
+            }
+
+        }
+
+
+
+
         /// <summary>
         /// Boolean checking whether a command is a Shape
         /// </summary>
@@ -342,3 +491,4 @@ namespace ASE_Project
         }
     }
 }
+
