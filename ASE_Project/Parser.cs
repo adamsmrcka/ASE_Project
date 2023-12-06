@@ -12,7 +12,9 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Shapes;
 using System.Xml.Linq;
+using static System.Windows.Forms.LinkLabel;
 
 namespace ASE_Project
 {
@@ -30,8 +32,14 @@ namespace ASE_Project
         public int errors;
         Exception caughtException = null;
         bool loopFlag = false;
+        bool loopFlagFirst = false;
+        bool ifFlag = false;
+        bool ifFlagFirst = false;
         string[] loopArgs;
+        string[] ifArgs;
+
         List<String> loopCommands = new List<String>();
+        List<String> ifCommands = new List<String>();
 
         private static Parser parser = new Parser();
 
@@ -65,6 +73,11 @@ namespace ASE_Project
             errors = 0;
             if (lines.Length > 0)
             {
+                ifFlag = false;
+                loopFlag = false;
+                loopFlagFirst = false;
+                ifFlagFirst = false;
+
                 foreach (String line in lines)
                 {
                     string command = String.Empty;
@@ -76,81 +89,18 @@ namespace ASE_Project
                         {
                             continue;
                         };
-                        string[] parts = trimmedCommand.Split(' ');
 
-                        if (loopFlag == true)
+                        if (ifFlag && !loopFlagFirst)
                         {
-                            if (parts[0] != "endloop")
-                            {
-                                loopCommands.Add(line);
-                            }
-                            else if (parts[0] == "endloop")
-                            {
-                                string e1 = "";
-                                string e2 = "";
-                                int numberOfCycles = 0;
-                                bool isLoopExCorrect;
-                                bool e1Assigned = false;
-                                bool e2Assigned = false;
-                                do
-                                {
-                                    string[] loopParts;
-                                    try
-                                    {
-                                        e1 = Dictionaries.variables[loopArgs[0]].ToString();
-                                        e1Assigned = true;
-                                    }
-                                    catch (Exception)
-                                    {
-                                        if (!e1Assigned)
-                                        {
-                                            e1 = loopArgs[0];
-                                            e1Assigned = true;
-                                        }
-                                    }
-                                    try
-                                    {
-                                        e2 = Dictionaries.variables[loopArgs[2]].ToString();
-                                        e2Assigned = true;
-                                    }
-                                    catch (Exception)
-                                    {
-                                        if (!e2Assigned)
-                                        {
-                                            e2 = loopArgs[2];
-                                            e2Assigned = true;
-                                        }
-                                    }
-
-                                    string equation = e1 + " " + loopArgs[1] + " " + e2;
-                                    isLoopExCorrect = validateLoopExpression(equation);
-
-                                    if (isLoopExCorrect)
-                                    {
-                                        foreach (String loopLine in loopCommands)
-                                        {
-                                            string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
-                                            loopParts = loopTrimmedCommand.Split(' ');
-                                            analyses(loopParts, draw);
-                                        }
-                                    }
-                                    numberOfCycles++;
-                                }
-                                while (isLoopExCorrect && numberOfCycles < 100);
-
-                                if (numberOfCycles > 100)
-                                {
-                                    loopFlag = true;
-                                    throw new Exception($"Error: Loop command has ended automatically after 100 cycles");
-                                }
-                                else
-                                {
-                                    loopFlag = false;
-                                }
-                            }
+                            ifAnalyses(trimmedCommand, draw);
+                        }
+                        else if (loopFlag && !ifFlagFirst)
+                        {
+                            loopsAnalyses(trimmedCommand, draw);
                         }
                         else
                         {
+                            string[] parts = trimmedCommand.Split(' ');
                             analyses(parts, draw);
                         }
                     }
@@ -163,8 +113,11 @@ namespace ASE_Project
                 }
                 if (loopFlag)
                 {
-                    errors++;
                     throw new Exception($"Error: Loop command is not correctly ended");
+                }
+                if (ifFlag)
+                {
+                    throw new Exception($"Error: If command is not correctly ended");
                 }
             }
             else
@@ -175,7 +128,7 @@ namespace ASE_Project
 
         }
 
-        private bool validateLoopExpression(string equation)
+        private bool validateExpression(string equation)
         {
             try
             {
@@ -183,16 +136,15 @@ namespace ASE_Project
                 var result = table.Compute(equation, "");
                 return Convert.ToBoolean(result);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // An exception may occur for invalid expressions
                 return false;
             }
         }
 
-        public void analyses(string[] parts, bool draw)
+        private void analyses(string[] parts, bool draw)
         {
-
             string command = parts[0];
             //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
             if (isShape(command))
@@ -284,16 +236,16 @@ namespace ASE_Project
                                     throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
                                 }
                                 break;
+
                             case "while":
-                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int argVarValue1) || int.TryParse(args[0], out int argValue1) && Dictionaries.variables.TryGetValue(args[2], out int argVarValue2) || int.TryParse(args[2], out int argValue2))
+                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int loopArgVarValue1) || int.TryParse(args[0], out int loopArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int loopArgVarValue2) || int.TryParse(args[2], out int loopArgValue2))
                                 {
                                     int e1, e2;
-                                    bool isLoopExCorrect;
                                     try
                                     {
                                         e1 = int.Parse(args[0]);
                                     }
-                                    catch (Exception e)
+                                    catch (Exception)
                                     {
                                         e1 = Dictionaries.variables[args[0]];
                                     }
@@ -301,23 +253,54 @@ namespace ASE_Project
                                     {
                                         e2 = int.Parse(args[2]);
                                     }
-                                    catch (Exception e)
+                                    catch (Exception)
                                     {
                                         e2 = Dictionaries.variables[args[2]];
                                     }
-
-                                    string equation = e1.ToString() + " " + args[1] + " " + e2.ToString();
-                                    isLoopExCorrect = validateLoopExpression(equation);
-
-                                    if (isLoopExCorrect)
+                                    loopArgs = new string[] { args[0], args[1], args[2] };
+                                    loopFlag = true;
+                                    if (ifFlag == false)
                                     {
-                                        loopFlag = true;
-                                        loopArgs = new string[] { args[0], args[1], args[2] };
+                                        loopFlagFirst = true;
                                     }
                                 }
                                 else
                                 {
                                     throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command While loop");
+                                }
+                                break;
+
+                            case "if":
+                                if (Dictionaries.ifSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int ifArgVarValue1) || int.TryParse(args[0], out int ifArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int ifArgVarValue2) || int.TryParse(args[2], out int ifArgValue2))
+                                {
+                                    int e1, e2;
+                                    try
+                                    {
+                                        e1 = int.Parse(args[0]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        e1 = Dictionaries.variables[args[0]];
+                                    }
+                                    try
+                                    {
+                                        e2 = int.Parse(args[2]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        e2 = Dictionaries.variables[args[2]];
+                                    }
+
+                                    ifFlag = true;
+                                    ifArgs = new string[] { args[0], args[1], args[2] };
+                                    if (loopFlag == false)
+                                    {
+                                        ifFlagFirst = true;
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command If");
                                 }
                                 break;
 
@@ -361,13 +344,70 @@ namespace ASE_Project
                                 break;
 
                             case "while":
-                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int argVarValue1) || Dictionaries.variables.TryGetValue(args[2], out int argVarValue2) && int.TryParse(args[0], out int argValue1) || int.TryParse(args[2], out int argValue2))
+                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int loopArgVarValue1) || int.TryParse(args[0], out int loopArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int loopArgVarValue2) || int.TryParse(args[2], out int loopArgValue2))
                                 {
+                                    int e1, e2;
+                                    try
+                                    {
+                                        e1 = int.Parse(args[0]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        e1 = Dictionaries.variables[args[0]];
+                                    }
+                                    try
+                                    {
+                                        e2 = int.Parse(args[2]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        e2 = Dictionaries.variables[args[2]];
+                                    }
+
+                                    loopArgs = new string[] { args[0], args[1], args[2] };
                                     loopFlag = true;
+                                    if (ifFlag == false)
+                                    {
+                                        loopFlagFirst = true;
+                                    }
                                 }
                                 else
                                 {
                                     throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command While loop");
+                                }
+                                break;
+
+                            case "if":
+                                if (Dictionaries.ifSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int ifArgVarValue1) || int.TryParse(args[0], out int ifArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int ifArgVarValue2) || int.TryParse(args[2], out int ifArgValue2))
+                                {
+                                    int e1, e2;
+                                    try
+                                    {
+                                        e1 = int.Parse(args[0]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        e1 = Dictionaries.variables[args[0]];
+                                    }
+                                    try
+                                    {
+                                        e2 = int.Parse(args[2]);
+                                    }
+                                    catch (Exception)
+                                    {
+                                        e2 = Dictionaries.variables[args[2]];
+                                    }
+
+                                    ifFlag = true;
+                                    ifArgs = new string[] { args[0], args[1], args[2] };
+                                    if (loopFlag == false)
+                                    {
+                                        ifFlagFirst = true;
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command If");
                                 }
                                 break;
 
@@ -474,10 +514,160 @@ namespace ASE_Project
             {
                 throw new Exception($"Error: '{command}' is an Unknown command.");
             }
-
         }
 
+        private void loopsAnalyses(string trimmedCommand, bool draw)
+        {
+            string[] parts = trimmedCommand.Split(' ');
 
+            if (parts[0] != "endloop")
+            {
+                loopCommands.Add(trimmedCommand);
+            }
+            else if (parts[0] == "endloop")
+            {
+                string e1 = "";
+                string e2 = "";
+                int numberOfCycles = 0;
+                bool isLoopExCorrect;
+                bool e1Assigned = false;
+                bool e2Assigned = false;
+                do
+                {
+                    string[] loopParts;
+                    try
+                    {
+                        e1 = Dictionaries.variables[loopArgs[0]].ToString();
+                        e1Assigned = true;
+                    }
+                    catch (Exception)
+                    {
+                        if (!e1Assigned)
+                        {
+                            e1 = loopArgs[0];
+                            e1Assigned = true;
+                        }
+                    }
+                    try
+                    {
+                        e2 = Dictionaries.variables[loopArgs[2]].ToString();
+                        e2Assigned = true;
+                    }
+                    catch (Exception)
+                    {
+                        if (!e2Assigned)
+                        {
+                            e2 = loopArgs[2];
+                            e2Assigned = true;
+                        }
+                    }
+
+                    string equation = e1 + " " + loopArgs[1] + " " + e2;
+                    isLoopExCorrect = validateExpression(equation);
+
+                    if (isLoopExCorrect)
+                    {
+                        foreach (String loopLine in loopCommands)
+                        {
+                            if (!ifFlag || ifFlagFirst)
+                            {
+                                string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
+                                loopParts = loopTrimmedCommand.Split(' ');
+                                analyses(loopParts, draw);
+                            }
+                            else
+                            {
+                                string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
+                                ifAnalyses(loopTrimmedCommand, draw);
+                            }
+                        }
+                    }
+                    numberOfCycles++;
+                }
+                while (isLoopExCorrect && numberOfCycles < 100);
+
+                if (numberOfCycles > 100)
+                {
+                    loopFlag = false;
+                    loopFlagFirst = false;
+                    throw new Exception($"Error: Loop command has ended automatically after 100 cycles");
+                }
+                else
+                {
+                    loopFlag = false;
+                    loopFlagFirst = false;
+                }
+            }
+        }
+
+        private void ifAnalyses(string trimmedCommand, bool draw)
+        {
+            string[] parts = trimmedCommand.Split(' ');
+
+            if (parts[0] != "endif")
+            {
+                ifCommands.Add(trimmedCommand);
+            }
+            else if (parts[0] == "endif")
+            {
+                string e1 = "";
+                string e2 = "";
+                bool isIfExCorrect;
+                bool e1Assigned = false;
+                bool e2Assigned = false;
+
+                string[] ifParts;
+                try
+                {
+                    e1 = Dictionaries.variables[ifArgs[0]].ToString();
+                    e1Assigned = true;
+                }
+                catch (Exception)
+                {
+                    if (!e1Assigned)
+                    {
+                        e1 = ifArgs[0];
+                        e1Assigned = true;
+                    }
+                }
+                try
+                {
+                    e2 = Dictionaries.variables[ifArgs[2]].ToString();
+                    e2Assigned = true;
+                }
+                catch (Exception)
+                {
+                    if (!e2Assigned)
+                    {
+                        e2 = ifArgs[2];
+                        e2Assigned = true;
+                    }
+                }
+                string equation = e1 + " " + ifArgs[1] + " " + e2;
+                isIfExCorrect = validateExpression(equation);
+
+                if (isIfExCorrect)
+                {
+                    foreach (String ifLine in ifCommands)
+                    {
+                        if (!loopFlag || loopFlagFirst)
+                        {
+                            string ifTrimmedCommand = ifLine.Trim(' ').ToLower();
+                            ifParts = ifTrimmedCommand.Split(' ');
+                            analyses(ifParts, draw);
+                        }
+                        else
+                        {
+                            string ifTrimmedCommand = ifLine.Trim(' ').ToLower();
+                            loopsAnalyses(ifTrimmedCommand, draw);
+
+                        }
+                    }
+                }
+                ifFlag = false;
+                ifFlagFirst = false;
+            }
+        }
 
 
         /// <summary>
@@ -489,6 +679,8 @@ namespace ASE_Project
         {
             return Dictionaries.shapes.Contains(cmd);
         }
+
+
     }
 }
 
