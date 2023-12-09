@@ -371,6 +371,14 @@ namespace ASE_Project
         {
             return File.ReadAllLines(directory).ToArray();
         }
+
+        private void DeleteVar_Button_Click(object sender, EventArgs e)
+        {
+            Dictionaries.methodLines.Clear();
+            Dictionaries.methods.Clear();
+            Dictionaries.variables.Clear();
+
+        }
     }
 }
 

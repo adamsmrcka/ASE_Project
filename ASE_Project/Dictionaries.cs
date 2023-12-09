@@ -36,7 +36,7 @@ namespace ASE_Project
             { "clear", 0},
             { "reset", 0},
             { "while", 3},
-            { "if", 3 }
+            { "if", 3 },
         };
 
         /// <summary>
@@ -51,5 +51,9 @@ namespace ASE_Project
         public static List<String> ifSymbols = new List<String>() { ">", "<", "<=", ">=", "=" };
 
         public static Dictionary<String, int> variables = new Dictionary<String, int>() { };
+
+        public static Dictionary<String, String> methods = new Dictionary<String, String>() { };
+
+        public static Dictionary<String, List<String>> methodLines = new Dictionary<String, List<String>>() { };
     }
 }

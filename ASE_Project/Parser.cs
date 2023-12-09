@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -31,13 +32,18 @@ namespace ASE_Project
         public static Shape s;
         public int errors;
         Exception caughtException = null;
+
         bool loopFlag = false;
         bool loopFlagFirst = false;
         bool ifFlag = false;
         bool ifFlagFirst = false;
+        bool buildingMethodFlag = false;
+
+        string methodName;
         string[] loopArgs;
         string[] ifArgs;
 
+        List<String> methodLines = new List<String>();
         List<String> loopCommands = new List<String>();
         List<String> ifCommands = new List<String>();
 
@@ -77,10 +83,10 @@ namespace ASE_Project
                 loopFlag = false;
                 loopFlagFirst = false;
                 ifFlagFirst = false;
+                buildingMethodFlag |= false;
 
                 foreach (String line in lines)
                 {
-                    string command = String.Empty;
                     string trimmedCommand = String.Empty;
                     try
                     {
@@ -90,7 +96,11 @@ namespace ASE_Project
                             continue;
                         };
 
-                        if (ifFlag && !loopFlagFirst)
+                        if (buildingMethodFlag)
+                        {
+                            buildingMethod(trimmedCommand);
+                        }
+                        else if (ifFlag && !loopFlagFirst)
                         {
                             ifAnalyses(trimmedCommand, draw);
                         }
@@ -100,8 +110,7 @@ namespace ASE_Project
                         }
                         else
                         {
-                            string[] parts = trimmedCommand.Split(' ');
-                            analyses(parts, draw);
+                            analyses(trimmedCommand, draw);
                         }
                     }
                     catch (Exception ex)
@@ -118,6 +127,10 @@ namespace ASE_Project
                 if (ifFlag)
                 {
                     throw new Exception($"Error: If command is not correctly ended");
+                }
+                if (buildingMethodFlag)
+                {
+                    throw new Exception($"Error: Building method command is not correctly ended");
                 }
             }
             else
@@ -143,8 +156,9 @@ namespace ASE_Project
             }
         }
 
-        private void analyses(string[] parts, bool draw)
+        private void analyses(string trimmedCommand, bool draw)
         {
+            string[] parts = trimmedCommand.Split(' ');
             string command = parts[0];
             //If the command is to draw a Shape - detects the shape and sends instruction and parameters to prepare the drawing
             if (isShape(command))
@@ -425,6 +439,106 @@ namespace ASE_Project
                     throw new Exception($"Error: Unknown command '{command}'");
                 }
             }
+            else if (command == "method")
+            {
+                if (IsValidMethodDeclaration(trimmedCommand))
+                {
+
+                    if (Dictionaries.methods.TryGetValue(parts[1], out string MethodVar))
+                    {
+                        string[] MethodVarValues = MethodVar.Split(' ');
+
+                        if (MethodVar == "")
+                        {
+                            if (parts[2] == "()")
+                            {
+                                List<string> linesInMethod = Dictionaries.methodLines[parts[1]];
+                                foreach (string lineInMethod in linesInMethod)
+                                {
+                                    analyses(lineInMethod, draw);
+                                }
+                            }
+                            else
+                            {
+                                throw new Exception($"Error: No parameters for '{parts[1]}' method during creation were declared");
+                            }
+                        }
+                        else if (parts.Length - 2 == MethodVarValues.Length)
+                        {
+                            string[] methodParameters;
+                            List<string> parametersList = new List<string>();
+
+                            for (int i = 2; i < parts.Length; i++)
+                            {
+                                // Trim characters and add to the List
+                                parametersList.Add(parts[i].Trim('(', ')', ','));
+                            }
+
+                            // Convert the List to an array if needed
+                            methodParameters = parametersList.ToArray();
+
+                            string parUsedForCommand = methodParameters.FirstOrDefault(item => Dictionaries.commands.Contains(item));
+                            string parUsedForShape = methodParameters.FirstOrDefault(item => Dictionaries.shapes.Contains(item));
+
+                            if (parUsedForCommand != null || parUsedForShape != null)
+                            {
+                                throw new Exception($"Error: '{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
+                            }
+                            else
+                            {
+                                List<string> linesInMethod = Dictionaries.methodLines[parts[1]];
+                                foreach (string lineInMethod in linesInMethod)
+                                {
+                                    string methodLine = lineInMethod;
+                                    for (int i = 0; i < MethodVarValues.Length; i++)
+                                    {
+                                        // Replace variables in the line with values from parts array
+                                        string variableToReplace = MethodVarValues[i];
+                                        if (lineInMethod.Contains(variableToReplace))
+                                        {
+                                            methodLine = lineInMethod.Replace(variableToReplace, methodParameters[i]);
+                                        }
+                                    }
+                                    analyses(methodLine, draw);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception($"Error: Invalid number of parameters for method '{parts[1]}' were included. {parts.Length - 2} were included but {MethodVarValues.Length} were expected");
+                        }
+                    }
+                    else
+                    {
+                        methodName = parts[1];
+                        Dictionaries.methods.Add(methodName, "");
+                        string methodParameters = "";
+                        for (int i = 2; i < parts.Length; i++)
+                        {
+                            methodParameters += parts[i].Trim('(', ')', ',') + " ";
+                        }
+
+                        string[] MethodVarValues = methodParameters.Split(' ');
+                        string parUsedForCommand = MethodVarValues.FirstOrDefault(item => Dictionaries.commands.Contains(item));
+                        string parUsedForShape = MethodVarValues.FirstOrDefault(item => Dictionaries.shapes.Contains(item));
+
+                        if (parUsedForCommand != null || parUsedForShape != null)
+                        {
+                            throw new Exception($"Error: '{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
+                        }
+                        else
+                        {
+                            Dictionaries.methods[parts[1]] = methodParameters.Trim();
+                            buildingMethodFlag = true;
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Error: Invalid method declaration format. Expected format: 'method <methodName> (<optionalVariable>, <optionalVariable>, ...)'");
+                }
+
+            }
             // Check if it is declaring Variables
             else if (parts.Length == 3 && parts[1] == "=")
             {
@@ -516,6 +630,22 @@ namespace ASE_Project
             }
         }
 
+        private void buildingMethod(string trimmedCommand)
+        {
+            string[] parts = trimmedCommand.Split(' ');
+
+            if (parts[0] != "endmethod")
+            {
+                methodLines.Add(trimmedCommand);
+            }
+            else if (parts[0] == "endmethod")
+            {
+                buildingMethodFlag = false;
+                Dictionaries.methodLines.Add(methodName, methodLines);
+            }
+
+        }
+
         private void loopsAnalyses(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
@@ -534,7 +664,6 @@ namespace ASE_Project
                 bool e2Assigned = false;
                 do
                 {
-                    string[] loopParts;
                     try
                     {
                         e1 = Dictionaries.variables[loopArgs[0]].ToString();
@@ -572,8 +701,7 @@ namespace ASE_Project
                             if (!ifFlag || ifFlagFirst)
                             {
                                 string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
-                                loopParts = loopTrimmedCommand.Split(' ');
-                                analyses(loopParts, draw);
+                                analyses(loopTrimmedCommand, draw);
                             }
                             else
                             {
@@ -616,7 +744,6 @@ namespace ASE_Project
                 bool e1Assigned = false;
                 bool e2Assigned = false;
 
-                string[] ifParts;
                 try
                 {
                     e1 = Dictionaries.variables[ifArgs[0]].ToString();
@@ -653,8 +780,7 @@ namespace ASE_Project
                         if (!loopFlag || loopFlagFirst)
                         {
                             string ifTrimmedCommand = ifLine.Trim(' ').ToLower();
-                            ifParts = ifTrimmedCommand.Split(' ');
-                            analyses(ifParts, draw);
+                            analyses(ifTrimmedCommand, draw);
                         }
                         else
                         {
@@ -667,6 +793,15 @@ namespace ASE_Project
                 ifFlag = false;
                 ifFlagFirst = false;
             }
+        }
+
+        private bool IsValidMethodDeclaration(string methodDeclaration)
+        {
+            // Define a regular expression for the expected format
+            string pattern = @"^\w+\s+\w+\s*\(\s*(\w+\s*(,\s*\w+\s*)*)?\s*\)$";
+
+            // Use Regex.IsMatch to check if the input matches the pattern
+            return Regex.IsMatch(methodDeclaration, pattern);
         }
 
 

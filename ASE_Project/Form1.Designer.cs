@@ -40,6 +40,9 @@
             this.fillStatusLabel = new System.Windows.Forms.Label();
             this.saveButton = new System.Windows.Forms.Button();
             this.loadButton = new System.Windows.Forms.Button();
+            this.declaredVarTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.DeleteVar_Button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -155,12 +158,44 @@
             this.loadButton.UseVisualStyleBackColor = true;
             this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
             // 
+            // declaredVarTextBox1
+            // 
+            this.declaredVarTextBox1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.declaredVarTextBox1.Location = new System.Drawing.Point(1574, 52);
+            this.declaredVarTextBox1.Name = "declaredVarTextBox1";
+            this.declaredVarTextBox1.ReadOnly = true;
+            this.declaredVarTextBox1.Size = new System.Drawing.Size(438, 709);
+            this.declaredVarTextBox1.TabIndex = 13;
+            this.declaredVarTextBox1.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1666, 13);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(205, 20);
+            this.label1.TabIndex = 14;
+            this.label1.Text = "Declared variables/methods";
+            // 
+            // DeleteVar_Button
+            // 
+            this.DeleteVar_Button.Location = new System.Drawing.Point(1702, 785);
+            this.DeleteVar_Button.Name = "DeleteVar_Button";
+            this.DeleteVar_Button.Size = new System.Drawing.Size(182, 34);
+            this.DeleteVar_Button.TabIndex = 15;
+            this.DeleteVar_Button.Text = "Delete All Variables";
+            this.DeleteVar_Button.UseVisualStyleBackColor = true;
+            this.DeleteVar_Button.Click += new System.EventHandler(this.DeleteVar_Button_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.ClientSize = new System.Drawing.Size(1568, 822);
+            this.ClientSize = new System.Drawing.Size(2066, 822);
+            this.Controls.Add(this.DeleteVar_Button);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.declaredVarTextBox1);
             this.Controls.Add(this.loadButton);
             this.Controls.Add(this.saveButton);
             this.Controls.Add(this.fillStatusLabel);
@@ -195,6 +230,9 @@
         private System.Windows.Forms.Label fillStatusLabel;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button loadButton;
+        private System.Windows.Forms.RichTextBox declaredVarTextBox1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button DeleteVar_Button;
     }
 }
 
