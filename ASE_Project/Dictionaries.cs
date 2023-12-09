@@ -20,7 +20,7 @@ namespace ASE_Project
         /// <summary>
         /// List of supported Non-Shape commands
         /// </summary>
-        public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill", "while", "if" };
+        public static List<String> commands = new List<String>() { "moveto", "reset", "clear", "pen", "fill", "while", "if", "delete", "deletemethod" };
 
         /// <summary>
         /// Dictionary of Commands and Shapes and their respective required number of variables
@@ -37,6 +37,8 @@ namespace ASE_Project
             { "reset", 0},
             { "while", 3},
             { "if", 3 },
+            { "delete", 1},
+            { "deletemethod", 1}
         };
 
         /// <summary>

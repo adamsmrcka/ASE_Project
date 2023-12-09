@@ -73,6 +73,7 @@ namespace ASE_Project
             form1.updateCursorPositionLabel(posX, posY);
             form1.updateFillStatusLabel(fill);
             form1.updatePenColourStatusLabel(penColour);
+            form1.restoreVar();
         }
         /// <summary>
         /// Cleans Canvas - removes all drawings
@@ -153,6 +154,10 @@ namespace ASE_Project
 
         }
 
+        public void displaySavedVar()
+        {
+            form1.displaySavedVar();
+        }
 
     }
 }

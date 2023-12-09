@@ -1,21 +1,9 @@
-﻿using ASE_Project;
-using CommandLine;
-using System;
-using System.CodeDom.Compiler;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using static System.Windows.Forms.LinkLabel;
 
 namespace ASE_Project
 {
@@ -24,6 +12,7 @@ namespace ASE_Project
     /// </summary>
     public class Parser
     {
+
         ShapeFactory commandFactory;
         public string[] args;
         public static int[] intArguments;
@@ -76,6 +65,11 @@ namespace ASE_Project
         /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
         public void parseCommand(string[] lines, bool draw)
         {
+            methodName = "";
+            methodLines.Clear();
+            loopCommands.Clear();
+            ifCommands.Clear();
+
             errors = 0;
             if (lines.Length > 0)
             {
@@ -138,7 +132,7 @@ namespace ASE_Project
                 errors++;
                 throw new Exception($"Error: No command entered.");
             }
-
+            canvas.displaySavedVar();
         }
 
         private bool validateExpression(string equation)
@@ -318,6 +312,43 @@ namespace ASE_Project
                                 }
                                 break;
 
+                            case "delete":
+                                if (parts.Length == 2)
+                                {
+                                    if (Dictionaries.variables.TryGetValue(parts[1], out int VarValue1))
+                                    {
+                                        Dictionaries.variables.Remove(parts[1]);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: Variable '{parts[1]}' was not found");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
+                                }
+                                break;
+
+                            case "deletemethod":
+                                if (parts[1] == "method")
+                                {
+                                    if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
+                                    {
+                                        Dictionaries.methods.Remove(parts[1]);
+                                        Dictionaries.methodLines.Remove(parts[1]);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: Method '{parts[1]}' was not found");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
+                                }
+                                break;
+
                             default:
                                 throw new Exception($"Error: Unknown command '{command}'");
                         }
@@ -482,7 +513,7 @@ namespace ASE_Project
 
                             if (parUsedForCommand != null || parUsedForShape != null)
                             {
-                                throw new Exception($"Error: '{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
+                                throw new Exception($"Error: Method Failed!" + Environment.NewLine + $"'{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
                             }
                             else
                             {
@@ -499,7 +530,15 @@ namespace ASE_Project
                                             methodLine = lineInMethod.Replace(variableToReplace, methodParameters[i]);
                                         }
                                     }
-                                    analyses(methodLine, draw);
+                                    try
+                                    {
+                                        analyses(methodLine, draw);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        throw new Exception($"Method Failed!" + Environment.NewLine + $"{ex.Message}");
+
+                                    }
                                 }
                             }
                         }
@@ -510,8 +549,10 @@ namespace ASE_Project
                     }
                     else
                     {
+                        List<string> emptyList = new List<string>();
                         methodName = parts[1];
                         Dictionaries.methods.Add(methodName, "");
+                        Dictionaries.methodLines.Add(methodName, emptyList);
                         string methodParameters = "";
                         for (int i = 2; i < parts.Length; i++)
                         {
@@ -528,14 +569,15 @@ namespace ASE_Project
                         }
                         else
                         {
-                            Dictionaries.methods[parts[1]] = methodParameters.Trim();
+                            methodLines.Clear();
+                            Dictionaries.methods[methodName] = methodParameters.Trim();
                             buildingMethodFlag = true;
                         }
                     }
                 }
                 else
                 {
-                    throw new Exception($"Error: Invalid method declaration format. Expected format: 'method <methodName> (<optionalVariable>, <optionalVariable>, ...)'");
+                    throw new Exception($"Error: Method '{methodName}' has not been declared." + Environment.NewLine + "Expected format: 'method <methodName> (<optionalVariable>, <optionalVariable>, ...)'");
                 }
 
             }
@@ -624,6 +666,10 @@ namespace ASE_Project
                     }
                 }
             }
+            else if (command == "endmethod")
+            {
+                throw new Exception($"Error: '{command}' is an invalid command. The method has already been Declared, or the Declaration has not begun.");
+            }
             else
             {
                 throw new Exception($"Error: '{command}' is an Unknown command.");
@@ -641,7 +687,7 @@ namespace ASE_Project
             else if (parts[0] == "endmethod")
             {
                 buildingMethodFlag = false;
-                Dictionaries.methodLines.Add(methodName, methodLines);
+                Dictionaries.methodLines[methodName] = new List<string>(methodLines);
             }
 
         }

@@ -10,6 +10,8 @@ using System.Security.Policy;
 using System.Collections.Generic;
 using MessageBox = System.Windows.Forms.MessageBox;
 using System.Linq;
+using System.Collections;
+using FontStyle = System.Drawing.FontStyle;
 
 namespace ASE_Project
 {
@@ -37,6 +39,7 @@ namespace ASE_Project
             updateFillStatusLabel(Canvas.fill);
             updatePenColourStatusLabel(Canvas.penColour);
             paintingCanvas.idicateCursor();
+            displaySavedVar();
         }
 
         /// <summary>
@@ -374,10 +377,55 @@ namespace ASE_Project
 
         private void DeleteVar_Button_Click(object sender, EventArgs e)
         {
+            restoreVar();
+        }
+
+        public void restoreVar()
+        {
             Dictionaries.methodLines.Clear();
             Dictionaries.methods.Clear();
             Dictionaries.variables.Clear();
+            displaySavedVar();
+        }
 
+        public void displaySavedVar()
+        {
+            declaredVarTextBox1.Clear();
+            declaredVarTextBox1.SelectionFont = new Font(declaredVarTextBox1.Font, FontStyle.Bold);
+            declaredVarTextBox1.AppendText("Variables:\r\n");
+            int v = 0;
+
+            foreach (var kvp in Dictionaries.variables)
+            {
+                v++;
+                declaredVarTextBox1.AppendText($"{v}) {kvp.Key} = {kvp.Value}\r\n");
+            }
+
+            declaredVarTextBox1.SelectionFont = new Font(declaredVarTextBox1.Font, FontStyle.Bold);
+            declaredVarTextBox1.AppendText("\r\nMethods:\r\n");
+
+            int m = 0;
+            foreach (var kvp in Dictionaries.methods)
+            {
+                m++;
+                declaredVarTextBox1.AppendText($"{m}) {kvp.Key} - {kvp.Value}\r\n");
+
+                int l = 0;
+                // Display method lines
+                foreach (var line in Dictionaries.methodLines[kvp.Key])
+                {
+                    l++;
+                    declaredVarTextBox1.SelectionFont = new Font(declaredVarTextBox1.Font, FontStyle.Italic);
+                    declaredVarTextBox1.AppendText($"Line {l})     {line}\r\n");
+                }
+            }
+
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.Size = new System.Drawing.Size(1380, 575);
         }
     }
 }
