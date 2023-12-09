@@ -92,7 +92,7 @@ namespace ASE_Project
 
                         if (buildingMethodFlag)
                         {
-                            buildingMethod(trimmedCommand);
+                            buildingMethod(trimmedCommand, draw);
                         }
                         else if (ifFlag && !loopFlagFirst)
                         {
@@ -162,7 +162,7 @@ namespace ASE_Project
                     args = parts.Skip(1).ToArray();
                     intArguments = new int[args.Length];
 
-                    if (args.Length == expectedArgsCount)
+                    if (args.Length == expectedArgsCount || command == "polygon" && args.Length >= expectedArgsCount && args.Length % 2 == 0)
                     {
                         bool argumentsAreInts = true;
 
@@ -456,6 +456,40 @@ namespace ASE_Project
                                 }
                                 break;
 
+                            case "delete":
+                                if (parts.Length == 2)
+                                {
+                                    if (Dictionaries.variables.TryGetValue(parts[1], out int VarValue1))
+                                    {
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: Variable '{parts[1]}' was not found");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
+                                }
+                                break;
+
+                            case "deletemethod":
+                                if (parts[1] == "method")
+                                {
+                                    if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
+                                    {
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: Method '{parts[1]}' was not found");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
+                                }
+                                break;
+
                             default:
                                 throw new Exception($"Error: Unknown command '{command}'");
                         }
@@ -537,7 +571,6 @@ namespace ASE_Project
                                     catch (Exception ex)
                                     {
                                         throw new Exception($"Method Failed!" + Environment.NewLine + $"{ex.Message}");
-
                                     }
                                 }
                             }
@@ -565,6 +598,8 @@ namespace ASE_Project
 
                         if (parUsedForCommand != null || parUsedForShape != null)
                         {
+                            Dictionaries.methods.Remove(methodName);
+                            Dictionaries.methodLines.Remove(methodName);
                             throw new Exception($"Error: '{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
                         }
                         else
@@ -589,24 +624,36 @@ namespace ASE_Project
                 {
                     if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                     {
-                        // Update the existing variable
-                        Dictionaries.variables[command] = int.Parse(parts[2]);
+                        if (draw)
+                        {
+                            // Update the existing variable
+                            Dictionaries.variables[command] = int.Parse(parts[2]);
+                        }
                     }
                     else
                     {
-                        Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
+                        if (draw)
+                        {
+                            Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
+                        }
                     }
                 }
                 else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
                 {
                     if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                     {
-                        // Update the existing variable
-                        Dictionaries.variables[command] = newVarValue;
+                        if (draw)
+                        {
+                            // Update the existing variable
+                            Dictionaries.variables[command] = newVarValue;
+                        }
                     }
                     else
                     {
-                        Dictionaries.variables.Add(parts[0], newVarValue);
+                        if (draw)
+                        {
+                            Dictionaries.variables.Add(parts[0], newVarValue);
+                        }
                     }
                 }
                 else
@@ -656,12 +703,18 @@ namespace ASE_Project
                         string resultString = result.ToString();
                         if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                         {
-                            // Update the existing variable
-                            Dictionaries.variables[command] = int.Parse(resultString);
+                            if (draw)
+                            {
+                                // Update the existing variable
+                                Dictionaries.variables[command] = int.Parse(resultString);
+                            }
                         }
                         else
                         {
-                            Dictionaries.variables.Add(parts[0], int.Parse(resultString));
+                            if (draw)
+                            {
+                                Dictionaries.variables.Add(parts[0], int.Parse(resultString));
+                            }
                         }
                     }
                 }
@@ -676,7 +729,7 @@ namespace ASE_Project
             }
         }
 
-        private void buildingMethod(string trimmedCommand)
+        private void buildingMethod(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
 
@@ -688,6 +741,11 @@ namespace ASE_Project
             {
                 buildingMethodFlag = false;
                 Dictionaries.methodLines[methodName] = new List<string>(methodLines);
+            }
+            if (!draw)
+            {
+                Dictionaries.methodLines.Remove(methodName);
+                Dictionaries.methods.Remove(methodName);
             }
 
         }

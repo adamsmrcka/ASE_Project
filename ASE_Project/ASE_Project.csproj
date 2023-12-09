@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Canvas.cs" />
     <Compile Include="Circle.cs" />
+    <Compile Include="Polygon.cs" />
     <Compile Include="ShapeFactory.cs" />
     <Compile Include="Dictionaries.cs" />
     <Compile Include="ErrorMessageForm.cs">

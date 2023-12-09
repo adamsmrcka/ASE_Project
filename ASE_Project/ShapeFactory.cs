@@ -39,6 +39,8 @@ namespace ASE_Project
                     return new Rectangle();
                 case "drawto":
                     return new Line();
+                case "polygon":
+                    return new Polygon();
                 default:
                     throw new Exception("Shape does not exist or unknown command");
 

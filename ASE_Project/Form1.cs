@@ -64,7 +64,7 @@ namespace ASE_Project
             draw = true;
             try
             {
-                if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
+                if (!string.IsNullOrEmpty(commandTextBox.Text))
                 {
                     parser.parseCommand(commandTextBox.Lines, draw);
                     Refresh();
@@ -73,10 +73,6 @@ namespace ASE_Project
                 {
                     parser.parseCommand(commandLineBox.Lines, draw);
                     Refresh();
-                }
-                else if (!string.IsNullOrEmpty(commandTextBox.Text) && !commandLineBox.Text.ToLower().Equals("run"))
-                {
-                    throw new Exception("You need to enter 'Run' into the 'Simple Command Box' in order to successfully run the command");
                 }
                 else
                 {
@@ -189,16 +185,10 @@ namespace ASE_Project
             draw = false;
             try
             {
-                if (!string.IsNullOrEmpty(commandTextBox.Text) && commandLineBox.Text.ToLower().Equals("run"))
+                if (!string.IsNullOrEmpty(commandTextBox.Text))
                 {
                     parser.parseCommand(commandTextBox.Lines, draw);
                     Refresh();
-                }
-                else if (!string.IsNullOrEmpty(commandTextBox.Text) && !commandLineBox.Text.ToLower().Equals("run"))
-                {
-                    parser.parseCommand(commandTextBox.Lines, draw);
-                    Refresh();
-                    throw new Exception("Error: You need to enter 'Run' into 'Simple Command Box' in order to successfully run the command");
                 }
                 else if (!string.IsNullOrEmpty(commandLineBox.Text))
                 {

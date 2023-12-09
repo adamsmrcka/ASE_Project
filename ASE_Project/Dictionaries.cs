@@ -15,7 +15,7 @@ namespace ASE_Project
         /// <summary>
         /// List of supported Shapes
         /// </summary>
-        public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto" };
+        public static List<String> shapes = new List<String>() { "circle", "rectangle", "triangle", "drawto", "polygon" };
 
         /// <summary>
         /// List of supported Non-Shape commands
@@ -30,6 +30,7 @@ namespace ASE_Project
             { "rectangle", 2},
             { "triangle", 4 },
             { "drawto", 2 },
+            { "polygon", 4 },
             { "moveto", 2 },
             { "fill", 1},
             { "pen", 1 },
