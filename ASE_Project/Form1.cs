@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Drawing;
-using System.Windows.Controls;
-using System.IO;
-using System.Windows.Forms;
-using CommandLine;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Windows;
-using System.Security.Policy;
 using System.Collections.Generic;
-using MessageBox = System.Windows.Forms.MessageBox;
+using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Collections;
+using System.Threading;
+using System.Windows.Forms;
 using FontStyle = System.Drawing.FontStyle;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace ASE_Project
 {
     public partial class Form1 : Form
     {
+
+        Thread newThread;
+
         const int CanvasBitmapWidth = 580;
         const int CanvasBitmapHeight = 490;
         private bool draw = false;
@@ -377,7 +375,6 @@ namespace ASE_Project
             Dictionaries.variables.Clear();
             displaySavedVar();
         }
-
         public void displaySavedVar()
         {
             declaredVarTextBox1.Clear();
@@ -409,14 +406,29 @@ namespace ASE_Project
                     declaredVarTextBox1.AppendText($"Line {l})     {line}\r\n");
                 }
             }
-
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.Size = new System.Drawing.Size(1380, 575);
+            this.Size = new Size(1380, 575);
         }
+
+        private void newWindowButton_Click(object sender, EventArgs e)
+        {
+            Thread newWindowThread = new Thread(new ThreadStart(OpenNewWindow));
+
+            // Start the thread
+            newWindowThread.Start();
+        }
+
+        private void OpenNewWindow()
+        {
+            Form1 newForm = new Form1();
+
+            newForm.displaySavedVar();
+            newForm.ShowDialog();
+        }
+
     }
 }
 

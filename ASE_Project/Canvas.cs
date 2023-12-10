@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Forms;
 
 namespace ASE_Project
 {
@@ -153,11 +147,11 @@ namespace ASE_Project
             g.DrawEllipse(new Pen(Color.Red), posX - (diameter / 2), posY - (diameter / 2), diameter, diameter);
 
         }
-
+        
         public void displaySavedVar()
         {
             form1.displaySavedVar();
         }
-
+        
     }
 }
