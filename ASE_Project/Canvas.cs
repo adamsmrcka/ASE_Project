@@ -148,6 +148,9 @@ namespace ASE_Project
 
         }
         
+        /// <summary>
+        /// Displays saved Variables and methods
+        /// </summary>
         public void displaySavedVar()
         {
             form1.displaySavedVar();

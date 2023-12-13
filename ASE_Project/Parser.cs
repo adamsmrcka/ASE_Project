@@ -59,7 +59,7 @@ namespace ASE_Project
         public void setCanvas(Canvas canvas) { this.canvas = canvas; }
 
         /// <summary>
-        /// Analyses the imput per line and handles instruction according to the imput - differentiates between commands and parameters and divides them accordingly
+        /// Analyses the imput per line and handles instruction according to the imput
         /// </summary>
         /// <param name="lines">Array of commands and parameters from commandLineBox or commandTextBox - divided by lines</param>
         /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
@@ -135,21 +135,6 @@ namespace ASE_Project
             canvas.displaySavedVar();
         }
 
-        private bool validateExpression(string equation)
-        {
-            try
-            {
-                DataTable table = new DataTable();
-                var result = table.Compute(equation, "");
-                return Convert.ToBoolean(result);
-            }
-            catch (Exception)
-            {
-                // An exception may occur for invalid expressions
-                return false;
-            }
-        }
-
         private void analyses(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
@@ -205,6 +190,7 @@ namespace ASE_Project
                 if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
                 {
                     args = parts.Skip(1).ToArray();
+                    // If the draw = true
                     if (args.Length == expectedArgsCount && draw == true)
                     {
                         switch (command)
@@ -353,6 +339,7 @@ namespace ASE_Project
                                 throw new Exception($"Error: Unknown command '{command}'");
                         }
                     }
+                    // If just syntax checking
                     else if (args.Length == expectedArgsCount && draw == false)
                     {
                         switch (command)
@@ -504,15 +491,17 @@ namespace ASE_Project
                     throw new Exception($"Error: Unknown command '{command}'");
                 }
             }
+            // Check if it's method
             else if (command == "method")
             {
                 if (IsValidMethodDeclaration(trimmedCommand))
                 {
-
+                    // If the method has already been declared - run the method commands
                     if (Dictionaries.methods.TryGetValue(parts[1], out string MethodVar))
                     {
                         string[] MethodVarValues = MethodVar.Split(' ');
 
+                        //check if number of parametrs matches with the number stored during the Method declaration process (0 parameters)
                         if (MethodVar == "")
                         {
                             if (parts[2] == "()")
@@ -528,6 +517,7 @@ namespace ASE_Project
                                 throw new Exception($"Error: No parameters for '{parts[1]}' method during creation were declared");
                             }
                         }
+                        //check if number of parametrs matches with the number stored during the Method declaration process (1+ parameters)
                         else if (parts.Length - 2 == MethodVarValues.Length)
                         {
                             string[] methodParameters;
@@ -539,16 +529,18 @@ namespace ASE_Project
                                 parametersList.Add(parts[i].Trim('(', ')', ','));
                             }
 
-                            // Convert the List to an array if needed
+                            // Convert the List to an array
                             methodParameters = parametersList.ToArray();
 
                             string parUsedForCommand = methodParameters.FirstOrDefault(item => Dictionaries.commands.Contains(item));
                             string parUsedForShape = methodParameters.FirstOrDefault(item => Dictionaries.shapes.Contains(item));
 
+                            // Check that parameter variables are not restricted strings
                             if (parUsedForCommand != null || parUsedForShape != null)
                             {
                                 throw new Exception($"Error: Method Failed!" + Environment.NewLine + $"'{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
                             }
+                            // else run the Method commands
                             else
                             {
                                 List<string> linesInMethod = Dictionaries.methodLines[parts[1]];
@@ -580,6 +572,7 @@ namespace ASE_Project
                             throw new Exception($"Error: Invalid number of parameters for method '{parts[1]}' were included. {parts.Length - 2} were included but {MethodVarValues.Length} were expected");
                         }
                     }
+                    //Else run method declaration and save the method
                     else
                     {
                         List<string> emptyList = new List<string>();
@@ -596,12 +589,14 @@ namespace ASE_Project
                         string parUsedForCommand = MethodVarValues.FirstOrDefault(item => Dictionaries.commands.Contains(item));
                         string parUsedForShape = MethodVarValues.FirstOrDefault(item => Dictionaries.shapes.Contains(item));
 
+                        // Check that parameter variables are not restricted strings
                         if (parUsedForCommand != null || parUsedForShape != null)
                         {
                             Dictionaries.methods.Remove(methodName);
                             Dictionaries.methodLines.Remove(methodName);
                             throw new Exception($"Error: '{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
                         }
+                        // Method declaration is correct and start method building
                         else
                         {
                             methodLines.Clear();
@@ -619,7 +614,7 @@ namespace ASE_Project
             // Check if it is declaring Variables
             else if (parts.Length == 3 && parts[1] == "=")
             {
-
+                //If the parameter is number
                 if (int.TryParse(parts[2], out int argValue))
                 {
                     if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
@@ -634,10 +629,12 @@ namespace ASE_Project
                     {
                         if (draw)
                         {
+                            // Add a new variable to the dictionary
                             Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
                         }
                     }
                 }
+                // if the parameter is another variable
                 else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
                 {
                     if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
@@ -652,6 +649,7 @@ namespace ASE_Project
                     {
                         if (draw)
                         {
+                            // Add a new variable to the dictionary
                             Dictionaries.variables.Add(parts[0], newVarValue);
                         }
                     }
@@ -669,6 +667,7 @@ namespace ASE_Project
                 DataTable table = new DataTable();
                 bool errors = false;
 
+                // check if parameters are numbers or variables
                 for (int i = 2; i < parts.Length; i = i + 2)
                 {
                     if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
@@ -683,6 +682,7 @@ namespace ASE_Project
 
                     }
                 }
+                //check if it has valid calcualtion symbol (+, *, -, /)
                 for (int i = 3; i < parts.Length; i = i + 2)
                 {
                     if (!Dictionaries.calcualtions.Contains(parts[i]))
@@ -691,6 +691,7 @@ namespace ASE_Project
                         throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid equation parameter.");
                     }
                 }
+                // If syntax is correct execute command 
                 if (errors == false)
                 {
                     foreach (string cmd in parts.Skip(2))
@@ -713,12 +714,14 @@ namespace ASE_Project
                         {
                             if (draw)
                             {
+                                // Add a new variable to the dictionary
                                 Dictionaries.variables.Add(parts[0], int.Parse(resultString));
                             }
                         }
                     }
                 }
             }
+            // check if command is endmethod without valid declaration
             else if (command == "endmethod")
             {
                 throw new Exception($"Error: '{command}' is an invalid command. The method has already been Declared, or the Declaration has not begun.");
@@ -729,6 +732,11 @@ namespace ASE_Project
             }
         }
 
+        /// <summary>
+        /// if the command is part of method declaration, store it in the dictionary
+        /// </summary>
+        /// <param name="trimmedCommand">string command from the command box</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
         private void buildingMethod(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
@@ -750,22 +758,30 @@ namespace ASE_Project
 
         }
 
+        /// <summary>
+        /// performs and analysis of a loop and runs it until a condition is met
+        /// </summary>
+        /// <param name="trimmedCommand">string command from the command box</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
         private void loopsAnalyses(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
-
+            // Store all commands inside the loop statement
             if (parts[0] != "endloop")
             {
                 loopCommands.Add(trimmedCommand);
             }
+            // if endloop check the conditon and run the code
             else if (parts[0] == "endloop")
             {
                 string e1 = "";
                 string e2 = "";
                 int numberOfCycles = 0;
-                bool isLoopExCorrect;
                 bool e1Assigned = false;
                 bool e2Assigned = false;
+                bool isLoopExCorrect;
+
+                //Replace variables with their values
                 do
                 {
                     try
@@ -797,16 +813,18 @@ namespace ASE_Project
 
                     string equation = e1 + " " + loopArgs[1] + " " + e2;
                     isLoopExCorrect = validateExpression(equation);
-
+                    // If conditon is met run the code
                     if (isLoopExCorrect)
                     {
                         foreach (String loopLine in loopCommands)
                         {
+                            // If IF statement is not active, or if the loop is running as a part of a if statement, run the command 
                             if (!ifFlag || ifFlagFirst)
                             {
                                 string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
                                 analyses(loopTrimmedCommand, draw);
                             }
+                            // else run If statement analysis inside of the loop
                             else
                             {
                                 string loopTrimmedCommand = loopLine.Trim(' ').ToLower();
@@ -816,6 +834,7 @@ namespace ASE_Project
                     }
                     numberOfCycles++;
                 }
+                // stop when condition is met or afer 100 cycles
                 while (isLoopExCorrect && numberOfCycles < 100);
 
                 if (numberOfCycles > 100)
@@ -832,22 +851,30 @@ namespace ASE_Project
             }
         }
 
+        /// <summary>
+        /// performs and analysis of a IF statement and runs it if a condition is met
+        /// </summary>
+        /// <param name="trimmedCommand">string command from the command box</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
         private void ifAnalyses(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
 
+            // Store all commands inside the IF statement
             if (parts[0] != "endif")
             {
                 ifCommands.Add(trimmedCommand);
             }
+
+            // If ENDIF check the conditon and run the code
             else if (parts[0] == "endif")
             {
                 string e1 = "";
                 string e2 = "";
-                bool isIfExCorrect;
                 bool e1Assigned = false;
                 bool e2Assigned = false;
 
+                // Replace variables with their values
                 try
                 {
                     e1 = Dictionaries.variables[ifArgs[0]].ToString();
@@ -875,17 +902,19 @@ namespace ASE_Project
                     }
                 }
                 string equation = e1 + " " + ifArgs[1] + " " + e2;
-                isIfExCorrect = validateExpression(equation);
 
-                if (isIfExCorrect)
+                // If IF condition is met run the code
+                if (validateExpression(equation))
                 {
                     foreach (String ifLine in ifCommands)
                     {
+                        // If loop statement is not active, or if the IF statement is running as a part of a loop, run the command 
                         if (!loopFlag || loopFlagFirst)
                         {
                             string ifTrimmedCommand = ifLine.Trim(' ').ToLower();
                             analyses(ifTrimmedCommand, draw);
                         }
+                        // else run loop analysis inside of the IF statement
                         else
                         {
                             string ifTrimmedCommand = ifLine.Trim(' ').ToLower();
@@ -899,6 +928,11 @@ namespace ASE_Project
             }
         }
 
+        /// <summary>
+        /// Ensures that method syntax is correctly used.
+        /// </summary>
+        /// <param name="methodDeclaration"> string with method declaration from command line</param>
+        /// <returns>true or false depending on the result</returns>
         private bool IsValidMethodDeclaration(string methodDeclaration)
         {
             // Define a regular expression for the expected format
@@ -908,6 +942,24 @@ namespace ASE_Project
             return Regex.IsMatch(methodDeclaration, pattern);
         }
 
+        /// <summary>
+        /// Validates if an equation is valid or not
+        /// </summary>
+        /// <param name="equation">String with an equation to validate</param>
+        /// <returns>true or false depending on the results</returns>
+        private bool validateExpression(string equation)
+        {
+            try
+            {
+                DataTable table = new DataTable();
+                var result = table.Compute(equation, "");
+                return Convert.ToBoolean(result);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Boolean checking whether a command is a Shape

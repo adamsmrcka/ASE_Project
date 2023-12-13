@@ -363,11 +363,19 @@ namespace ASE_Project
             return File.ReadAllLines(directory).ToArray();
         }
 
+        /// <summary>
+        /// When Delete Var Button is clicked, it deletes all stored variables and methods
+        /// </summary>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
         private void DeleteVar_Button_Click(object sender, EventArgs e)
         {
             restoreVar();
         }
 
+        /// <summary>
+        /// Deletes all stored Variables and methods and updates the textbox
+        /// </summary>
         public void restoreVar()
         {
             Dictionaries.methodLines.Clear();
@@ -375,6 +383,10 @@ namespace ASE_Project
             Dictionaries.variables.Clear();
             displaySavedVar();
         }
+
+        /// <summary>
+        /// finds all stored Variables and Mehthods and displays them to a textbox
+        /// </summary>
         public void displaySavedVar()
         {
             declaredVarTextBox1.Clear();
@@ -408,11 +420,21 @@ namespace ASE_Project
             }
         }
 
+        /// <summary>
+        /// Changes the default form size on load
+        /// </summary>
+        /// <param name="sender">Object that sent to event</param>
+        /// <param name="e">Event args</param>
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Size = new Size(1380, 575);
         }
 
+        /// <summary>
+        /// Opens a new window using Threads
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void newWindowButton_Click(object sender, EventArgs e)
         {
             Thread newWindowThread = new Thread(new ThreadStart(OpenNewWindow));
@@ -421,6 +443,9 @@ namespace ASE_Project
             newWindowThread.Start();
         }
 
+        /// <summary>
+        /// opens a new forms window
+        /// </summary>
         private void OpenNewWindow()
         {
             Form1 newForm = new Form1();

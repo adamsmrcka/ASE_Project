@@ -47,16 +47,34 @@ namespace ASE_Project
         /// </summary>
         public static List<String> errorMessages = new List<string>();
 
+        /// <summary>
+        /// List storing all valid calculation symbols
+        /// </summary>
         public static List<String> calcualtions = new List<String>() { "+", "-", "*", "/" };
 
+        /// <summary>
+        /// List storing all valid loop symbols
+        /// </summary>
         public static List<String> loopSymbols = new List<String>() { ">", "<"};
 
+        /// <summary>
+        /// List storing all valid if symbols
+        /// </summary>
         public static List<String> ifSymbols = new List<String>() { ">", "<", "<=", ">=", "=" };
 
+        /// <summary>
+        /// Dictionary storing variable names and their values
+        /// </summary>
         public static Dictionary<String, int> variables = new Dictionary<String, int>() { };
 
+        /// <summary>
+        /// Dictionary storing method names and their parameter
+        /// </summary>
         public static Dictionary<String, String> methods = new Dictionary<String, String>() { };
 
+        /// <summary>
+        /// Dictionary storing methods lines
+        /// </summary>
         public static Dictionary<String, List<String>> methodLines = new Dictionary<String, List<String>>() { };
     }
 }
