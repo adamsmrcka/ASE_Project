@@ -10,7 +10,7 @@ namespace ASE_Project
     /// <summary>
     /// Class with lists of supported commands, their arguments and recorded error messages
     /// </summary>
-    internal class Dictionaries
+    public class Dictionaries
     {
         /// <summary>
         /// List of supported Shapes

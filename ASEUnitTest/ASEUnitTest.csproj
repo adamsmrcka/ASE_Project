@@ -65,6 +65,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assignment2UnitTests.cs" />
     <Compile Include="CommandUnitTests.cs" />
     <Compile Include="Form1UnitTests.cs" />
     <Compile Include="ParserUnitTests.cs" />

@@ -17,9 +17,6 @@ namespace ASEUnitTest
     [TestClass]
     public class Form1UnitTests
     {
-        private Parser parser;
-        private Canvas canvas;
-        PictureBox pictureBox = new PictureBox();
 
         Form1 form1 = new Form1();
 
