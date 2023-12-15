@@ -36,6 +36,10 @@ namespace ASE_Project
         List<String> loopCommands = new List<String>();
         List<String> ifCommands = new List<String>();
 
+        Dictionary<String, int> varToReverse = new Dictionary<String, int>() { };
+        List<String> varToDelete = new List<String>();
+        List<String> methodsToDelete = new List<String>();
+
         private static Parser parser = new Parser();
 
         /// <summary>
@@ -69,6 +73,9 @@ namespace ASE_Project
             methodLines.Clear();
             loopCommands.Clear();
             ifCommands.Clear();
+            varToDelete.Clear();
+            varToReverse.Clear();
+            methodsToDelete.Clear();
 
             errors = 0;
             if (lines.Length > 0)
@@ -116,15 +123,38 @@ namespace ASE_Project
                 }
                 if (loopFlag)
                 {
+                    loopFlag = false;
+                    loopFlagFirst |= false;
                     throw new Exception($"Error: Loop command is not correctly ended");
                 }
                 if (ifFlag)
                 {
+                    ifFlag = false;
+                    ifFlagFirst |= false;
                     throw new Exception($"Error: If command is not correctly ended");
                 }
                 if (buildingMethodFlag)
                 {
+                    buildingMethodFlag = false;
                     throw new Exception($"Error: Building method command is not correctly ended");
+                }
+                if (!draw) // Revert all changes made during syntax checking
+                {
+                    foreach (string reverseVar in varToReverse.Keys)
+                    {
+                        Dictionaries.variables[reverseVar] = varToReverse[reverseVar];
+                    }
+
+                    foreach (string deleteVar in varToDelete)
+                    {
+                        Dictionaries.variables.Remove(deleteVar);
+                    }
+
+                    foreach (string deleteMethod in methodsToDelete)
+                    { 
+                        Dictionaries.methods.Remove(deleteMethod);
+                        Dictionaries.methodLines.Remove(deleteMethod);
+                    }
                 }
             }
             else
@@ -317,7 +347,7 @@ namespace ASE_Project
                                 break;
 
                             case "deletemethod":
-                                if (parts[1] == "method")
+                                if (parts.Length == 2)
                                 {
                                     if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
                                     {
@@ -461,7 +491,7 @@ namespace ASE_Project
                                 break;
 
                             case "deletemethod":
-                                if (parts[1] == "method")
+                                if (parts.Length == 2)
                                 {
                                     if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
                                     {
@@ -614,111 +644,160 @@ namespace ASE_Project
             // Check if it is declaring Variables
             else if (parts.Length == 3 && parts[1] == "=")
             {
-                //If the parameter is number
-                if (int.TryParse(parts[2], out int argValue))
+                if (!int.TryParse(command, out _))
                 {
-                    if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                    //If the parameter is number
+                    if (int.TryParse(parts[2], out int argValue))
                     {
-                        if (draw)
+                        if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                         {
+                            if (!draw)
+                            {
+                                if (!varToReverse.ContainsKey(command))
+                                {
+
+                                    varToReverse.Add(command, oldVarValue);
+                                }
+                            }
                             // Update the existing variable
                             Dictionaries.variables[command] = int.Parse(parts[2]);
                         }
-                    }
-                    else
-                    {
-                        if (draw)
+                        else
                         {
-                            // Add a new variable to the dictionary
+                            if (!draw)
+                            {
+                                if (!varToDelete.Contains(command))
+                                {
+
+                                    varToDelete.Add(command);
+                                }
+                            }
                             Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
                         }
                     }
-                }
-                // if the parameter is another variable
-                else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
-                {
-                    if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+
+                    // if the parameter is another variable
+                    else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
                     {
-                        if (draw)
+                        if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                         {
+                            if (!draw)
+                            {
+                                if (!varToReverse.ContainsKey(command))
+                                {
+
+                                    varToReverse.Add(command, oldVarValue);
+                                }
+                            }
                             // Update the existing variable
                             Dictionaries.variables[command] = newVarValue;
                         }
-                    }
-                    else
-                    {
-                        if (draw)
+                        else
                         {
+                            if (!draw)
+                            {
+                                if (!varToDelete.Contains(command))
+                                {
+
+                                    varToDelete.Add(command);
+                                }
+                            }
                             // Add a new variable to the dictionary
                             Dictionaries.variables.Add(parts[0], newVarValue);
                         }
                     }
+                    else
+                    {
+                        throw new Exception($"Error: Argument '{parts[2]}' for Variable '{command}' is not a valid parameter.");
+                    }
                 }
                 else
                 {
-                    throw new Exception($"Error: Argument '{parts[2]}' for Variable '{command}' is not a valid parameter.");
+                    throw new Exception($"Error: Int number '{command}' is not valid name for Variable.");
                 }
             }
 
             // Check for a complex Variable declaration
             else if (parts.Length > 4 && parts[1] == "=")
             {
-                string calculation = "";
-                DataTable table = new DataTable();
-                bool errors = false;
-
-                // check if parameters are numbers or variables
-                for (int i = 2; i < parts.Length; i = i + 2)
+                if (!int.TryParse(command, out _))
                 {
-                    if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
-                    {
-                        parts[i] = newVarValue.ToString();
+                    string calculation = "";
+                    DataTable table = new DataTable();
+                    bool error = false;
 
-                    }
-                    else if (!int.TryParse(parts[i], out int argValue))
+                    // check if parameters are numbers or variables
+                    for (int i = 2; i < parts.Length; i = i + 2)
                     {
-                        errors = true;
-                        throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid parameter.");
-
-                    }
-                }
-                //check if it has valid calcualtion symbol (+, *, -, /)
-                for (int i = 3; i < parts.Length; i = i + 2)
-                {
-                    if (!Dictionaries.calcualtions.Contains(parts[i]))
-                    {
-                        errors = true;
-                        throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid equation parameter.");
-                    }
-                }
-                // If syntax is correct execute command 
-                if (errors == false)
-                {
-                    foreach (string cmd in parts.Skip(2))
-                    {
-                        calculation += cmd;
-                    }
-                    var result = table.Compute(calculation, null);
-                    if (result != null)
-                    {
-                        string resultString = result.ToString();
-                        if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                        if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
                         {
-                            if (draw)
+                            parts[i] = newVarValue.ToString();
+
+                        }
+                        else if (!int.TryParse(parts[i], out int argValue))
+                        {
+                            error = true;
+                            throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid parameter.");
+
+                        }
+                    }
+                    //check if it has valid calcualtion symbol (+, *, -, /)
+                    for (int i = 3; i < parts.Length; i = i + 2)
+                    {
+                        if (!Dictionaries.calcualtions.Contains(parts[i]))
+                        {
+                            error = true;
+                            throw new Exception($"Error: Argument '{parts[i]}' for Variable '{command}' is not a valid equation parameter.");
+                        }
+                    }
+                    // If syntax is correct execute command 
+                    if (error == false)
+                    {
+                        foreach (string cmd in parts.Skip(2))
+                        {
+                            calculation += cmd;
+                        }
+                        var result = table.Compute(calculation, null);
+                        if (result != null)
+                        {
+                            string resultString = result.ToString();
+                            if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
                             {
+                                if (!draw)
+                                {
+                                    if (!varToReverse.ContainsKey(command))
+                                    {
+
+                                        varToReverse.Add(command, oldVarValue);
+                                    }
+                                }
                                 // Update the existing variable
                                 Dictionaries.variables[command] = int.Parse(resultString);
+                            }
+                            else
+                            {
+                                if (!draw)
+                                {
+                                    if (!varToDelete.Contains(command))
+                                    {
+
+                                        varToDelete.Add(command);
+                                    }
+                                }
+                                // Add a new variable to the dictionary
+                                Dictionaries.variables.Add(parts[0], int.Parse(resultString));
+
                             }
                         }
                         else
                         {
-                            if (draw)
-                            {
-                                // Add a new variable to the dictionary
-                                Dictionaries.variables.Add(parts[0], int.Parse(resultString));
-                            }
+                            throw new Exception($"Error: There was an error in calculating Variable '{command}' value.");
                         }
                     }
+                }
+                else
+                {
+                    throw new Exception($"Error: Int number '{command}' is not valid name for Variable.");
                 }
             }
             // check if command is endmethod without valid declaration
@@ -752,8 +831,7 @@ namespace ASE_Project
             }
             if (!draw)
             {
-                Dictionaries.methodLines.Remove(methodName);
-                Dictionaries.methods.Remove(methodName);
+                methodsToDelete.Add(methodName);
             }
 
         }
