@@ -28,6 +28,9 @@ namespace ASEUnitTest
             parser.setCanvas(canvas);
         }
 
+        /// <summary>
+        /// Variables should be parsed
+        /// </summary>
         [TestMethod]
         public void testVariables_ShouldDraw_number()
         {
@@ -42,6 +45,9 @@ namespace ASEUnitTest
             Assert.AreEqual(20, varTest);
         }
 
+        /// <summary>
+        /// Variables should be parsed using another variables
+        /// </summary>
         [TestMethod]
         public void testVariables_ShouldDraw_variable()
         {
@@ -58,6 +64,9 @@ namespace ASEUnitTest
             Assert.AreEqual(varTestFinal, varTestBeg);
         }
 
+        /// <summary>
+        /// Variables should be parsed and updated
+        /// </summary>
         [TestMethod]
         public void testVariables_ShouldDraw_update()
         {
@@ -72,6 +81,9 @@ namespace ASEUnitTest
             Assert.AreEqual(80, varTestFinal);
         }
 
+        /// <summary>
+        /// Complex variables should be parsed
+        /// </summary>
         [TestMethod]
         public void testVariables_ShouldDraw_complex()
         {
@@ -88,6 +100,9 @@ namespace ASEUnitTest
             Assert.AreEqual(varTestBeg + 50, varTestFinal);
         }
 
+        /// <summary>
+        /// Invalid Variable declaration should be throw error message
+        /// </summary>
         [TestMethod]
         public void testVariables_ShouldThrowException_complex()
         {
@@ -102,6 +117,9 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// Variables should be not act during syntax checking
+        /// </summary>
         [TestMethod]
         public void testVariables_SyntaxChecking_NoChange()
         {
@@ -117,6 +135,9 @@ namespace ASEUnitTest
             Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out int varTestBeg));
         }
 
+        /// <summary>
+        /// Loops should be parsed
+        /// </summary>
         [TestMethod]
         public void testLoops_ShouldDraw_Valid()
         {
@@ -131,6 +152,9 @@ namespace ASEUnitTest
             Assert.AreEqual(80, varTestBeg);
         }
 
+        /// <summary>
+        /// Loops should not be parsed when condition is not met
+        /// </summary>
         [TestMethod]
         public void testLoops_ShouldNotDraw_Invalid()
         {
@@ -145,6 +169,9 @@ namespace ASEUnitTest
             Assert.AreEqual(50, varTestBeg);
         }
 
+        /// <summary>
+        /// Invalid loops commands should throw exception
+        /// </summary>
         [TestMethod]
         public void testLoops_ShouldThrowException_InvalidCommand()
         {
@@ -158,6 +185,9 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// Invalid loops declaration should throw exception
+        /// </summary>
         [TestMethod]
         public void testLoops_ShouldThrowException_InvalidDeclaration()
         {
@@ -171,6 +201,9 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// Loops should not act during syntax checking
+        /// </summary>
         [TestMethod]
         public void testLoops_SyntaxChecking_NoChange()
         {
@@ -185,6 +218,9 @@ namespace ASEUnitTest
             Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out int varTestBeg));
         }
 
+        /// <summary>
+        /// If commands should parse
+        /// </summary>
         [TestMethod]
         public void testIf_ShouldDraw_Valid()
         {
@@ -199,6 +235,9 @@ namespace ASEUnitTest
             Assert.AreEqual(55, varTestBeg);
         }
 
+        /// <summary>
+        /// If commands should not parse when condition is not met
+        /// </summary>
         [TestMethod]
         public void testIf_ShouldDraw_Invalid()
         {
@@ -213,6 +252,9 @@ namespace ASEUnitTest
             Assert.AreEqual(50, varTestBeg);
         }
 
+        /// <summary>
+        /// Invalid If commands should throw exception
+        /// </summary>
         [TestMethod]
         public void testIfs_ShouldThrowException_InvalidCommand()
         {
@@ -226,6 +268,9 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// Invalid If commands declaration should throw exception
+        /// </summary>
         [TestMethod]
         public void testIfs_ShouldThrowException_InvalidDeclaration()
         {
@@ -239,6 +284,28 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// If commands should not act during syntax checking
+        /// </summary>
+        [TestMethod]
+        public void testIf_SyntaxChecking_NoChange()
+        {
+            // Arrange
+            Dictionaries.methods.Clear();
+            Dictionaries.methodLines.Clear();
+            Dictionaries.variables.Clear();
+            string[] lines = { "test = 50", "if test < 80", "test = test + 5", "endif" };
+
+            // Act
+            parser.parseCommand(lines, false);
+
+            // Assert
+            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out int varTestBeg));
+        }
+
+        /// <summary>
+        /// Method commands should parse
+        /// </summary>
         [TestMethod]
         public void testMethods_ShouldDraw_Valid()
         {
@@ -256,6 +323,9 @@ namespace ASEUnitTest
             Assert.AreEqual(150, varTestBeg);
         }
 
+        /// <summary>
+        /// Invalid Method commands should throw exception
+        /// </summary>
         [TestMethod]
         public void testMethods_ShouldThrowException_InvalidCommand()
         {
@@ -272,6 +342,9 @@ namespace ASEUnitTest
             Assert.IsTrue(parser.errors > 0);
         }
 
+        /// <summary>
+        /// Invalid Method declaration should throw exception
+        /// </summary>
         [TestMethod]
         public void testMethods_ShouldThrowException_InvalidDeclaration()
         {
@@ -285,6 +358,10 @@ namespace ASEUnitTest
             Assert.ThrowsException<Exception>(() => parser.parseCommand(lines, true));
         }
 
+
+        /// <summary>
+        /// Method commands should not act during syntax checking
+        /// </summary>
         [TestMethod]
         public void testMethods_SyntaxChecking_Valid()
         {
