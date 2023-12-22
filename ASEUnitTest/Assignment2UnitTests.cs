@@ -41,7 +41,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTest);
+            Dictionaries.variables.TryGetValue("test", out double varTest);
             Assert.AreEqual(20, varTest);
         }
 
@@ -58,9 +58,9 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("test", out double varTestBeg);
             Assert.AreEqual(varTestBeg, 20);
-            Dictionaries.variables.TryGetValue("test2", out int varTestFinal);
+            Dictionaries.variables.TryGetValue("test2", out double varTestFinal);
             Assert.AreEqual(varTestFinal, varTestBeg);
         }
 
@@ -77,7 +77,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestFinal);
+            Dictionaries.variables.TryGetValue("test", out double varTestFinal);
             Assert.AreEqual(80, varTestFinal);
         }
 
@@ -94,9 +94,9 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("test", out double varTestBeg);
             Assert.AreEqual(80, varTestBeg);
-            Dictionaries.variables.TryGetValue("test2", out int varTestFinal);
+            Dictionaries.variables.TryGetValue("test2", out double varTestFinal);
             Assert.AreEqual(varTestBeg + 50, varTestFinal);
         }
 
@@ -132,7 +132,7 @@ namespace ASEUnitTest
 
             // Assert
 
-            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out int varTestBeg));
+            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out double varTestBeg));
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("test", out double varTestBeg);
             Assert.AreEqual(80, varTestBeg);
         }
 
@@ -165,7 +165,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("test", out double varTestBeg);
             Assert.AreEqual(50, varTestBeg);
         }
 
@@ -215,7 +215,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, false);
 
             // Assert
-            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out int varTestBeg));
+            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out double varTestBeg));
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("test", out double varTestBeg);
             Assert.AreEqual(55, varTestBeg);
         }
 
@@ -248,7 +248,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("test", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("test", out double varTestBeg);
             Assert.AreEqual(50, varTestBeg);
         }
 
@@ -300,7 +300,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, false);
 
             // Assert
-            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out int varTestBeg));
+            Assert.AreEqual(false, Dictionaries.variables.TryGetValue("test", out double varTestBeg));
         }
 
         /// <summary>
@@ -319,7 +319,7 @@ namespace ASEUnitTest
             parser.parseCommand(lines, true);
 
             // Assert
-            Dictionaries.variables.TryGetValue("tests", out int varTestBeg);
+            Dictionaries.variables.TryGetValue("tests", out double varTestBeg);
             Assert.AreEqual(150, varTestBeg);
         }
 

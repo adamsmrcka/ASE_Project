@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace ASE_Project
@@ -36,7 +37,7 @@ namespace ASE_Project
         List<String> loopCommands = new List<String>();
         List<String> ifCommands = new List<String>();
 
-        Dictionary<String, int> varToReverse = new Dictionary<String, int>() { };
+        Dictionary<String, double> varToReverse = new Dictionary<String, double>() { };
         List<String> varToDelete = new List<String>();
         List<String> methodsToDelete = new List<String>();
 
@@ -136,6 +137,8 @@ namespace ASE_Project
                 if (buildingMethodFlag)
                 {
                     buildingMethodFlag = false;
+                    Dictionaries.methods.Remove(methodName);
+                    Dictionaries.methodLines.Remove(methodName);
                     throw new Exception($"Error: Building method command is not correctly ended");
                 }
                 if (!draw) // Revert all changes made during syntax checking
@@ -165,6 +168,11 @@ namespace ASE_Project
             canvas.displaySavedVar();
         }
 
+        /// <summary>
+        /// The main analysis code analysing the individual lines and handles them accordingly
+        /// </summary>
+        /// <param name="trimmedCommand">Trimmed command line</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
         private void analyses(string trimmedCommand, bool draw)
         {
             string[] parts = trimmedCommand.Split(' ');
@@ -183,9 +191,9 @@ namespace ASE_Project
 
                         for (int i = 0; i < args.Length; i++)
                         {
-                            if (Dictionaries.variables.TryGetValue(args[i], out int varValue))
+                            if (Dictionaries.variables.TryGetValue(args[i], out double varValue))
                             {
-                                intArguments[i] = varValue;
+                                intArguments[i] = (int)Math.Round(varValue);
                             }
                             else if (int.TryParse(args[i], out int argValue))
                             {
@@ -220,22 +228,22 @@ namespace ASE_Project
                 if (Dictionaries.validArgsNumber.TryGetValue(command, out int expectedArgsCount))
                 {
                     args = parts.Skip(1).ToArray();
-                    // If the draw = true
-                    if (args.Length == expectedArgsCount && draw == true)
+                    //If the command has valid number of arguments
+                    if (args.Length == expectedArgsCount)
                     {
                         switch (command)
                         {
                             case "clear":
-                                canvas.clearCanvas();
+                                if (draw) canvas.clearCanvas();
                                 break;
 
                             case "reset":
-                                canvas.restoreCanvas();
+                                if (draw) canvas.restoreCanvas();
                                 break;
 
                             case "moveto":
                                 intArguments = Array.ConvertAll(args, int.Parse);
-                                canvas.moveTo(intArguments);
+                                if (draw) canvas.moveTo(intArguments);
                                 break;
 
                             case "pen":
@@ -247,13 +255,13 @@ namespace ASE_Project
                                 {
                                     throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
                                 }
-                                canvas.changeColor(colour);
+                                if (draw) canvas.changeColor(colour);
                                 break;
 
                             case "fill":
                                 if (args[0] == "on" || args[0] == "off")
                                 {
-                                    canvas.toggleFill(args[0]);
+                                    if (draw) canvas.toggleFill(args[0]);
                                 }
                                 else
                                 {
@@ -261,13 +269,50 @@ namespace ASE_Project
                                 }
                                 break;
 
-                            case "while":
-                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int loopArgVarValue1) || int.TryParse(args[0], out int loopArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int loopArgVarValue2) || int.TryParse(args[2], out int loopArgValue2))
+                            case "delete":
+                                if (parts.Length == 2)
                                 {
-                                    int e1, e2;
+                                    if (Dictionaries.variables.TryGetValue(parts[1], out double VarValue1))
+                                    {
+                                        if (draw) Dictionaries.variables.Remove(parts[1]);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: Variable '{parts[1]}' was not found");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
+                                }
+                                break;
+
+                            case "deletemethod":
+                                if (parts.Length == 2)
+                                {
+                                    if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
+                                    {
+                                        if (draw) Dictionaries.methods.Remove(parts[1]);
+                                        if (draw) Dictionaries.methodLines.Remove(parts[1]);
+                                    }
+                                    else
+                                    {
+                                        throw new Exception($"Error: Method '{parts[1]}' was not found");
+                                    }
+                                }
+                                else
+                                {
+                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
+                                }
+                                break;
+
+                            case "while":
+                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out double loopArgVarValue1) || int.TryParse(args[0], out int loopArgValue1) && Dictionaries.variables.TryGetValue(args[2], out double loopArgVarValue2) || int.TryParse(args[2], out int loopArgValue2))
+                                {
+                                    double e1, e2;
                                     try
                                     {
-                                        e1 = int.Parse(args[0]);
+                                        e1 = double.Parse(args[0]);
                                     }
                                     catch (Exception)
                                     {
@@ -275,7 +320,7 @@ namespace ASE_Project
                                     }
                                     try
                                     {
-                                        e2 = int.Parse(args[2]);
+                                        e2 = double.Parse(args[2]);
                                     }
                                     catch (Exception)
                                     {
@@ -295,12 +340,12 @@ namespace ASE_Project
                                 break;
 
                             case "if":
-                                if (Dictionaries.ifSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int ifArgVarValue1) || int.TryParse(args[0], out int ifArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int ifArgVarValue2) || int.TryParse(args[2], out int ifArgValue2))
+                                if (Dictionaries.ifSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out double ifArgVarValue1) || int.TryParse(args[0], out int ifArgValue1) && Dictionaries.variables.TryGetValue(args[2], out double ifArgVarValue2) || int.TryParse(args[2], out int ifArgValue2))
                                 {
-                                    int e1, e2;
+                                    double e1, e2;
                                     try
                                     {
-                                        e1 = int.Parse(args[0]);
+                                        e1 = double.Parse(args[0]);
                                     }
                                     catch (Exception)
                                     {
@@ -308,7 +353,7 @@ namespace ASE_Project
                                     }
                                     try
                                     {
-                                        e2 = int.Parse(args[2]);
+                                        e2 = double.Parse(args[2]);
                                     }
                                     catch (Exception)
                                     {
@@ -328,184 +373,6 @@ namespace ASE_Project
                                 }
                                 break;
 
-                            case "delete":
-                                if (parts.Length == 2)
-                                {
-                                    if (Dictionaries.variables.TryGetValue(parts[1], out int VarValue1))
-                                    {
-                                        Dictionaries.variables.Remove(parts[1]);
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Error: Variable '{parts[1]}' was not found");
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
-                                }
-                                break;
-
-                            case "deletemethod":
-                                if (parts.Length == 2)
-                                {
-                                    if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
-                                    {
-                                        Dictionaries.methods.Remove(parts[1]);
-                                        Dictionaries.methodLines.Remove(parts[1]);
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Error: Method '{parts[1]}' was not found");
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
-                                }
-                                break;
-
-                            default:
-                                throw new Exception($"Error: Unknown command '{command}'");
-                        }
-                    }
-                    // If just syntax checking
-                    else if (args.Length == expectedArgsCount && draw == false)
-                    {
-                        switch (command)
-                        {
-                            case "clear":
-                                break;
-
-                            case "reset":
-                                break;
-
-                            case "moveto":
-                                intArguments = Array.ConvertAll(args, int.Parse);
-                                break;
-
-                            case "pen":
-                                try
-                                {
-                                    colour = ColorTranslator.FromHtml(args[0]);
-                                }
-                                catch
-                                {
-                                    throw new Exception($"Error: Argument '{args[0]}' for '{command}' command is not a valid colour.");
-                                }
-                                break;
-
-                            case "fill":
-                                if (args[0] == "on" || args[0] == "off")
-                                {
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: Incorect Fill parameter '{args[0]}', Expeted On or Off");
-                                }
-                                break;
-
-                            case "while":
-                                if (Dictionaries.loopSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int loopArgVarValue1) || int.TryParse(args[0], out int loopArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int loopArgVarValue2) || int.TryParse(args[2], out int loopArgValue2))
-                                {
-                                    int e1, e2;
-                                    try
-                                    {
-                                        e1 = int.Parse(args[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        e1 = Dictionaries.variables[args[0]];
-                                    }
-                                    try
-                                    {
-                                        e2 = int.Parse(args[2]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        e2 = Dictionaries.variables[args[2]];
-                                    }
-
-                                    loopArgs = new string[] { args[0], args[1], args[2] };
-                                    loopFlag = true;
-                                    if (ifFlag == false)
-                                    {
-                                        loopFlagFirst = true;
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command While loop");
-                                }
-                                break;
-
-                            case "if":
-                                if (Dictionaries.ifSymbols.Contains(args[1]) && Dictionaries.variables.TryGetValue(args[0], out int ifArgVarValue1) || int.TryParse(args[0], out int ifArgValue1) && Dictionaries.variables.TryGetValue(args[2], out int ifArgVarValue2) || int.TryParse(args[2], out int ifArgValue2))
-                                {
-                                    int e1, e2;
-                                    try
-                                    {
-                                        e1 = int.Parse(args[0]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        e1 = Dictionaries.variables[args[0]];
-                                    }
-                                    try
-                                    {
-                                        e2 = int.Parse(args[2]);
-                                    }
-                                    catch (Exception)
-                                    {
-                                        e2 = Dictionaries.variables[args[2]];
-                                    }
-
-                                    ifFlag = true;
-                                    ifArgs = new string[] { args[0], args[1], args[2] };
-                                    if (loopFlag == false)
-                                    {
-                                        ifFlagFirst = true;
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: Argumets: '{args[0]}', '{args[1]}' and '{args[2]}' are invalid arguments for command If");
-                                }
-                                break;
-
-                            case "delete":
-                                if (parts.Length == 2)
-                                {
-                                    if (Dictionaries.variables.TryGetValue(parts[1], out int VarValue1))
-                                    {
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Error: Variable '{parts[1]}' was not found");
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
-                                }
-                                break;
-
-                            case "deletemethod":
-                                if (parts.Length == 2)
-                                {
-                                    if (Dictionaries.methods.TryGetValue(parts[1], out string VarValue1))
-                                    {
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"Error: Method '{parts[1]}' was not found");
-                                    }
-                                }
-                                else
-                                {
-                                    throw new Exception($"Error: '{parts[1]}' is invalid delete argument");
-                                }
-                                break;
 
                             default:
                                 throw new Exception($"Error: Unknown command '{command}'");
@@ -526,81 +393,10 @@ namespace ASE_Project
             {
                 if (IsValidMethodDeclaration(trimmedCommand))
                 {
-                    // If the method has already been declared - run the method commands
+                    // If the method has already been declared - execute the method
                     if (Dictionaries.methods.TryGetValue(parts[1], out string MethodVar))
                     {
-                        string[] MethodVarValues = MethodVar.Split(' ');
-
-                        //check if number of parametrs matches with the number stored during the Method declaration process (0 parameters)
-                        if (MethodVar == "")
-                        {
-                            if (parts[2] == "()")
-                            {
-                                List<string> linesInMethod = Dictionaries.methodLines[parts[1]];
-                                foreach (string lineInMethod in linesInMethod)
-                                {
-                                    analyses(lineInMethod, draw);
-                                }
-                            }
-                            else
-                            {
-                                throw new Exception($"Error: No parameters for '{parts[1]}' method during creation were declared");
-                            }
-                        }
-                        //check if number of parametrs matches with the number stored during the Method declaration process (1+ parameters)
-                        else if (parts.Length - 2 == MethodVarValues.Length)
-                        {
-                            string[] methodParameters;
-                            List<string> parametersList = new List<string>();
-
-                            for (int i = 2; i < parts.Length; i++)
-                            {
-                                // Trim characters and add to the List
-                                parametersList.Add(parts[i].Trim('(', ')', ','));
-                            }
-
-                            // Convert the List to an array
-                            methodParameters = parametersList.ToArray();
-
-                            string parUsedForCommand = methodParameters.FirstOrDefault(item => Dictionaries.commands.Contains(item));
-                            string parUsedForShape = methodParameters.FirstOrDefault(item => Dictionaries.shapes.Contains(item));
-
-                            // Check that parameter variables are not restricted strings
-                            if (parUsedForCommand != null || parUsedForShape != null)
-                            {
-                                throw new Exception($"Error: Method Failed!" + Environment.NewLine + $"'{parUsedForCommand ?? parUsedForShape}' is an invalid name for variable");
-                            }
-                            // else run the Method commands
-                            else
-                            {
-                                List<string> linesInMethod = Dictionaries.methodLines[parts[1]];
-                                foreach (string lineInMethod in linesInMethod)
-                                {
-                                    string methodLine = lineInMethod;
-                                    for (int i = 0; i < MethodVarValues.Length; i++)
-                                    {
-                                        // Replace variables in the line with values from parts array
-                                        string variableToReplace = MethodVarValues[i];
-                                        if (lineInMethod.Contains(variableToReplace))
-                                        {
-                                            methodLine = lineInMethod.Replace(variableToReplace, methodParameters[i]);
-                                        }
-                                    }
-                                    try
-                                    {
-                                        analyses(methodLine, draw);
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        throw new Exception($"Method Failed!" + Environment.NewLine + $"{ex.Message}");
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            throw new Exception($"Error: Invalid number of parameters for method '{parts[1]}' were included. {parts.Length - 2} were included but {MethodVarValues.Length} were expected");
-                        }
+                        ExecuteMethod(parts, MethodVar, draw);
                     }
                     //Else run method declaration and save the method
                     else
@@ -635,11 +431,6 @@ namespace ASE_Project
                         }
                     }
                 }
-                else
-                {
-                    throw new Exception($"Error: Method '{methodName}' has not been declared." + Environment.NewLine + "Expected format: 'method <methodName> (<optionalVariable>, <optionalVariable>, ...)'");
-                }
-
             }
             // Check if it is declaring Variables
             else if (parts.Length == 3 && parts[1] == "=")
@@ -649,58 +440,42 @@ namespace ASE_Project
                     //If the parameter is number
                     if (int.TryParse(parts[2], out int argValue))
                     {
-                        if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                        if (Dictionaries.variables.TryGetValue(command, out double existingValue))
                         {
-                            if (!draw)
+                            if (!draw && !varToReverse.ContainsKey(command))
                             {
-                                if (!varToReverse.ContainsKey(command))
-                                {
-
-                                    varToReverse.Add(command, oldVarValue);
-                                }
+                                    varToReverse.Add(command, existingValue);
                             }
                             // Update the existing variable
-                            Dictionaries.variables[command] = int.Parse(parts[2]);
+                            Dictionaries.variables[command] = argValue;
                         }
                         else
                         {
-                            if (!draw)
+                            if (!draw && !varToDelete.Contains(command))
                             {
-                                if (!varToDelete.Contains(command))
-                                {
-
                                     varToDelete.Add(command);
-                                }
                             }
-                            Dictionaries.variables.Add(parts[0], int.Parse(parts[2]));
+                            // Add a new variable to the dictionary
+                            Dictionaries.variables.Add(parts[0], argValue);
                         }
                     }
-
                     // if the parameter is another variable
-                    else if (Dictionaries.variables.TryGetValue(parts[2], out int newVarValue))
+                    else if (Dictionaries.variables.TryGetValue(parts[2], out double newVarValue))
                     {
-                        if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                        if (Dictionaries.variables.TryGetValue(command, out double oldVarValue))
                         {
-                            if (!draw)
+                            if (!draw && !varToReverse.ContainsKey(command))
                             {
-                                if (!varToReverse.ContainsKey(command))
-                                {
-
                                     varToReverse.Add(command, oldVarValue);
-                                }
                             }
                             // Update the existing variable
                             Dictionaries.variables[command] = newVarValue;
                         }
                         else
                         {
-                            if (!draw)
+                            if (!draw && !varToDelete.Contains(command))
                             {
-                                if (!varToDelete.Contains(command))
-                                {
-
                                     varToDelete.Add(command);
-                                }
                             }
                             // Add a new variable to the dictionary
                             Dictionaries.variables.Add(parts[0], newVarValue);
@@ -722,14 +497,14 @@ namespace ASE_Project
             {
                 if (!int.TryParse(command, out _))
                 {
-                    string calculation = "";
+                    StringBuilder calculation = new StringBuilder();
                     DataTable table = new DataTable();
                     bool error = false;
 
                     // check if parameters are numbers or variables
-                    for (int i = 2; i < parts.Length; i = i + 2)
+                    for (int i = 2; i < parts.Length; i += 2)
                     {
-                        if (Dictionaries.variables.TryGetValue(parts[i], out int newVarValue))
+                        if (Dictionaries.variables.TryGetValue(parts[i], out double newVarValue))
                         {
                             parts[i] = newVarValue.ToString();
 
@@ -742,7 +517,7 @@ namespace ASE_Project
                         }
                     }
                     //check if it has valid calcualtion symbol (+, *, -, /)
-                    for (int i = 3; i < parts.Length; i = i + 2)
+                    for (int i = 3; i < parts.Length; i += 2)
                     {
                         if (!Dictionaries.calcualtions.Contains(parts[i]))
                         {
@@ -753,40 +528,29 @@ namespace ASE_Project
                     // If syntax is correct execute command 
                     if (error == false)
                     {
-                        foreach (string cmd in parts.Skip(2))
-                        {
-                            calculation += cmd;
-                        }
-                        var result = table.Compute(calculation, null);
+                        calculation.Append(string.Join("", parts.Skip(2)));
+                        var result = table.Compute(calculation.ToString(), null);
+
                         if (result != null)
                         {
-                            string resultString = result.ToString();
-                            if (Dictionaries.variables.TryGetValue(command, out int oldVarValue))
+                            double resultValue = double.Parse(result.ToString());
+                            if (Dictionaries.variables.TryGetValue(command, out double oldVarValue))
                             {
-                                if (!draw)
+                                if (!draw && !varToReverse.ContainsKey(command))
                                 {
-                                    if (!varToReverse.ContainsKey(command))
-                                    {
-
                                         varToReverse.Add(command, oldVarValue);
-                                    }
                                 }
                                 // Update the existing variable
-                                Dictionaries.variables[command] = int.Parse(resultString);
+                                Dictionaries.variables[command] = resultValue;
                             }
                             else
                             {
-                                if (!draw)
+                                if (!draw && !varToDelete.Contains(command))
                                 {
-                                    if (!varToDelete.Contains(command))
-                                    {
-
                                         varToDelete.Add(command);
-                                    }
                                 }
                                 // Add a new variable to the dictionary
-                                Dictionaries.variables.Add(parts[0], int.Parse(resultString));
-
+                                Dictionaries.variables.Add(parts[0], resultValue);
                             }
                         }
                         else
@@ -809,6 +573,102 @@ namespace ASE_Project
             {
                 throw new Exception($"Error: '{command}' is an Unknown command.");
             }
+        }
+
+        /// <summary>
+        /// Execute the method based on it's type
+        /// </summary>
+        /// <param name="parts">array of the command inputed by the user</param>
+        /// <param name="methodVar">Variable names saved in the method</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
+        private void ExecuteMethod(string[] parts, string methodVar, bool draw)
+        {
+            string[] MethodVarNames = methodVar.Split(' ');
+
+            if (methodVar == "")
+            {
+                ExecuteMethodWithNoParameters(parts, draw);
+            }
+            else if (parts.Length - 2 == MethodVarNames.Length)
+            {
+                ExecuteMethodWithParameters(parts, MethodVarNames, draw);
+            }
+            else
+            {
+                throw new Exception($"Error: Invalid number of parameters for method '{parts[1]}' were included. {parts.Length - 2} were included but {MethodVarNames.Length} were expected");
+            }
+        }
+
+        /// <summary>
+        /// Executes the method without any parameters inputed during the declaration
+        /// </summary>
+        /// <param name="parts">array of the command inputed by the user</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
+        private void ExecuteMethodWithNoParameters(string[] parts, bool draw)
+        {
+            if (parts[2] == "()")
+            {
+                foreach (string lineInMethod in Dictionaries.methodLines[parts[1]])
+                {
+                    analyses(lineInMethod, draw);
+                }
+            }
+            else
+            {
+                throw new Exception($"Error: No parameters for '{parts[1]}' method during creation were declared");
+            }
+        }
+
+        /// <summary>
+        /// Executes the method with parameters inputed during the declaration
+        /// </summary>
+        /// <param name="parts">array of the command inputed by the user</param>
+        /// <param name="MethodVarNames">Array of variables used during method declaration</param>
+        /// <param name="draw">boolean swithing between drawing and syntax analyses</param>
+        private void ExecuteMethodWithParameters(string[] parts, string[] MethodVarNames, bool draw)
+        {
+            List<string> parametersList = ExtractMethodParameters(parts);
+
+            string parUsedForCommand = parametersList.FirstOrDefault(item => Dictionaries.commands.Contains(item));
+            string parUsedForShape = parametersList.FirstOrDefault(item => Dictionaries.shapes.Contains(item));
+
+            if (parUsedForCommand != null || parUsedForShape != null)
+            {
+                throw new Exception($"Error: Method Failed!" + Environment.NewLine + $"'{parUsedForCommand ?? parUsedForShape}' is an invalid name for a variable");
+            }
+
+            foreach (string lineInMethod in Dictionaries.methodLines[parts[1]])
+            {
+                string methodLine = SubstituteMethodParameters(lineInMethod, MethodVarNames, parametersList);
+                try
+                {
+                    analyses(methodLine, draw);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Method Failed!" + Environment.NewLine + $"{ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Replaces stored method variables to variables inputed by a user
+        /// </summary>
+        /// <param name="lineInMethod">individual command lines used in a method</param>
+        /// <param name="MethodVarNames">Array of variables used during method declaration</param>
+        /// <param name="parametersList">Variables inputed by the user</param>
+        /// <returns></returns>
+        private string SubstituteMethodParameters(string lineInMethod, string[] MethodVarNames, List<string> parametersList)
+        {
+            for (int i = 0; i < MethodVarNames.Length; i++)
+            {
+                string variableToReplace = MethodVarNames[i];
+                if (lineInMethod.Contains(variableToReplace))
+                {
+                    lineInMethod = lineInMethod.Replace(variableToReplace, parametersList[i]);
+                }
+            }
+            return lineInMethod;
         }
 
         /// <summary>
@@ -1049,6 +909,15 @@ namespace ASE_Project
             return Dictionaries.shapes.Contains(cmd);
         }
 
+        /// <summary>
+        /// returns a list with parameters inputed by the user
+        /// </summary>
+        /// <param name="parts">array of the command inputed by the user</param>
+        /// <returns>Variables inputed by the user</returns>
+        private List<string> ExtractMethodParameters(string[] parts)
+        {
+            return parts.Skip(2).Select(p => p.Trim('(', ')', ',')).ToList();
+        }
 
     }
 }

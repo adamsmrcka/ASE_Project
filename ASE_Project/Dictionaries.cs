@@ -65,7 +65,7 @@ namespace ASE_Project
         /// <summary>
         /// Dictionary storing variable names and their values
         /// </summary>
-        public static Dictionary<String, int> variables = new Dictionary<String, int>() { };
+        public static Dictionary<String, double> variables = new Dictionary<String, double>() { };
 
         /// <summary>
         /// Dictionary storing method names and their parameter
