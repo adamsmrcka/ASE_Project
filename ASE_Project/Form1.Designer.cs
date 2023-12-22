@@ -43,7 +43,6 @@
             this.declaredVarTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.DeleteVar_Button = new System.Windows.Forms.Button();
-            this.newWindowButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.drawPanel)).BeginInit();
             this.SuspendLayout();
             // 
@@ -180,7 +179,7 @@
             // 
             // DeleteVar_Button
             // 
-            this.DeleteVar_Button.Location = new System.Drawing.Point(1574, 785);
+            this.DeleteVar_Button.Location = new System.Drawing.Point(1703, 778);
             this.DeleteVar_Button.Name = "DeleteVar_Button";
             this.DeleteVar_Button.Size = new System.Drawing.Size(182, 34);
             this.DeleteVar_Button.TabIndex = 15;
@@ -188,23 +187,12 @@
             this.DeleteVar_Button.UseVisualStyleBackColor = true;
             this.DeleteVar_Button.Click += new System.EventHandler(this.DeleteVar_Button_Click);
             // 
-            // newWindowButton
-            // 
-            this.newWindowButton.Location = new System.Drawing.Point(1830, 785);
-            this.newWindowButton.Name = "newWindowButton";
-            this.newWindowButton.Size = new System.Drawing.Size(182, 34);
-            this.newWindowButton.TabIndex = 16;
-            this.newWindowButton.Text = "New Window";
-            this.newWindowButton.UseVisualStyleBackColor = true;
-            this.newWindowButton.Click += new System.EventHandler(this.newWindowButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.ClientSize = new System.Drawing.Size(2028, 824);
-            this.Controls.Add(this.newWindowButton);
             this.Controls.Add(this.DeleteVar_Button);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.declaredVarTextBox1);
@@ -246,7 +234,6 @@
         private System.Windows.Forms.RichTextBox declaredVarTextBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button DeleteVar_Button;
-        private System.Windows.Forms.Button newWindowButton;
     }
 }
 

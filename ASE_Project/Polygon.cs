@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ASE_Project
 {
@@ -24,7 +20,7 @@ namespace ASE_Project
             colourShape = colour;
             fillShape = fill;
             polygonPointsList.Add(new Point(posX, posY));
-            for (int i = 0; i < parameters.Length; i  = i + 2)
+            for (int i = 0; i < parameters.Length; i += 2)
             {
                 polygonPointsList.Add(new Point(parameters[i], parameters[i + 1]));
             }

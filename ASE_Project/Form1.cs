@@ -12,9 +12,6 @@ namespace ASE_Project
 {
     public partial class Form1 : Form
     {
-
-        Thread newThread;
-
         const int CanvasBitmapWidth = 580;
         const int CanvasBitmapHeight = 490;
         private bool draw = false;
@@ -181,6 +178,7 @@ namespace ASE_Project
         private void syntaxButton_Click(object sender, EventArgs e)
         {
             draw = false;
+            List<string> errorMessage = new List<string>();
             try
             {
                 if (!string.IsNullOrEmpty(commandTextBox.Text))
@@ -201,7 +199,6 @@ namespace ASE_Project
                 {
                     ErrorMessageForm errorMessageForm = new ErrorMessageForm();
                     errorMessageForm.setLabelMessage("Command is correct");
-                    List<string> errorMessage = new List<string>();
                     errorMessage.Add("No errors found. You can run this command");
                     errorMessageForm.setErrorMessages(errorMessage);
                     errorMessageForm.ShowDialog();
@@ -428,30 +425,6 @@ namespace ASE_Project
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Size = new Size(1380, 575);
-        }
-
-        /// <summary>
-        /// Opens a new window using Threads
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void newWindowButton_Click(object sender, EventArgs e)
-        {
-            Thread newWindowThread = new Thread(new ThreadStart(OpenNewWindow));
-
-            // Start the thread
-            newWindowThread.Start();
-        }
-
-        /// <summary>
-        /// opens a new forms window
-        /// </summary>
-        private void OpenNewWindow()
-        {
-            Form1 newForm = new Form1();
-
-            newForm.displaySavedVar();
-            newForm.ShowDialog();
         }
 
     }

@@ -89,7 +89,7 @@ namespace ASE_Project
 
                 foreach (String line in lines)
                 {
-                    string trimmedCommand = String.Empty;
+                    string trimmedCommand;
                     try
                     {
                         trimmedCommand = line.Trim(' ').ToLower();
