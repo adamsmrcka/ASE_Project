@@ -657,7 +657,7 @@ namespace ASE_Project
         /// <param name="lineInMethod">individual command lines used in a method</param>
         /// <param name="MethodVarNames">Array of variables used during method declaration</param>
         /// <param name="parametersList">Variables inputed by the user</param>
-        /// <returns></returns>
+        /// <returns>individual command lines used in a method</returns>
         private string SubstituteMethodParameters(string lineInMethod, string[] MethodVarNames, List<string> parametersList)
         {
             for (int i = 0; i < MethodVarNames.Length; i++)
