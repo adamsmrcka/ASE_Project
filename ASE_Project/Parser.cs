@@ -663,9 +663,11 @@ namespace ASE_Project
             for (int i = 0; i < MethodVarNames.Length; i++)
             {
                 string variableToReplace = MethodVarNames[i];
-                if (lineInMethod.Contains(variableToReplace))
+                string pattern = @"\b" + Regex.Escape(variableToReplace) + @"\b";
+
+                if (Regex.IsMatch(lineInMethod, pattern))
                 {
-                    lineInMethod = lineInMethod.Replace(variableToReplace, parametersList[i]);
+                    lineInMethod = Regex.Replace(lineInMethod, pattern, parametersList[i]);
                 }
             }
             return lineInMethod;
