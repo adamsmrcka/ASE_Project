@@ -775,7 +775,7 @@ namespace ASE_Project
                 // stop when condition is met or afer 100 cycles
                 while (isLoopExCorrect && numberOfCycles < 100);
 
-                if (numberOfCycles > 100)
+                if (numberOfCycles >= 100)
                 {
                     loopFlag = false;
                     loopFlagFirst = false;
